@@ -151,7 +151,7 @@ unsigned int __fastcall sub_42F0(int a1);
 unsigned int __fastcall sub_4364(int a1, int a2, int a3);
 int *__fastcall sub_4394(int a1);
 int __fastcall sub_43AC(int a1, int a2, unsigned int a3, const char *a4, const char *a5);
-int __fastcall sub_4424(int a1, char *s1, _DWORD *a3);
+static int adev_open(const hw_module_t* module, const char* name, hw_device_t** device);
 int __fastcall sub_46E0(int a1);
 int sub_470A();
 int __fastcall sub_4710(int a1, float a2);
@@ -1762,24 +1762,24 @@ int __fastcall sub_43AC(int a1, int a2, unsigned int a3, const char *a4, const c
 // 3194: using guessed type int __fastcall pcm_params_get_max(_DWORD, _DWORD);
 
 //----- (00004424) --------------------------------------------------------
-int __fastcall sub_4424(int a1, char *s1, _DWORD *a3)
+static int adev_open(const hw_module_t* module, const char* name, hw_device_t** device)
 {
-  _DWORD *v6; // r4
-  _DWORD *v7; // r0
+  struct audio_device *v6; // r4
+  struct audio_route* *v7; // r0
   int v8; // r0
   int v9; // r0
   _BOOL4 v10; // r0
   char s1a[128]; // [sp+8h] [bp-118h] BYREF
   char v12[128]; // [sp+88h] [bp-98h] BYREF
 
-  if ( strcmp(s1, "audio_hw_if") )
+  if ( strcmp(name, "audio_hw_if") )
     return -22;
   v6 = calloc(1u, 0x140u);
   if ( !v6 )
     return -12;
   *v6 = 1213678676;
   v6[1] = 512;
-  v6[2] = a1;
+  v6[2] = module;
   v6[15] = sub_46E0;
   v6[17] = sub_470A;
   v6[18] = sub_4710;
@@ -1839,7 +1839,7 @@ LABEL_14:
   v6[69] = 56;
   v6[70] = 7;
   v6[71] = 7;
-  *a3 = v6;
+  *device = v6;
   Open();
   j_thread_refresh_audio_route((int)v6);
   property_get("ro.product.locale.region", v12, "0");
