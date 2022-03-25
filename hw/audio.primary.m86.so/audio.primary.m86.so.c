@@ -145,28 +145,28 @@ bool is_headphone_on();
 int __fastcall amplifier_calibrate(int *a1);
 int thread_test_hifi();
 int __fastcall adev_set_headset_volume(int a1, float a2);
-unsigned int __fastcall sub_427C(int a1);
-unsigned int __fastcall sub_42F0(int a1);
-unsigned int __fastcall sub_4364(int a1, int a2, int a3);
+unsigned int __fastcall set_hifi_volume(int a1);
+unsigned int __fastcall set_headphone_volume(int a1);
+unsigned int __fastcall set_mixer_value_by_name(int a1, int a2, int a3);
 int *__fastcall sub_4394(int a1);
 int __fastcall sub_43AC(int a1, int a2, unsigned int a3, const char *a4, const char *a5);
 static int adev_open(const hw_module_t* module, const char* name, hw_device_t** device);
-int __fastcall sub_46E0(int a1);
-int sub_470A();
-int __fastcall sub_4710(int a1, float a2);
-int sub_4824();
-int __fastcall sub_482C(int a1, int a2);
-int __fastcall sub_4B34(int a1, char a2);
-int __fastcall sub_4B3C(int a1, _BYTE *a2);
-int __fastcall sub_4B48(int a1, const char *a2);
-char *__fastcall sub_4E6C(int a1, const char *a2);
-int __fastcall sub_4FD0(int a1, int *a2);
-int __fastcall sub_5068(int a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6);
-void __fastcall sub_52B8(int a1, void *a2);
-int __fastcall sub_52F4(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5);
-void __fastcall sub_5520(int a1, _DWORD *a2);
-int sub_55A0();
-int __fastcall sub_55A4(int a1, int a2, int a3);
+int __fastcall adev_close(int a1);
+int adev_init_check();
+int __fastcall adev_set_voice_volume(int a1, float a2);
+int adev_set_master_volume();
+int __fastcall adev_set_mode(int a1, int a2);
+int __fastcall adev_set_mic_mute(int a1, char a2);
+int __fastcall adev_get_mic_mute(int a1, _BYTE *a2);
+int __fastcall adev_set_parameters(int a1, const char *a2);
+char *__fastcall adev_get_parameters(int a1, const char *a2);
+int __fastcall adev_get_input_buffer_size(int a1, int *a2);
+int __fastcall adev_open_output_stream(int a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6);
+void __fastcall adev_close_output_stream(int a1, void *a2);
+int __fastcall adev_open_input_stream(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5);
+void __fastcall adev_close_input_stream(int a1, _DWORD *a2);
+int adev_dump();
+int __fastcall adev_dumb2(int a1, int a2, int a3);
 int __fastcall sub_55E8(int a1);
 int __fastcall sub_569C(int a1);
 int __fastcall sub_5730(int a1);
@@ -1431,13 +1431,13 @@ LABEL_40:
   if ( v22 )
   {
     _android_log_print(3, "audio_hw_primary", "%s(): set hifi gain: %d, %d", "play_sample", dword_116C8, 12);
-    sub_4364(v22, (int)"Gain selection", dword_116C8);
-    sub_4364(v22, (int)"Master Playback Volume", 12);
-    sub_4364(v22, (int)"Filter Shape", 1);
-    sub_4364(v22, (int)"bypass IIR", 1);
-    sub_4364(v22, (int)"THD Compensation", 1);
-    sub_4364(v22, (int)"2nd Harmonic Compensation", 0);
-    sub_4364(v22, (int)"3nd Harmonic Compensation", 254);
+    set_mixer_value_by_name(v22, (int)"Gain selection", dword_116C8);
+    set_mixer_value_by_name(v22, (int)"Master Playback Volume", 12);
+    set_mixer_value_by_name(v22, (int)"Filter Shape", 1);
+    set_mixer_value_by_name(v22, (int)"bypass IIR", 1);
+    set_mixer_value_by_name(v22, (int)"THD Compensation", 1);
+    set_mixer_value_by_name(v22, (int)"2nd Harmonic Compensation", 0);
+    set_mixer_value_by_name(v22, (int)"3nd Harmonic Compensation", 254);
     mixer_close(v22);
   }
   v23 = dword_116D0;
@@ -1610,9 +1610,9 @@ int __fastcall adev_set_headset_volume(int a1, float a2)
     }
     *(_DWORD *)(a1 + 272) = v6;
     if ( *(_BYTE *)(a1 + 289) )
-      sub_427C(a1);
+      set_hifi_volume(a1);
     else
-      sub_42F0(a1);
+      set_headphone_volume(a1);
     return 0;
   }
   return result;
@@ -1620,7 +1620,7 @@ int __fastcall adev_set_headset_volume(int a1, float a2)
 // 3158: using guessed type int _snprintf_chk(_DWORD, _DWORD, _DWORD, _DWORD, const char *, ...);
 
 //----- (0000427C) --------------------------------------------------------
-unsigned int __fastcall sub_427C(int a1)
+unsigned int __fastcall set_hifi_volume(int a1)
 {
   int v2; // r5
   int v3; // r0
@@ -1649,12 +1649,12 @@ unsigned int __fastcall sub_427C(int a1)
     }
   }
   _android_log_print(2, "audio_hw_primary", "%s(): volume=%d", "set_hifi_volume", v2);
-  return sub_4364(*(_DWORD *)(a1 + 196), (int)"Master Playback Volume", v2);
+  return set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"Master Playback Volume", v2);
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 
 //----- (000042F0) --------------------------------------------------------
-unsigned int __fastcall sub_42F0(int a1)
+unsigned int __fastcall set_headphone_volume(int a1)
 {
   unsigned int result; // r0
   int v3; // r0
@@ -1677,14 +1677,14 @@ unsigned int __fastcall sub_42F0(int a1)
         v4 = 128 - 2 * *(_DWORD *)(a1 + 272);
     }
     _android_log_print(2, "audio_hw_primary", "%s(): headphone volume=%d", "set_headphone_volume", v4);
-    return sub_4364(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Volume", v4);
+    return set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Volume", v4);
   }
   return result;
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 
 //----- (00004364) --------------------------------------------------------
-unsigned int __fastcall sub_4364(int a1, int a2, int a3)
+unsigned int __fastcall set_mixer_value_by_name(int a1, int a2, int a3)
 {
   unsigned int result; // r0
   unsigned int v5; // r5
@@ -1771,23 +1771,23 @@ static int adev_open(const hw_module_t* module, const char* name, hw_device_t** 
   *v6 = 1213678676;
   v6[1] = 512;
   v6[2] = module;
-  v6[15] = sub_46E0;
-  v6[17] = sub_470A;
-  v6[18] = sub_4710;
-  v6[19] = sub_4824;
-  v6[21] = sub_482C;
-  v6[22] = sub_4B34;
-  v6[23] = sub_4B3C;
-  v6[27] = sub_4B48;
-  v6[28] = sub_4E6C;
-  v6[29] = sub_4FD0;
-  v6[30] = sub_5068;
-  v6[31] = sub_52B8;
-  v6[32] = sub_52F4;
-  v6[33] = sub_5520;
-  v6[34] = sub_55A0;
+  v6[15] = adev_close;
+  v6[17] = adev_init_check;
+  v6[18] = adev_set_voice_volume;
+  v6[19] = adev_set_master_volume;
+  v6[21] = adev_set_mode;
+  v6[22] = adev_set_mic_mute;
+  v6[23] = adev_get_mic_mute;
+  v6[27] = adev_set_parameters;
+  v6[28] = adev_get_parameters;
+  v6[29] = adev_get_input_buffer_size;
+  v6[30] = adev_open_output_stream;
+  v6[31] = adev_close_output_stream;
+  v6[32] = adev_open_input_stream;
+  v6[33] = adev_close_input_stream;
+  v6[34] = adev_dump;
   v6[26] = adev_set_headset_volume;
-  v6[24] = sub_55A4;
+  v6[24] = adev_dumb2;
   v7 = audio_route_init(0, "/system/etc/mixer_paths.xml");
   v6[47] = v7;
   if ( !v7 )
@@ -1846,19 +1846,19 @@ LABEL_14:
 // 2FF0: using guessed type int __fastcall mixer_open(_DWORD);
 // 3008: using guessed type int __fastcall mixer_close(_DWORD);
 // 31B8: using guessed type int Open(void);
-// 46E0: using guessed type int sub_46E0();
-// 4710: using guessed type int sub_4710();
-// 482C: using guessed type int sub_482C();
-// 4B48: using guessed type int sub_4B48();
-// 4E6C: using guessed type int sub_4E6C();
-// 5068: using guessed type int sub_5068(int, int, int, int, int, int);
-// 52B8: using guessed type int sub_52B8();
-// 52F4: using guessed type int sub_52F4(int, int, int, int, int);
-// 5520: using guessed type int sub_5520();
-// 55A4: using guessed type int sub_55A4();
+// 46E0: using guessed type int adev_close();
+// 4710: using guessed type int adev_set_voice_volume();
+// 482C: using guessed type int adev_set_mode();
+// 4B48: using guessed type int adev_set_parameters();
+// 4E6C: using guessed type int adev_get_parameters();
+// 5068: using guessed type int adev_open_output_stream(int, int, int, int, int, int);
+// 52B8: using guessed type int adev_close_output_stream();
+// 52F4: using guessed type int adev_open_input_stream(int, int, int, int, int);
+// 5520: using guessed type int adev_close_input_stream();
+// 55A4: using guessed type int adev_dumb2();
 
 //----- (000046E0) --------------------------------------------------------
-int __fastcall sub_46E0(int a1)
+int __fastcall adev_close(int a1)
 {
   NxpTfa98xx_Stop();
   mixer_close(*(_DWORD *)(a1 + 196));
@@ -1871,13 +1871,13 @@ int __fastcall sub_46E0(int a1)
 // 31D0: using guessed type int NxpTfa98xx_Stop(void);
 
 //----- (0000470A) --------------------------------------------------------
-int sub_470A()
+int adev_init_check()
 {
   return 0;
 }
 
 //----- (00004710) --------------------------------------------------------
-int __fastcall sub_4710(int a1, float a2)
+int __fastcall adev_set_voice_volume(int a1, float a2)
 {
   int v4; // r8
   float *v5; // r9
@@ -1919,13 +1919,13 @@ int __fastcall sub_4710(int a1, float a2)
 // 3158: using guessed type int _snprintf_chk(_DWORD, _DWORD, _DWORD, _DWORD, const char *, ...);
 
 //----- (00004824) --------------------------------------------------------
-int sub_4824()
+int adev_set_master_volume()
 {
   return -38;
 }
 
 //----- (0000482C) --------------------------------------------------------
-int __fastcall sub_482C(int a1, int a2)
+int __fastcall adev_set_mode(int a1, int a2)
 {
   int v4; // r0
   int v5; // r0
@@ -2093,21 +2093,21 @@ LABEL_37:
 // 31E8: using guessed type int __fastcall SetAudioClock(_DWORD);
 
 //----- (00004B34) --------------------------------------------------------
-int __fastcall sub_4B34(int a1, char a2)
+int __fastcall adev_set_mic_mute(int a1, char a2)
 {
   *(_BYTE *)(a1 + 180) = a2;
   return 0;
 }
 
 //----- (00004B3C) --------------------------------------------------------
-int __fastcall sub_4B3C(int a1, _BYTE *a2)
+int __fastcall adev_get_mic_mute(int a1, _BYTE *a2)
 {
   *a2 = *(_BYTE *)(a1 + 180);
   return 0;
 }
 
 //----- (00004B48) --------------------------------------------------------
-int __fastcall sub_4B48(int a1, const char *a2)
+int __fastcall adev_set_parameters(int a1, const char *a2)
 {
   int str; // r4
   int v5; // r6
@@ -2140,7 +2140,7 @@ int __fastcall sub_4B48(int a1, const char *a2)
       if ( *(_BYTE *)(a1 + 289) )
       {
         sub_62E0(a1);
-        sub_427C(a1);
+        set_hifi_volume(a1);
       }
     }
   }
@@ -2158,7 +2158,7 @@ int __fastcall sub_4B48(int a1, const char *a2)
         v6);
       *(_BYTE *)(a1 + 290) = v6;
       if ( v6 )
-        sub_427C(a1);
+        set_hifi_volume(a1);
     }
   }
   v7 = *(_QWORD *)(a1 + 252);
@@ -2232,7 +2232,7 @@ int __fastcall sub_4B48(int a1, const char *a2)
 // 320C: using guessed type int __fastcall str_parms_destroy(_DWORD);
 
 //----- (00004E6C) --------------------------------------------------------
-char *__fastcall sub_4E6C(int a1, const char *a2)
+char *__fastcall adev_get_parameters(int a1, const char *a2)
 {
   int str; // r5
   int v5; // r4
@@ -2285,7 +2285,7 @@ char *__fastcall sub_4E6C(int a1, const char *a2)
 // 323C: using guessed type int _sprintf_chk(_DWORD, _DWORD, _DWORD, const char *, ...);
 
 //----- (00004FD0) --------------------------------------------------------
-int __fastcall sub_4FD0(int a1, int *a2)
+int __fastcall adev_get_input_buffer_size(int a1, int *a2)
 {
   int v2; // r0
   int v3; // r12
@@ -2328,7 +2328,7 @@ LABEL_4:
 // 11038: using guessed type Elf32_Sym *off_11038;
 
 //----- (00005068) --------------------------------------------------------
-int __fastcall sub_5068(int a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6)
+int __fastcall adev_open_output_stream(int a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6)
 {
   int result; // r0
   unsigned int v8; // r10
@@ -2488,7 +2488,7 @@ LABEL_22:
 // 11010: using guessed type void *;
 
 //----- (000052B8) --------------------------------------------------------
-void __fastcall sub_52B8(int a1, void *a2)
+void __fastcall adev_close_output_stream(int a1, void *a2)
 {
   sub_6644((int)a2);
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 164));
@@ -2500,7 +2500,7 @@ void __fastcall sub_52B8(int a1, void *a2)
 }
 
 //----- (000052F4) --------------------------------------------------------
-int __fastcall sub_52F4(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5)
+int __fastcall adev_open_input_stream(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5)
 {
   _DWORD *v8; // r7
   int v9; // r0
@@ -2594,7 +2594,7 @@ LABEL_9:
 // 11038: using guessed type Elf32_Sym *off_11038;
 
 //----- (00005520) --------------------------------------------------------
-void __fastcall sub_5520(int a1, _DWORD *a2)
+void __fastcall adev_close_input_stream(int a1, _DWORD *a2)
 {
   int v3; // r6
   int v4; // r5
@@ -2617,21 +2617,21 @@ void __fastcall sub_5520(int a1, _DWORD *a2)
 // 11034: using guessed type void *off_11034;
 
 //----- (000055A0) --------------------------------------------------------
-int sub_55A0()
+int adev_dump()
 {
   return 0;
 }
 
 //----- (000055A4) --------------------------------------------------------
-int __fastcall sub_55A4(int a1, int a2, int a3)
+int __fastcall adev_dumb2(int a1, int a2, int a3)
 {
   int v5; // r6
 
   if ( (*(_BYTE *)(a1 + 172) & 2) == 0 )
   {
     v5 = a3 + 2;
-    sub_4364(*(_DWORD *)(a1 + 192), (int)off_10BDC[a2], a3 + 2);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)off_10BF0[a2], v5);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)off_10BDC[a2], a3 + 2);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)off_10BF0[a2], v5);
   }
   return 0;
 }
@@ -2649,7 +2649,7 @@ int __fastcall sub_55E8(int a1)
   v2 = *(_DWORD *)(a1 + 172);
   if ( (v2 & 0xC) != 0 )
   {
-    sub_42F0(a1);
+    set_headphone_volume(a1);
 LABEL_3:
     v3 = 15;
     goto LABEL_8;
@@ -2833,13 +2833,13 @@ int __fastcall sub_5730(int a1)
   {
     v57 = v4 & 0xC;
     sub_62E0(a1);
-    sub_427C(a1);
+    set_hifi_volume(a1);
   }
   else
   {
     v57 = v4 & 0xC;
     if ( (v4 & 0xC) != 0 )
-      sub_42F0(a1);
+      set_headphone_volume(a1);
   }
   if ( (v4 & 2) == 0 && *(_BYTE *)(a1 + 260) )
   {
@@ -2908,10 +2908,10 @@ LABEL_44:
       NxpTfa98xx_SetMute(2);
       *(_BYTE *)(a1 + 261) = 1;
     }
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Switch", 0);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"EPOUT Digital Switch", 0);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"AIF2TX1 Input 1", 0);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"AIF2TX2 Input 1", 0);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Switch", 0);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"EPOUT Digital Switch", 0);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX1 Input 1", 0);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX2 Input 1", 0);
     *(_BYTE *)(a1 + 268) = 1;
   }
 LABEL_49:
@@ -3204,10 +3204,10 @@ LABEL_136:
 LABEL_139:
   if ( *(_BYTE *)(a1 + 268) )
   {
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Switch", 1);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"EPOUT Digital Switch", 1);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"AIF2TX1 Input 1", 38);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)"AIF2TX2 Input 1", 39);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Switch", 1);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"EPOUT Digital Switch", 1);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX1 Input 1", 38);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX2 Input 1", 39);
     *(_BYTE *)(a1 + 268) = 0;
   }
   return _stack_chk_guard - v59;
@@ -3612,15 +3612,15 @@ LABEL_46:
           v9);
         if ( v8 != *(_DWORD *)(a1 + 296) )
         {
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"Filter Shape", 0);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"bypass IIR", 0);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"IIR bandwidth", 0);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"Gain selection", v8);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"THD Compensation", 1);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"2nd Harmonic Compensation", 0);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"3nd Harmonic Compensation", 254);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"custom FIR enable", 1);
-          sub_4364(*(_DWORD *)(a1 + 196), (int)"stage2 filter type", 0);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"Filter Shape", 0);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"bypass IIR", 0);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"IIR bandwidth", 0);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"Gain selection", v8);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"THD Compensation", 1);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"2nd Harmonic Compensation", 0);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"3nd Harmonic Compensation", 254);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"custom FIR enable", 1);
+          set_mixer_value_by_name(*(_DWORD *)(a1 + 196), (int)"stage2 filter type", 0);
           if ( *(_DWORD *)(a1 + 292) != 3 )
             *(_DWORD *)(a1 + 296) = v8;
         }
