@@ -29,7 +29,6 @@ void sub_2F34();
 // int __fastcall mixer_close(_DWORD); weak
 // int usleep(__useconds_t useconds);
 // int pthread_mutex_lock(pthread_mutex_t *mutex);
-void __fastcall j_audio_route_free(_DWORD *);
 // int pthread_mutex_unlock(pthread_mutex_t *mutex);
 // int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD); weak
 // int __fastcall pcm_is_ready(_DWORD); weak
@@ -221,9 +220,7 @@ int __fastcall audio_route_apply_path(int, char *s2); // idb
 const char **__fastcall sub_8DE4(int a1, char *s2);
 int __fastcall audio_route_reset_path(int, char *s2); // idb
 struct audio_route *audio_route_init(unsigned int card, const char *xml_path);// /system/media/audio_route/include/audio_route/audio_route.h
-int __fastcall sub_9568(int result);
-void __fastcall sub_9570(int a1);
-void __fastcall audio_route_free(_DWORD *a1);
+void audio_route_free(struct audio_route *ar);// /system/media/audio_route/include/audio_route/audio_route.h
 unsigned int __fastcall sub_95D4(int a1);
 int __fastcall get_value(const char *a1, int a2);
 int __fastcall set_value(const char *a1, const char *a2);
@@ -784,13 +781,6 @@ void sub_2F34()
 }
 // 2F40: control flows out of bounds to 0
 
-//----- (0000302C) --------------------------------------------------------
-// attributes: thunk
-void __fastcall j_audio_route_free(_DWORD *a1)
-{
-  audio_route_free(a1);
-}
-
 //----- (00003074) --------------------------------------------------------
 // attributes: thunk
 unsigned int __fastcall j_audio_route_reset(int a1)
@@ -1191,7 +1181,7 @@ LABEL_7:
     }
   }
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 164));
-  j_audio_route_free(*(_DWORD **)(a1 + 188));
+  audio_route_free(*(_DWORD **)(a1 + 188));
   v8 = audio_route_init(0, "/system/etc/mixer_paths.xml");
   *(_DWORD *)(a1 + 188) = v8;
   if ( !v8 )
@@ -1803,7 +1793,7 @@ LABEL_15:
   {
     _android_log_print(6, "audio_hw_primary", "%s(): failed to open mixer, abort...", "adev_open");
 LABEL_14:
-    j_audio_route_free((_DWORD *)v6[47]);
+    audio_route_free((_DWORD *)v6[47]);
     goto LABEL_15;
   }
   v9 = mixer_open(1);
@@ -1863,7 +1853,7 @@ int __fastcall adev_close(int a1)
   NxpTfa98xx_Stop();
   mixer_close(*(_DWORD *)(a1 + 196));
   mixer_close(*(_DWORD *)(a1 + 192));
-  j_audio_route_free(*(_DWORD **)(a1 + 188));
+  audio_route_free(*(_DWORD **)(a1 + 188));
   free((void *)a1);
   return 0;
 }
@@ -6513,51 +6503,6 @@ int __fastcall audio_route_reset_path(int a1, char *s2)
   }
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
-
-//----- (00009568) --------------------------------------------------------
-int __fastcall sub_9568(int result)
-{
-  --*(_DWORD *)(result + 8);
-  return result;
-}
-
-//----- (00009570) --------------------------------------------------------
-void __fastcall sub_9570(int a1)
-{
-  unsigned int v2; // r0
-  int v3; // r6
-  unsigned int i; // r7
-  int v5; // r1
-
-  v2 = *(_DWORD *)(a1 + 4);
-  if ( v2 )
-  {
-    v3 = 0;
-    for ( i = 0; i < v2; ++i )
-    {
-      v5 = *(_DWORD *)(a1 + 8) + v3;
-      if ( *(_DWORD *)(v5 + 4) <= 2u )
-      {
-        free(*(void **)(v5 + 12));
-        free(*(void **)(*(_DWORD *)(a1 + 8) + v3 + 16));
-        free(*(void **)(*(_DWORD *)(a1 + 8) + v3 + 20));
-        v2 = *(_DWORD *)(a1 + 4);
-      }
-      v3 += 24;
-    }
-  }
-  free(*(void **)(a1 + 8));
-  *(_DWORD *)(a1 + 8) = 0;
-}
-
-//----- (000095BA) --------------------------------------------------------
-void __fastcall audio_route_free(_DWORD *a1)
-{
-  sub_9570((int)a1);
-  mixer_close(*a1);
-  j_free(a1);
-}
-// 3008: using guessed type int __fastcall mixer_close(_DWORD);
 
 //----- (000095D4) --------------------------------------------------------
 unsigned int __fastcall sub_95D4(int a1)
