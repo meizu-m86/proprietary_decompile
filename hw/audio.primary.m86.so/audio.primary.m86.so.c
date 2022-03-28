@@ -152,7 +152,7 @@ int __fastcall sub_43AC(int a1, int a2, unsigned int a3, const char *a4, const c
 static int adev_open(const hw_module_t* module, const char* name, hw_device_t** device);
 int __fastcall adev_close(int a1);
 int adev_init_check();
-int __fastcall adev_set_voice_volume(int a1, float a2);
+int adev_set_voice_volume(struct audio_hw_device *dev, float volume);
 int adev_set_master_volume();
 int __fastcall adev_set_mode(int a1, int a2);
 int __fastcall adev_set_mic_mute(int a1, char a2);
@@ -1837,7 +1837,7 @@ LABEL_14:
 // 3008: using guessed type int __fastcall mixer_close(_DWORD);
 // 31B8: using guessed type int Open(void);
 // 46E0: using guessed type int adev_close();
-// 4710: using guessed type int adev_set_voice_volume();
+// 4710: using guessed type int adev_set_voice_volume(struct audio_hw_device *dev, float volume);
 // 482C: using guessed type int adev_set_mode();
 // 4B48: using guessed type int adev_set_parameters();
 // 4E6C: using guessed type int adev_get_parameters();
@@ -1867,14 +1867,15 @@ int adev_init_check()
 }
 
 //----- (00004710) --------------------------------------------------------
-int __fastcall adev_set_voice_volume(int a1, float a2)
+int adev_set_voice_volume(struct audio_hw_device *dev, float volume);
 {
   int v4; // r8
   float *v5; // r9
   pthread_mutex_t *mutex; // [sp+10h] [bp-40h]
   char v8[9]; // [sp+16h] [bp-3Ah] BYREF
   char v9[9]; // [sp+1Fh] [bp-31h] BYREF
-
+  struct audio_device *a1 = (struct audio_device *)dev;
+  
   mutex = (pthread_mutex_t *)(a1 + 164);
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 164));
   v4 = 0;
