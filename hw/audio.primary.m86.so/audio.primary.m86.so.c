@@ -160,7 +160,13 @@ int __fastcall adev_get_mic_mute(int a1, _BYTE *a2);
 int __fastcall adev_set_parameters(int a1, const char *a2);
 char *__fastcall adev_get_parameters(int a1, const char *a2);
 int __fastcall adev_get_input_buffer_size(int a1, int *a2);
-int __fastcall adev_open_output_stream(int a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6);
+int adev_open_output_stream(struct audio_hw_device *dev,
+                              audio_io_handle_t handle,
+                              audio_devices_t devices,
+                              audio_output_flags_t flags,
+                              struct audio_config *config,
+                              struct audio_stream_out **stream_out,
+                              const char *address);
 void __fastcall adev_close_output_stream(int a1, void *a2);
 int __fastcall adev_open_input_stream(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5);
 void __fastcall adev_close_input_stream(int a1, _DWORD *a2);
@@ -2319,7 +2325,14 @@ LABEL_4:
 // 11038: using guessed type Elf32_Sym *off_11038;
 
 //----- (00005068) --------------------------------------------------------
-int __fastcall adev_open_output_stream(int a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6)
+//int __fastcall adev_open_output_stream(int a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6)
+int adev_open_output_stream(struct audio_hw_device *dev,
+                              audio_io_handle_t handle,
+                              audio_devices_t devices,
+                              audio_output_flags_t flags,
+                              struct audio_config *config,
+                              struct audio_stream_out **stream_out,
+                              const char *address)
 {
   int result; // r0
   unsigned int v8; // r10
