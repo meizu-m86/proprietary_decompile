@@ -10,7 +10,6 @@
 //-------------------------------------------------------------------------
 // Function declarations
 
-void sub_2F34();
 // int __fastcall _cxa_finalize(void *);
 // int __fastcall _cxa_atexit(void (__fastcall *lpfunc)(void *), void *obj, void *lpdso_handle);
 // int __fastcall _register_atfork(_DWORD, _DWORD, _DWORD, _DWORD); weak
@@ -129,7 +128,6 @@ int __fastcall j_uart_read_wrapper(_DWORD *, char *, size_t);
 // int fprintf(FILE *stream, const char *format, ...);
 // int __fastcall dladdr(_DWORD, _DWORD); weak
 // int __fastcall _gnu_Unwind_Find_exidx(_DWORD, _DWORD); weak
-int sub_3500();
 int (*__fastcall sub_3520(int (*result)(void)))(void);
 int __fastcall sub_354C(void *a1);
 int __fastcall sub_3598(int a1, int a2, int a3);
@@ -172,12 +170,12 @@ int __fastcall adev_open_input_stream(int a1, int a2, int a3, _DWORD *a4, _DWORD
 void __fastcall adev_close_input_stream(int a1, _DWORD *a2);
 int adev_dump();
 int __fastcall adev_dumb2(int a1, int a2, int a3);
-int __fastcall sub_55E8(int a1);
+int __fastcall set_voice_volume(int a1);
 int __fastcall sub_569C(int a1);
 int __fastcall sub_5730(int a1);
 void __fastcall sub_605C(int a1);
 int __fastcall sub_6164(int a1);
-void __fastcall sub_61B8(int a1);
+void __fastcall do_out_standby(int a1);
 int __fastcall sub_629C(int a1);
 int __fastcall sub_62E0(int a1);
 int __fastcall sub_6644(int a1);
@@ -192,13 +190,13 @@ int __fastcall sub_6E22(int a1);
 int __fastcall sub_6E28(int a1);
 int sub_6E2E();
 int sub_6E34();
-int __fastcall sub_6E38(int a1, int a2);
+int __fastcall out_set_parameters(int a1, int a2);
 char *__fastcall sub_723C(int a1, const char *a2);
 int sub_7320();
 int sub_7324();
 unsigned int __fastcall sub_7328(_DWORD *a1);
 int sub_733E();
-unsigned int __fastcall sub_7344(int a1, int a2, unsigned int a3);
+unsigned int __fastcall start_output_stream(int a1, int a2, unsigned int a3);
 int sub_7C90();
 int sub_7C96();
 int __fastcall sub_7C9C(int a1, _QWORD *a2, int a3);
@@ -215,10 +213,10 @@ int sub_7F78(); // weak
 int sub_7F84();
 int sub_7F88();
 int sub_7F8C();
-unsigned int __fastcall sub_7F90(int a1, char *a2, unsigned int a3);
+unsigned int __fastcall start_input_stream(int a1, char *a2, unsigned int a3);
 int sub_8A54();
-int __fastcall sub_8A58(int a1);
-int __fastcall sub_8BD4(_DWORD *a1, _DWORD *a2);
+int __fastcall pcm_read_thread(int a1);
+int __fastcall get_next_buffer(_DWORD *a1, _DWORD *a2);
 int __fastcall sub_8C90(int result, int a2);
 int __fastcall audio_route_update_mixer(int a1);
 unsigned int __fastcall audio_route_reset(int a1);
@@ -779,14 +777,6 @@ _UNKNOWN unk_116E0; // weak
 // extern _UNKNOWN _stack_chk_guard; weak
 // extern struct _IO_FILE *stderr;
 
-
-//----- (00002F34) --------------------------------------------------------
-void sub_2F34()
-{
-  JUMPOUT(0);
-}
-// 2F40: control flows out of bounds to 0
-
 //----- (00003074) --------------------------------------------------------
 // attributes: thunk
 unsigned int __fastcall j_audio_route_reset(int a1)
@@ -892,12 +882,6 @@ int __fastcall j_uart_read_wrapper(_DWORD *a1, char *a2, size_t a3)
   return uart_read_wrapper(a1, a2, a3);
 }
 
-//----- (00003500) --------------------------------------------------------
-int sub_3500()
-{
-  return _cxa_finalize(&off_11000);
-}
-// 11000: using guessed type void *off_11000;
 
 //----- (00003520) --------------------------------------------------------
 int (*__fastcall sub_3520(int (*result)(void)))(void)
@@ -1908,7 +1892,7 @@ int adev_set_voice_volume(struct audio_hw_device *dev, float volume);
   }
   while ( v4 != 15 );
   if ( *(_DWORD *)(a1 + 168) == 2 )
-    sub_55E8(a1);
+    set_voice_volume(a1);
   pthread_mutex_unlock(mutex);
   return 0;
 }
@@ -2398,13 +2382,13 @@ int adev_open_output_stream(struct audio_hw_device *dev,
   v9[5] = sub_6E2E;
   v9[6] = sub_6644;
   v9[7] = sub_6E34;
-  v9[10] = sub_6E38;
+  v9[10] = out_set_parameters;
   v9[11] = sub_723C;
   v9[12] = sub_7320;
   v9[13] = sub_7324;
   v9[14] = sub_7328;
   v9[15] = sub_733E;
-  v9[16] = sub_7344;
+  v9[16] = start_output_stream;
   v9[17] = sub_7C90;
   v9[18] = sub_7C96;
   v9[24] = sub_7C9C;
@@ -2486,8 +2470,8 @@ LABEL_22:
   return result;
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
-// 6E38: using guessed type int sub_6E38();
-// 7344: using guessed type int sub_7344();
+// 6E38: using guessed type int out_set_parameters();
+// 7344: using guessed type int start_output_stream();
 // 1100C: using guessed type void *off_1100C;
 // 11010: using guessed type void *;
 
@@ -2568,7 +2552,7 @@ LABEL_9:
       v8[12] = sub_7F84;
       v8[13] = sub_7F88;
       v8[14] = sub_7F8C;
-      v8[15] = sub_7F90;
+      v8[15] = start_input_stream;
       v8[16] = sub_8A54;
       v8[43] = a1;
       *((_BYTE *)v8 + 124) = 1;
@@ -2593,7 +2577,7 @@ LABEL_9:
 // 7DB8: using guessed type int sub_7DB8();
 // 7DF4: using guessed type int sub_7DF4();
 // 7F78: using guessed type int sub_7F78();
-// 7F90: using guessed type int sub_7F90();
+// 7F90: using guessed type int start_input_stream();
 // 11030: using guessed type int pcm_config_in;
 // 11038: using guessed type Elf32_Sym *off_11038;
 
@@ -2643,7 +2627,7 @@ int __fastcall adev_dumb2(int a1, int a2, int a3)
 // 10BF0: using guessed type char *off_10BF0[5];
 
 //----- (000055E8) --------------------------------------------------------
-int __fastcall sub_55E8(int a1)
+int __fastcall set_voice_volume(int a1)
 {
   int v2; // r0
   int v3; // r5
@@ -2723,7 +2707,7 @@ int __fastcall sub_569C(int a1)
       sub_6164(a1);
       *(_BYTE *)(a1 + 260) = 0;
     }
-    sub_61B8(v3);
+    do_out_standby(v3);
     sub_629C(a1);
     return j_pthread_mutex_unlock((pthread_mutex_t *)(v3 + 100));
   }
@@ -2830,7 +2814,7 @@ int __fastcall sub_5730(int a1)
       }
     }
     if ( HIDWORD(v7) == 2 )
-      sub_55E8(a1);
+      set_voice_volume(a1);
   }
   v8 = v4 & 2;
   if ( *(_BYTE *)(a1 + 289) )
@@ -3333,7 +3317,7 @@ int __fastcall sub_6164(int a1)
 // 32B4: using guessed type int NxpTfa98xx_PowerOff(void);
 
 //----- (000061B8) --------------------------------------------------------
-void __fastcall sub_61B8(int a1)
+void __fastcall do_out_standby(int a1)
 {
   int v2; // r8
   int v3; // r6
@@ -3645,7 +3629,7 @@ int __fastcall sub_6644(int a1)
 {
   pthread_mutex_lock((pthread_mutex_t *)(*(_DWORD *)(a1 + 204) + 164));
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 100));
-  sub_61B8(a1);
+  do_out_standby(a1);
   pthread_mutex_unlock((pthread_mutex_t *)(a1 + 100));
   pthread_mutex_unlock((pthread_mutex_t *)(*(_DWORD *)(a1 + 204) + 164));
   return 0;
@@ -4105,7 +4089,7 @@ int sub_6E34()
 }
 
 //----- (00006E38) --------------------------------------------------------
-int __fastcall sub_6E38(int a1, int a2)
+int __fastcall out_set_parameters(int a1, int a2)
 {
   int v3; // r5
   int v4; // r10
@@ -4180,7 +4164,7 @@ LABEL_10:
     if ( v8 != 8 )
       v13 = v8 == 4;
     if ( v13 && *(_DWORD *)(v3 + 256) && *(_BYTE *)(v3 + 289) )
-      sub_61B8(a1);
+      do_out_standby(a1);
     v14 = v6 == 8;
     if ( v6 != 8 )
       v14 = v6 == 4;
@@ -4336,7 +4320,7 @@ LABEL_58:
     *(_BYTE *)(v3 + 288) = v31;
   }
   if ( v9 == 1 )
-    sub_61B8(a1);
+    do_out_standby(a1);
   pthread_mutex_unlock((pthread_mutex_t *)(a1 + 100));
   if ( v7 == 1 )
   {
@@ -4444,7 +4428,7 @@ int sub_733E()
 }
 
 //----- (00007344) --------------------------------------------------------
-unsigned int __fastcall sub_7344(int a1, int a2, unsigned int a3)
+unsigned int __fastcall start_output_stream(int a1, int a2, unsigned int a3)
 {
   int v3; // r9
   int v5; // r11
@@ -5419,7 +5403,7 @@ int sub_7F8C()
 }
 
 //----- (00007F90) --------------------------------------------------------
-unsigned int __fastcall sub_7F90(int a1, char *a2, unsigned int a3)
+unsigned int __fastcall start_input_stream(int a1, char *a2, unsigned int a3)
 {
   int v6; // r7
   int v7; // r0
@@ -5617,7 +5601,7 @@ LABEL_35:
   {
     pthread_mutex_lock((pthread_mutex_t *)(v18 + 100));
     _android_log_print(2, "audio_hw_primary", "%s(): sync with input stream, standby output", "start_input_stream");
-    sub_61B8(v18);
+    do_out_standby(v18);
     pthread_mutex_unlock((pthread_mutex_t *)(v18 + 100));
     v19 = (char *)off_11034;
   }
@@ -5715,7 +5699,7 @@ LABEL_65:
   v36 = *(void **)(a1 + 128);
   if ( v36 != off_11034 )
   {
-    *(_DWORD *)(a1 + 136) = sub_8BD4;
+    *(_DWORD *)(a1 + 136) = get_next_buffer;
     *(_DWORD *)(a1 + 140) = sub_8C90;
     _android_log_print(
       3,
@@ -5803,7 +5787,7 @@ LABEL_149:
         {
           v96 = 0;
           v97 = v75 - i;
-          sub_8BD4((_DWORD *)(a1 + 136), &v96);
+          get_next_buffer((_DWORD *)(a1 + 136), &v96);
           v78 = v97;
           if ( v96 )
           {
@@ -5900,7 +5884,7 @@ LABEL_148:
     if ( !*(_DWORD *)(a1 + 84) )
     {
       _android_log_print(4, "audio_hw_primary", "#### start pcm read thread ####");
-      if ( pthread_create((pthread_t *)(a1 + 80), 0, (void *(*)(void *))sub_8A58, (void *)a1) <= -1 )
+      if ( pthread_create((pthread_t *)(a1 + 80), 0, (void *(*)(void *))pcm_read_thread, (void *)a1) <= -1 )
       {
         _android_log_print(6, "audio_hw_primary", "#### pcm_read_thread() thread creation failed ####");
       }
@@ -6169,7 +6153,7 @@ int sub_8A54()
 }
 
 //----- (00008A58) --------------------------------------------------------
-int __fastcall sub_8A58(int a1)
+int __fastcall pcm_read_thread(int a1)
 {
   size_t v2; // r5
   char *v3; // r10
@@ -6250,7 +6234,7 @@ int __fastcall sub_8A58(int a1)
 // 338C: using guessed type int __fastcall pcm_read(_DWORD, _DWORD, _DWORD);
 
 //----- (00008BD4) --------------------------------------------------------
-int __fastcall sub_8BD4(_DWORD *a1, _DWORD *a2)
+int __fastcall get_next_buffer(_DWORD *a1, _DWORD *a2)
 {
   int result; // r0
   int v5; // r6
