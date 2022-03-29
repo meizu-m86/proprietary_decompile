@@ -196,7 +196,7 @@ int sub_7320();
 int sub_7324();
 unsigned int __fastcall sub_7328(_DWORD *a1);
 int sub_733E();
-unsigned int __fastcall start_output_stream(int a1, int a2, unsigned int a3);
+unsigned int __fastcall out_write(int a1, int a2, unsigned int a3);
 int sub_7C90();
 int sub_7C96();
 int __fastcall sub_7C9C(int a1, _QWORD *a2, int a3);
@@ -2388,7 +2388,7 @@ int adev_open_output_stream(struct audio_hw_device *dev,
   v9[13] = sub_7324;
   v9[14] = sub_7328;
   v9[15] = sub_733E;
-  v9[16] = start_output_stream;
+  v9[16] = out_write;
   v9[17] = sub_7C90;
   v9[18] = sub_7C96;
   v9[24] = sub_7C9C;
@@ -2471,7 +2471,7 @@ LABEL_22:
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 6E38: using guessed type int out_set_parameters();
-// 7344: using guessed type int start_output_stream();
+// 7344: using guessed type int out_write();
 // 1100C: using guessed type void *off_1100C;
 // 11010: using guessed type void *;
 
@@ -4428,7 +4428,7 @@ int sub_733E()
 }
 
 //----- (00007344) --------------------------------------------------------
-unsigned int __fastcall start_output_stream(int a1, int a2, unsigned int a3)
+unsigned int __fastcall out_write(int a1, int a2, unsigned int a3)
 {
   int v3; // r9
   int v5; // r11

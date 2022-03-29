@@ -909,50 +909,45 @@ struct listnode
  ** Structure for Audio Output Stream
  ** Implement audio_stream_out structure
  **/
+// size : 0xD8 -> 216 
 struct stream_out {
     struct audio_stream_out stream;
-    pthread_mutex_t lock;
+    pthread_mutex_t lock; // *out + 25  // out + 100
 
-    /* These variables are needed to save Android Request becuase pcm_config
-         and audio_config are different */
-    audio_io_handle_t handle;
-    audio_devices_t devices;
-    audio_output_flags_t flags;
-    unsigned int sample_rate;
-    audio_channel_mask_t channel_mask;
-    audio_format_t format;
+    void *v_104; // *out + 26 // out + 104
+    void *v_108; // *out + 27 // out + 108
+    void *v_112; // *out + 28 // out + 112
+    void *v_116; // *out + 29 // out + 116
+    
+    void *v_120; // *out + 30 // out + 120
+    void *v_124; // *out + 31 // out + 124
+    void *v_128; // *out + 32 // out + 128
+    void *v_132; // *out + 33 // out + 132
+    
+    void *v_136; // *out + 34 // out + 136
+    void *v_140; // *out + 35 // out + 140
+    void *v_144; // *out + 36 // out + 144
+    void *v_148; // *out + 37 // out + 148
+    
+    void *v_152; // *out + 38 // out + 152
+    void *v_156; // *out + 39 // out + 156
+    void *v_160; // *out + 40 // out + 160
+    void *v_164; // *out + 41 // out + 164
+    
+    void *v_168; // *out + 42 // out + 168
+    void *v_172; // *out + 43 // out + 172
+    void *v_176; // *out + 44 // out + 176
+    void *v_180; // *out + 45 // out + 180
+    
+    int sample_rate; // *out + 46 // out + 184
+    int format; // *out + 47 // out + 188
+    void *v_192; // *out + 48 // out + 192
+    void *v_196; // *out + 49 // out + 196
+    void *v_200; // *out + 50 // out + 200
 
-    audio_usage_id_t ausage;
-    stream_state_type_t sstate;
-    bool mixer_path_setup;
-
-    /* PCM specific */
-    struct pcm *pcminfo;
-    struct pcm_config pcmconfig;
-    uint64_t written; /* total frames written, not cleared when entering standby */
-
-    /* Offload specific */
-    struct compress *comprinfo;
-    struct compr_config comprconfig;
-    int nonblock_flag;
-    float vol_left, vol_right;
-
-    stream_callback_t offload_callback;
-    void *offload_cookie;
-
-    pthread_t offload_callback_thread;
-
-    pthread_cond_t offload_msg_cond;
-    struct listnode offload_msg_list;
-
-    pthread_cond_t offload_sync_cond;
-    bool callback_thread_blocked;
-
-    struct compr_gapless_mdata offload_metadata;
-    int ready_new_metadata;
-
-    unsigned long err_count;
-    struct audio_device *adev;
+    struct audio_device *adev; // *out + 51 // out + 204
+    void *v_208; // *out + 52 // out + 208
+    void *v_212; // *out + 53 // out + 212
 };
 
 /**
@@ -1340,7 +1335,7 @@ struct audio_device {
     struct pcm *pcm_pa_in;// * + 62 // adev + 248     // PA_IN
 
     void *v_63;      // * + 63 // adev + 252 
-    void *v_64;      // * + 64 // adev + 256 
+    struct audio_stream_out **stream_out;      // * + 64 // adev + 256 
 
     bool tfa_power_state; // adev + 260
     bool mute_state; // adev + 261
