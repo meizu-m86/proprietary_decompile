@@ -1,4 +1,4 @@
-### 对于audio hal 需要重建3个结构体
+### 对于audio hal 需要重建结构体
    1. struct audio_device
    2. struct stream_out
    3. struct stream_in
