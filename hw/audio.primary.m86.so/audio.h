@@ -1268,9 +1268,10 @@ struct stream_out {
  ** Structure for Audio Input Stream
  ** Implement audio_stream_in structure
  **/
+// size : 0xB0 -> 176
 struct stream_in {
     struct audio_stream_in stream;
-    pthread_mutex_t lock;
+    pthread_mutex_t lock;// *in + 29  //  in + 116
 
     /* These variables are needed to save Android Request becuase pcm_config
          and audio_config are different */
@@ -1291,7 +1292,7 @@ struct stream_in {
     struct pcm_config pcmconfig;
 
     unsigned long err_count;
-    struct audio_device *adev;
+    struct audio_device *adev; // *in + 43 // out + 172
 };
 
 // size : 0x140 -> 320 
