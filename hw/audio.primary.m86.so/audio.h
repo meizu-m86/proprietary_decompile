@@ -905,80 +905,6 @@ struct listnode
     struct listnode *next;
     struct listnode *prev;
 };
-/**
- ** Structure for Audio Output Stream
- ** Implement audio_stream_out structure
- **/
-// size : 0xD8 -> 216 
-struct stream_out {
-    struct audio_stream_out stream;
-    pthread_mutex_t lock; // *out + 25  // out + 100
-
-    void *v_104; // *out + 26 // out + 104
-    void *v_108; // *out + 27 // out + 108
-    void *v_112; // *out + 28 // out + 112
-    void *v_116; // *out + 29 // out + 116
-    
-    void *v_120; // *out + 30 // out + 120
-    void *v_124; // *out + 31 // out + 124
-    void *v_128; // *out + 32 // out + 128
-    void *v_132; // *out + 33 // out + 132
-    
-    void *v_136; // *out + 34 // out + 136
-    void *v_140; // *out + 35 // out + 140
-    void *v_144; // *out + 36 // out + 144
-    void *v_148; // *out + 37 // out + 148
-    
-    void *v_152; // *out + 38 // out + 152
-    void *v_156; // *out + 39 // out + 156
-    void *v_160; // *out + 40 // out + 160
-    void *v_164; // *out + 41 // out + 164
-    
-    void *v_168; // *out + 42 // out + 168
-    void *v_172; // *out + 43 // out + 172
-    void *v_176; // *out + 44 // out + 176
-    void *v_180; // *out + 45 // out + 180
-    
-    int sample_rate; // *out + 46 // out + 184
-    int format; // *out + 47 // out + 188
-    void *v_192; // *out + 48 // out + 192
-    void *v_196; // *out + 49 // out + 196
-    void *v_200; // *out + 50 // out + 200
-
-    struct audio_device *adev; // *out + 51 // out + 204
-    void *v_208; // *out + 52 // out + 208
-    void *v_212; // *out + 53 // out + 212
-};
-
-/**
- ** Structure for Audio Input Stream
- ** Implement audio_stream_in structure
- **/
-struct stream_in {
-    struct audio_stream_in stream;
-    pthread_mutex_t lock;
-
-    /* These variables are needed to save Android Request becuase pcm_config
-         and audio_config are different */
-    audio_io_handle_t handle;
-    audio_devices_t devices;
-    audio_source_t source;
-    audio_input_flags_t flags;
-    unsigned int sample_rate;
-    audio_channel_mask_t channel_mask;
-    audio_format_t format;
-
-    audio_usage_id_t ausage;
-    stream_state_type_t sstate;
-    bool mixer_path_setup;
-
-    /* PCM specific */
-    struct pcm *pcminfo;
-    struct pcm_config pcmconfig;
-
-    unsigned long err_count;
-    struct audio_device *adev;
-};
 
 /**
  * return the frame size (number of bytes per sample) of an output stream.
@@ -1291,6 +1217,81 @@ struct audio_route {
     unsigned int mixer_path_size;
     unsigned int num_mixer_paths;
     struct mixer_path *mixer_path;
+};
+
+/**
+ ** Structure for Audio Output Stream
+ ** Implement audio_stream_out structure
+ **/
+// size : 0xD8 -> 216 
+struct stream_out {
+    struct audio_stream_out stream;
+    pthread_mutex_t lock; // *out + 25  // out + 100
+
+    void *v_104; // *out + 26 // out + 104
+    void *v_108; // *out + 27 // out + 108
+    void *v_112; // *out + 28 // out + 112
+    void *v_116; // *out + 29 // out + 116
+    
+    void *v_120; // *out + 30 // out + 120
+    void *v_124; // *out + 31 // out + 124
+    void *v_128; // *out + 32 // out + 128
+    void *v_132; // *out + 33 // out + 132
+    
+    void *v_136; // *out + 34 // out + 136
+    void *v_140; // *out + 35 // out + 140
+    void *v_144; // *out + 36 // out + 144
+    void *v_148; // *out + 37 // out + 148
+    
+    void *v_152; // *out + 38 // out + 152
+    void *v_156; // *out + 39 // out + 156
+    void *v_160; // *out + 40 // out + 160
+    void *v_164; // *out + 41 // out + 164
+    
+    void *v_168; // *out + 42 // out + 168
+    void *v_172; // *out + 43 // out + 172
+    void *v_176; // *out + 44 // out + 176
+    void *v_180; // *out + 45 // out + 180
+    
+    int sample_rate; // *out + 46 // out + 184
+    int format; // *out + 47 // out + 188
+    void *v_192; // *out + 48 // out + 192
+    void *v_196; // *out + 49 // out + 196
+    void *v_200; // *out + 50 // out + 200
+
+    struct audio_device *adev; // *out + 51 // out + 204
+    void *v_208; // *out + 52 // out + 208
+    void *v_212; // *out + 53 // out + 212
+};
+
+/**
+ ** Structure for Audio Input Stream
+ ** Implement audio_stream_in structure
+ **/
+struct stream_in {
+    struct audio_stream_in stream;
+    pthread_mutex_t lock;
+
+    /* These variables are needed to save Android Request becuase pcm_config
+         and audio_config are different */
+    audio_io_handle_t handle;
+    audio_devices_t devices;
+    audio_source_t source;
+    audio_input_flags_t flags;
+    unsigned int sample_rate;
+    audio_channel_mask_t channel_mask;
+    audio_format_t format;
+
+    audio_usage_id_t ausage;
+    stream_state_type_t sstate;
+    bool mixer_path_setup;
+
+    /* PCM specific */
+    struct pcm *pcminfo;
+    struct pcm_config pcmconfig;
+
+    unsigned long err_count;
+    struct audio_device *adev;
 };
 
 // size : 0x140 -> 320 
