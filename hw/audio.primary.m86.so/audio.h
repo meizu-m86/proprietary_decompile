@@ -1248,7 +1248,7 @@ struct stream_out {
     void *v_160; // *out + 40 // out + 160
     void *v_164; // *out + 41 // out + 164
     
-    void *v_168; // *out + 42 // out + 168
+    int channel_mask; // *out + 42 // out + 168
     void *v_172; // *out + 43 // out + 172
     void *v_176; // *out + 44 // out + 176
     void *v_180; // *out + 45 // out + 180
@@ -1292,7 +1292,16 @@ struct stream_in {
     struct pcm_config pcmconfig;
 
     unsigned long err_count;
-    struct audio_device *adev; // *in + 43 // out + 172
+    
+    bool b_124; // *in + 31 // in + 124
+    bool b_125;             // in + 125
+    bool b_126;             // in + 126
+    bool b_127;             // in + 127
+    
+    struct audio_config *config; // *in + 32 // in + 128
+    
+    
+    struct audio_device *adev; // *in + 43 // in + 172
 };
 
 // size : 0x140 -> 320 

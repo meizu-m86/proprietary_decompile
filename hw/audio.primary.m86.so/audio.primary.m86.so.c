@@ -176,28 +176,28 @@ int __fastcall sub_6164(int a1);
 void __fastcall do_out_standby(int a1);
 int __fastcall sub_629C(int a1);
 int __fastcall sub_62E0(int a1);
-int __fastcall sub_6644(int a1);
+int __fastcall out_standby(int a1);
 int __fastcall sub_6676(int a1);
 int __fastcall sub_66B0(int a1, int a2);
 int __fastcall sub_6CBC(_DWORD *a1);
 int __fastcall sub_6D54(int result, const char **a2, int a3);
-int __fastcall sub_6E08(int a1);
-int __fastcall sub_6E0E(int a1, int a2);
-unsigned int __fastcall sub_6E16(int a1);
-int __fastcall sub_6E22(int a1);
-int __fastcall sub_6E28(int a1);
-int sub_6E2E();
-int sub_6E34();
+int __fastcall out_get_sample_rate(int a1);
+int __fastcall out_set_sample_rate(int a1, int a2);
+unsigned int __fastcall out_get_buffer_size(int a1);
+int __fastcall out_get_channels(int a1);
+int __fastcall out_get_format(int a1);
+int out_set_format();
+int out_dump();
 int __fastcall out_set_parameters(int a1, int a2);
-char *__fastcall sub_723C(int a1, const char *a2);
-int sub_7320();
-int sub_7324();
-unsigned int __fastcall sub_7328(_DWORD *a1);
-int sub_733E();
+char *__fastcall out_get_parameters(int a1, const char *a2);
+int out_add_audio_effect();
+int out_remove_audio_effect();
+unsigned int __fastcall out_get_latency(_DWORD *a1);
+int out_set_volume();
 unsigned int __fastcall out_write(int a1, int a2, unsigned int a3);
-int sub_7C90();
-int sub_7C96();
-int __fastcall sub_7C9C(int a1, _QWORD *a2, int a3);
+int out_get_render_position();
+int out_get_next_write_timestamp();
+int __fastcall out_get_presentation_position(int a1, _QWORD *a2, int a3);
 unsigned int __fastcall sub_7D2C(int a1);
 int __fastcall sub_7DAC(int a1);
 int sub_7DB2();
@@ -2136,7 +2136,7 @@ int __fastcall adev_set_parameters(int a1, const char *a2)
       if ( !v8 && *(_DWORD *)(a1 + 168) != 2 )
       {
         if ( HIDWORD(v7) )
-          sub_6644(SHIDWORD(v7));
+          out_standby(SHIDWORD(v7));
         if ( (_DWORD)v7 )
         {
           sub_6676(v7);
@@ -2351,24 +2351,24 @@ int adev_open_output_stream(struct audio_hw_device *dev,
   v9[36] = v16;
   v9[37] = v17;
   v9[38] = v18;
-  *v9 = sub_6E08;
-  v9[1] = sub_6E0E;
-  v9[2] = sub_6E16;
-  v9[3] = sub_6E22;
-  v9[4] = sub_6E28;
-  v9[5] = sub_6E2E;
-  v9[6] = sub_6644;
-  v9[7] = sub_6E34;
+  *v9 = out_get_sample_rate;
+  v9[1] = out_set_sample_rate;
+  v9[2] = out_get_buffer_size;
+  v9[3] = out_get_channels;
+  v9[4] = out_get_format;
+  v9[5] = out_set_format;
+  v9[6] = out_standby;
+  v9[7] = out_dump;
   v9[10] = out_set_parameters;
-  v9[11] = sub_723C;
-  v9[12] = sub_7320;
-  v9[13] = sub_7324;
-  v9[14] = sub_7328;
-  v9[15] = sub_733E;
+  v9[11] = out_get_parameters;
+  v9[12] = out_add_audio_effect;
+  v9[13] = out_remove_audio_effect;
+  v9[14] = out_get_latency;
+  v9[15] = out_set_volume;
   v9[16] = out_write;
-  v9[17] = sub_7C90;
-  v9[18] = sub_7C96;
-  v9[24] = sub_7C9C;
+  v9[17] = out_get_render_position;
+  v9[18] = out_get_next_write_timestamp;
+  v9[24] = out_get_presentation_position;
   v9[51] = a1;
   v9[46] = 48000;
   v9[47] = 1;
@@ -2455,7 +2455,7 @@ LABEL_22:
 //----- (000052B8) --------------------------------------------------------
 void __fastcall adev_close_output_stream(int a1, void *a2)
 {
-  sub_6644((int)a2);
+  out_standby((int)a2);
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 164));
   if ( *(void **)(a1 + 256) == a2 )
     *(_DWORD *)(a1 + 256) = 0;
@@ -2466,6 +2466,15 @@ void __fastcall adev_close_output_stream(int a1, void *a2)
 
 //----- (000052F4) --------------------------------------------------------
 int __fastcall adev_open_input_stream(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5)
+static int adev_open_input_stream(
+        struct audio_hw_device *dev,
+        audio_io_handle_t handle,
+        audio_devices_t devices,
+        struct audio_config *config,
+        struct audio_stream_in **stream_in,
+        audio_input_flags_t flags,
+        const char *address __unused,
+        audio_source_t source)
 {
   _DWORD *v8; // r7
   int v9; // r0
@@ -2574,7 +2583,7 @@ void __fastcall adev_close_input_stream(int a1, _DWORD *a2)
     && (!*(_BYTE *)(v3 + 313) || a2[18])
     && *(_DWORD *)(v3 + 168) != 2 )
   {
-    sub_6644(v4);
+    out_standby(v4);
   }
   j_free(a2);
 }
@@ -3602,7 +3611,7 @@ LABEL_46:
 // 32CC: using guessed type int __fastcall _read_chk(_DWORD, _DWORD, _DWORD, _DWORD);
 
 //----- (00006644) --------------------------------------------------------
-int __fastcall sub_6644(int a1)
+int __fastcall out_standby(int a1)
 {
   pthread_mutex_lock((pthread_mutex_t *)(*(_DWORD *)(a1 + 204) + 164));
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 100));
@@ -4023,44 +4032,44 @@ int __fastcall sub_6D54(int result, const char **a2, int a3)
 // 3320: using guessed type int __fastcall mixer_ctl_set_enum_by_string(_DWORD, _DWORD);
 
 //----- (00006E08) --------------------------------------------------------
-int __fastcall sub_6E08(int a1)
+int __fastcall out_get_sample_rate(int a1)
 {
   return *(_DWORD *)(a1 + 184);
 }
 
 //----- (00006E0E) --------------------------------------------------------
-int __fastcall sub_6E0E(int a1, int a2)
+int __fastcall out_set_sample_rate(int a1, int a2)
 {
   *(_DWORD *)(a1 + 184) = a2;
   return 0;
 }
 
 //----- (00006E16) --------------------------------------------------------
-unsigned int __fastcall sub_6E16(int a1)
+unsigned int __fastcall out_get_buffer_size(int a1)
 {
   return (*(_DWORD *)(a1 + 192) + 15) & 0xFFFFFFF0;
 }
 
 //----- (00006E22) --------------------------------------------------------
-int __fastcall sub_6E22(int a1)
+int __fastcall out_get_channels(int a1)
 {
   return *(_DWORD *)(a1 + 168);
 }
 
 //----- (00006E28) --------------------------------------------------------
-int __fastcall sub_6E28(int a1)
+int __fastcall out_get_format(int a1)
 {
   return *(_DWORD *)(a1 + 188);
 }
 
 //----- (00006E2E) --------------------------------------------------------
-int sub_6E2E()
+int out_set_format()
 {
   return -38;
 }
 
 //----- (00006E34) --------------------------------------------------------
-int sub_6E34()
+int out_dump()
 {
   return 0;
 }
@@ -4315,7 +4324,7 @@ LABEL_58:
 // 320C: using guessed type int __fastcall str_parms_destroy(_DWORD);
 
 //----- (0000723C) --------------------------------------------------------
-char *__fastcall sub_723C(int a1, const char *a2)
+char *__fastcall out_get_parameters(int a1, const char *a2)
 {
   int str; // r8
   int v5; // r9
@@ -4381,25 +4390,25 @@ LABEL_11:
 // 1096C: using guessed type char *out_channels_name_to_enum_table;
 
 //----- (00007320) --------------------------------------------------------
-int sub_7320()
+int out_add_audio_effect()
 {
   return 0;
 }
 
 //----- (00007324) --------------------------------------------------------
-int sub_7324()
+int out_remove_audio_effect()
 {
   return 0;
 }
 
 //----- (00007328) --------------------------------------------------------
-unsigned int __fastcall sub_7328(_DWORD *a1)
+unsigned int __fastcall out_get_latency(_DWORD *a1)
 {
   return (unsigned int)(1000 * a1[32] * a1[31]) / a1[46];
 }
 
 //----- (0000733E) --------------------------------------------------------
-int sub_733E()
+int out_set_volume()
 {
   return -38;
 }
@@ -5145,19 +5154,19 @@ LABEL_158:
 // 1105C: using guessed type int dword_1105C;
 
 //----- (00007C90) --------------------------------------------------------
-int sub_7C90()
+int out_get_render_position()
 {
   return -22;
 }
 
 //----- (00007C96) --------------------------------------------------------
-int sub_7C96()
+int out_get_next_write_timestamp()
 {
   return -22;
 }
 
 //----- (00007C9C) --------------------------------------------------------
-int __fastcall sub_7C9C(int a1, _QWORD *a2, int a3)
+int __fastcall out_get_presentation_position(int a1, _QWORD *a2, int a3)
 {
   pthread_mutex_t *v4; // r9
   int v7; // r6
