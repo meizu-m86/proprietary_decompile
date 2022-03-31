@@ -493,7 +493,7 @@ LABEL_39:
 // EE88: using guessed type _WORD word_EE88[256];
 
 //----- (00009F24) --------------------------------------------------------
-int __fastcall cvq_init(int a1)
+int __fastcall cvq_init(int a1) // a1 = malloc(0x4E264u);
 {
   _QWORD *v1; // r0
 

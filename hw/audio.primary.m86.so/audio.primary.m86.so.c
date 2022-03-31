@@ -148,8 +148,6 @@ unsigned int __fastcall set_mixer_value_by_name(int a1, int a2, int a3);
 int *__fastcall sub_4394(int a1);
 int __fastcall sub_43AC(int a1, int a2, unsigned int a3, const char *a4, const char *a5);
 static int adev_open(const hw_module_t* module, const char* name, hw_device_t** device);
-int __fastcall adev_close(int a1);
-int adev_init_check();
 int adev_set_voice_volume(struct audio_hw_device *dev, float volume);
 int adev_set_master_volume();
 int __fastcall adev_set_mode(int a1, int a2);
@@ -1752,7 +1750,6 @@ static int adev_open(const hw_module_t* module, const char* name, hw_device_t** 
   v6[1] = 512;
   v6[2] = module;
   v6[15] = adev_close;
-  v6[17] = adev_init_check;
   v6[18] = adev_set_voice_volume;
   v6[19] = adev_set_master_volume;
   v6[21] = adev_set_mode;
@@ -1826,7 +1823,6 @@ LABEL_14:
 // 2FF0: using guessed type int __fastcall mixer_open(_DWORD);
 // 3008: using guessed type int __fastcall mixer_close(_DWORD);
 // 31B8: using guessed type int Open(void);
-// 46E0: using guessed type int adev_close();
 // 4710: using guessed type int adev_set_voice_volume(struct audio_hw_device *dev, float volume);
 // 482C: using guessed type int adev_set_mode();
 // 4B48: using guessed type int adev_set_parameters();
@@ -1836,25 +1832,6 @@ LABEL_14:
 // 52F4: using guessed type int adev_open_input_stream(int, int, int, int, int);
 // 5520: using guessed type int adev_close_input_stream();
 // 55A4: using guessed type int adev_dumb2();
-
-//----- (000046E0) --------------------------------------------------------
-int __fastcall adev_close(int a1)
-{
-  NxpTfa98xx_Stop();
-  mixer_close(*(_DWORD *)(a1 + 196));
-  mixer_close(*(_DWORD *)(a1 + 192));
-  audio_route_free(*(_DWORD **)(a1 + 188));
-  free((void *)a1);
-  return 0;
-}
-// 3008: using guessed type int __fastcall mixer_close(_DWORD);
-// 31D0: using guessed type int NxpTfa98xx_Stop(void);
-
-//----- (0000470A) --------------------------------------------------------
-int adev_init_check()
-{
-  return 0;
-}
 
 //----- (00004710) --------------------------------------------------------
 int adev_set_voice_volume(struct audio_hw_device *dev, float volume);
