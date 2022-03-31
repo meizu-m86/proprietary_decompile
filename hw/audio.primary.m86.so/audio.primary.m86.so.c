@@ -177,7 +177,7 @@ void __fastcall do_out_standby(int a1);
 int __fastcall sub_629C(int a1);
 int __fastcall sub_62E0(int a1);
 int __fastcall out_standby(int a1);
-int __fastcall sub_6676(int a1);
+int __fastcall in_standby(int a1);
 int __fastcall sub_66B0(int a1, int a2);
 int __fastcall sub_6CBC(_DWORD *a1);
 int __fastcall sub_6D54(int result, const char **a2, int a3);
@@ -199,20 +199,20 @@ int out_get_render_position();
 int out_get_next_write_timestamp();
 int __fastcall out_get_presentation_position(int a1, _QWORD *a2, int a3);
 unsigned int __fastcall sub_7D2C(int a1);
-int __fastcall sub_7DAC(int a1);
-int sub_7DB2();
-int sub_7DB8(); // weak
-int sub_7DE0();
-int sub_7DE4();
-int sub_7DE8();
-int sub_7DEE();
-int __fastcall sub_7DF4(int a1, int a2);
-int sub_7F78(); // weak
-int sub_7F84();
-int sub_7F88();
-int sub_7F8C();
+int __fastcall in_get_sample_rate(int a1);
+int in_set_sample_rate();
+int in_get_buffer_size(); // weak
+int in_get_channels();
+int in_get_format();
+int in_set_format();
+int in_dump();
+int __fastcall in_set_parameters(int a1, int a2);
+int in_get_parameters(); // weak
+int in_add_audio_effect();
+int in_remove_audio_effect();
+int in_set_gain();
 unsigned int __fastcall start_input_stream(int a1, char *a2, unsigned int a3);
-int sub_8A54();
+int in_get_input_frames_lost();
 int __fastcall pcm_read_thread(int a1);
 int __fastcall get_next_buffer(_DWORD *a1, _DWORD *a2);
 int __fastcall sub_8C90(int result, int a2);
@@ -2139,7 +2139,7 @@ int __fastcall adev_set_parameters(int a1, const char *a2)
           out_standby(SHIDWORD(v7));
         if ( (_DWORD)v7 )
         {
-          sub_6676(v7);
+          in_standby(v7);
         }
         else if ( !HIDWORD(v7) )
         {
@@ -2525,21 +2525,21 @@ static int adev_open_input_stream(
 LABEL_9:
       pcm_config_in = v11;
       off_11038 = v12;
-      *v8 = sub_7DAC;
-      v8[1] = sub_7DB2;
-      v8[2] = sub_7DB8;
-      v8[3] = sub_7DE0;
-      v8[4] = sub_7DE4;
-      v8[5] = sub_7DE8;
-      v8[6] = sub_6676;
-      v8[7] = sub_7DEE;
-      v8[10] = sub_7DF4;
-      v8[11] = sub_7F78;
-      v8[12] = sub_7F84;
-      v8[13] = sub_7F88;
-      v8[14] = sub_7F8C;
-      v8[15] = start_input_stream;
-      v8[16] = sub_8A54;
+      *v8 = in_get_sample_rate;
+      v8[1] = in_set_sample_rate;
+      v8[2] = in_get_buffer_size;
+      v8[3] = in_get_channels;
+      v8[4] = in_get_format;
+      v8[5] = in_set_format;
+      v8[6] = in_standby;
+      v8[7] = in_dump;
+      v8[10] = in_set_parameters;
+      v8[11] = in_get_parameters;
+      v8[12] = in_add_audio_effect;
+      v8[13] = in_remove_audio_effect;
+      v8[14] = in_set_gain;
+      v8[15] = start_input_stream; //in_read
+      v8[16] = in_get_input_frames_lost;
       v8[43] = a1;
       *((_BYTE *)v8 + 124) = 1;
       v8[32] = *a4;
@@ -2560,9 +2560,9 @@ LABEL_9:
 // 2F6C: using guessed type int __fastcall property_get(_DWORD, _DWORD, _DWORD);
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 30BC: using guessed type int __fastcall property_set(_DWORD, _DWORD);
-// 7DB8: using guessed type int sub_7DB8();
-// 7DF4: using guessed type int sub_7DF4();
-// 7F78: using guessed type int sub_7F78();
+// 7DB8: using guessed type int in_get_buffer_size();
+// 7DF4: using guessed type int in_set_parameters();
+// 7F78: using guessed type int in_get_parameters();
 // 7F90: using guessed type int start_input_stream();
 // 11030: using guessed type int pcm_config_in;
 // 11038: using guessed type Elf32_Sym *off_11038;
@@ -2575,7 +2575,7 @@ void __fastcall adev_close_input_stream(int a1, _DWORD *a2)
 
   v3 = a2[43];
   v4 = *(_DWORD *)(v3 + 256);
-  sub_6676((int)a2);
+  in_standby((int)a2);
   _android_log_print(2, "audio_hw_primary", "%s(): is_cvq=%d", "adev_close_input_stream", a2[18]);
   if ( v4
     && !*(_BYTE *)(v3 + 289)
@@ -3622,7 +3622,7 @@ int __fastcall out_standby(int a1)
 }
 
 //----- (00006676) --------------------------------------------------------
-int __fastcall sub_6676(int a1)
+int __fastcall in_standby(int a1)
 {
   pthread_mutex_lock((pthread_mutex_t *)(*(_DWORD *)(a1 + 172) + 164));
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 116));
@@ -5229,43 +5229,43 @@ unsigned int __fastcall sub_7D2C(int a1)
 // ED40: using guessed type __int16 *off_ED40[2];
 
 //----- (00007DAC) --------------------------------------------------------
-int __fastcall sub_7DAC(int a1)
+int __fastcall in_get_sample_rate(int a1)
 {
   return *(_DWORD *)(a1 + 128);
 }
 
 //----- (00007DB2) --------------------------------------------------------
-int sub_7DB2()
+int in_set_sample_rate()
 {
   return 0;
 }
 
 //----- (00007DE0) --------------------------------------------------------
-int sub_7DE0()
+int in_get_channels()
 {
   return 16;
 }
 
 //----- (00007DE4) --------------------------------------------------------
-int sub_7DE4()
+int in_get_format()
 {
   return 1;
 }
 
 //----- (00007DE8) --------------------------------------------------------
-int sub_7DE8()
+int in_set_format()
 {
   return -38;
 }
 
 //----- (00007DEE) --------------------------------------------------------
-int sub_7DEE()
+int in_dump()
 {
   return 0;
 }
 
 //----- (00007DF4) --------------------------------------------------------
-int __fastcall sub_7DF4(int a1, int a2)
+int __fastcall in_set_parameters(int a1, int a2)
 {
   int v3; // r11
   int str; // r10
@@ -5371,19 +5371,19 @@ LABEL_24:
 // 320C: using guessed type int __fastcall str_parms_destroy(_DWORD);
 
 //----- (00007F84) --------------------------------------------------------
-int sub_7F84()
+int in_add_audio_effect()
 {
   return 0;
 }
 
 //----- (00007F88) --------------------------------------------------------
-int sub_7F88()
+int in_remove_audio_effect()
 {
   return 0;
 }
 
 //----- (00007F8C) --------------------------------------------------------
-int sub_7F8C()
+int in_set_gain()
 {
   return 0;
 }
@@ -6133,7 +6133,7 @@ LABEL_194:
 // 1105C: using guessed type int dword_1105C;
 
 //----- (00008A54) --------------------------------------------------------
-int sub_8A54()
+int in_get_input_frames_lost()
 {
   return 0;
 }
