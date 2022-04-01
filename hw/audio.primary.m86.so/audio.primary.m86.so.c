@@ -171,16 +171,16 @@ int __fastcall adev_dumb2(int a1, int a2, int a3);
 int __fastcall set_voice_volume(int a1);
 int __fastcall sub_569C(int a1);
 int __fastcall sub_5730(int a1);
-void __fastcall sub_605C(int a1);
-int __fastcall sub_6164(int a1);
+void __fastcall do_in_standby(int a1);
+int __fastcall stop_amplifier(int a1);
 void __fastcall do_out_standby(int a1);
-int __fastcall sub_629C(int a1);
-int __fastcall sub_62E0(int a1);
+int __fastcall stop_backend(int a1);
+int __fastcall set_hifi_gain(int a1);
 int __fastcall out_standby(int a1);
 int __fastcall in_standby(int a1);
-int __fastcall sub_66B0(int a1, int a2);
+int __fastcall audio_test(int a1, int a2);
 int __fastcall sub_6CBC(_DWORD *a1);
-int __fastcall sub_6D54(int result, const char **a2, int a3);
+int __fastcall set_route_by_array(int result, const char **a2, int a3);
 int __fastcall out_get_sample_rate(int a1);
 int __fastcall out_set_sample_rate(int a1, int a2);
 unsigned int __fastcall out_get_buffer_size(int a1);
@@ -216,6 +216,7 @@ int in_get_input_frames_lost();
 int __fastcall pcm_read_thread(int a1);
 int __fastcall get_next_buffer(_DWORD *a1, _DWORD *a2);
 int __fastcall sub_8C90(int result, int a2);
+
 int __fastcall audio_route_update_mixer(int a1);
 unsigned int __fastcall audio_route_reset(int a1);
 int __fastcall audio_route_apply_path(int, char *s2); // idb
@@ -226,6 +227,7 @@ void audio_route_free(struct audio_route *ar);// /system/media/audio_route/inclu
 unsigned int __fastcall sub_95D4(int a1);
 int __fastcall get_value(const char *a1, int a2);
 int __fastcall set_value(const char *a1, const char *a2);
+
 int __fastcall cvq_open(int a1);
 int __fastcall cvq_close(_DWORD *a1);
 int __fastcall readdirect(int a1);
@@ -238,65 +240,7 @@ int __fastcall cvq_start(pthread_t *a1);
 int __fastcall uart_read_wrapper(_DWORD *a1, char *a2, size_t a3);
 int __fastcall pcm_read_uart_char_dev(_DWORD *a1, _WORD *a2, int a3);
 int __fastcall cvq_init(int a1);
-unsigned int *__fastcall sub_9FE0(unsigned int *result, int *a2, int *a3);
-int __fastcall sub_A034(int a1, int a2, unsigned int a3, unsigned int a4);
-int __fastcall sub_A378(int a1, int a2, unsigned int a3, int a4, int *a5);
-int __fastcall sub_A414(int a1, int a2, unsigned int a3, int a4);
-int __fastcall sub_A550(int a1, int a2, int a3);
-int __fastcall sub_A558(int a1, int a2);
-int __fastcall sub_A5B4(int a1, int a2, int a3);
-int __fastcall sub_A5BC(int a1, int a2, int a3);
-int __fastcall sub_A5C4(int *a1, int a2, int a3, int a4);
-int __fastcall sub_A670(const void *a1, int *a2, char a3);
-void __fastcall __noreturn sub_A760(int *a1, int a2, int a3, int a4);
-void __fastcall __noreturn sub_A794(const char *a1, int a2, const char *a3);
-int __fastcall sub_A7C4(int a1);
-int __fastcall sub_A800(int a1);
-int __fastcall sub_A848(int a1, int a2);
-int __fastcall sub_A85C(_DWORD *a1, int a2, int a3, int a4, int a5);
-_QWORD *__fastcall sub_A874(_QWORD *result);
-_QWORD *__fastcall sub_A87C(_QWORD *result);
-_QWORD *__fastcall sub_A884(_QWORD *result);
-void sub_A88C();
-void sub_A8D0();
-int __fastcall sub_A8E4(int a1, const void *a2);
-int __fastcall sub_A928(int a1, int a2, _DWORD *a3);
-int __fastcall sub_A956(int a1, int a2, int a3);
-int __fastcall sub_A99A(int a1, int a2, _QWORD *a3);
-int __fastcall sub_A9CA(int a1, int a2, int a3, int a4);
-int __fastcall sub_AA02(int a1);
-int __fastcall sub_AA08(int a1, int a2);
-int __fastcall sub_AA26(int a1);
-int __fastcall sub_AA38(int a1);
-int __fastcall sub_AA3E(int a1, int a2);
-int __fastcall sub_AA60(int a1, int a2);
-int __fastcall sub_AAEC(int result, int a2, int a3);
-int __fastcall sub_AB78(int a1, int a2);
-__int64 __fastcall sub_AB9C(int a1, int a2);
-int __fastcall sub_AC40(int a1, int a2, int a3, int a4);
-int __fastcall sub_AD0C(_DWORD *a1);
-_DWORD *__fastcall sub_AD5C(int a1, _DWORD *a2);
-int __fastcall sub_AD74(int a1);
-int __fastcall sub_AD8A(int a1);
-int __fastcall sub_AD90(int a1, int a2, int a3, _DWORD *a4);
-int __fastcall sub_AE00(int *a1, int a2);
-int __fastcall sub_AE76(int result);
-void __fastcall __noreturn sub_AE80(const char *a1, const char *a2, int a3, const char *a4);
-int __fastcall sub_AEAC(int a1);
-_DWORD *__fastcall sub_AF00(int a1);
-int __fastcall sub_AF58(int *a1, int a2, _DWORD *a3);
-_DWORD *__fastcall sub_B0FC(_DWORD *a1, int a2, int a3, _DWORD *a4, int a5, int a6, int a7, _DWORD *a8);
-int __fastcall sub_B58C(int a1);
-void sub_B5A0();
-void sub_B5A8();
-void sub_B5B0();
-_DWORD *__fastcall sub_B5B8(int *a1);
-_DWORD *__fastcall sub_B5FC(int *a1);
-void __fastcall j_free(void *ptr);
-int __fastcall j_pthread_mutex_unlock(pthread_mutex_t *mutex);
-char *__fastcall j_strdup(const char *s);
-int __fastcall sub_B640(int a1);
-_DWORD *__fastcall sub_B650(int *a1);
+
 
 //-------------------------------------------------------------------------
 // Data declarations
@@ -2097,7 +2041,7 @@ int __fastcall adev_set_parameters(int a1, const char *a2)
       *(_DWORD *)(a1 + 292) = v5;
       if ( *(_BYTE *)(a1 + 289) )
       {
-        sub_62E0(a1);
+        set_hifi_gain(a1);
         set_hifi_volume(a1);
       }
     }
@@ -2179,7 +2123,7 @@ int __fastcall adev_set_parameters(int a1, const char *a2)
   }
   else
   {
-    v10 = sub_66B0(a1, (int)a2);
+    v10 = audio_test(a1, (int)a2);
     str_parms_destroy(str);
   }
   return v10;
@@ -2208,7 +2152,7 @@ char *__fastcall adev_get_parameters(int a1, const char *a2)
     str_parms_destroy(str);
     if ( v7 >= 0 && !strcmp((const char *)s1, "pa_calibration") )
     {
-      if ( sub_66B0(a1, (int)"factory_test=pa_calibration") )
+      if ( audio_test(a1, (int)"factory_test=pa_calibration") )
         SpeakerImpedance = 0.0;
       else
         SpeakerImpedance = NxpTfa98xx_GetSpeakerImpedance();
@@ -2217,7 +2161,7 @@ char *__fastcall adev_get_parameters(int a1, const char *a2)
       v9 = str_parms_create_str(s1);
       v6 = (const char *)str_parms_to_str(v9);
       str_parms_destroy(v9);
-      sub_66B0(a1, (int)"factory_test=off");
+      audio_test(a1, (int)"factory_test=off");
       _android_log_print(3, "audio_hw_primary", "%s(): %s", "adev_get_parameters", v6);
     }
     else
@@ -2681,7 +2625,7 @@ int __fastcall sub_569C(int a1)
   if ( v2 )
   {
     pthread_mutex_lock((pthread_mutex_t *)(v2 + 116));
-    sub_605C(v2);
+    do_in_standby(v2);
     pthread_mutex_unlock((pthread_mutex_t *)(v2 + 116));
   }
   v3 = *(_DWORD *)(a1 + 256);
@@ -2690,11 +2634,11 @@ int __fastcall sub_569C(int a1)
     pthread_mutex_lock((pthread_mutex_t *)(v3 + 100));
     if ( *(_BYTE *)(a1 + 260) && (*(_BYTE *)(a1 + 172) & 2) != 0 )
     {
-      sub_6164(a1);
+      stop_amplifier(a1);
       *(_BYTE *)(a1 + 260) = 0;
     }
     do_out_standby(v3);
-    sub_629C(a1);
+    stop_backend(a1);
     return j_pthread_mutex_unlock((pthread_mutex_t *)(v3 + 100));
   }
   else if ( *(_DWORD *)(a1 + 228) || (result = *(_DWORD *)(a1 + 232)) != 0 )
@@ -2703,7 +2647,7 @@ int __fastcall sub_569C(int a1)
     *(_DWORD *)(a1 + 172) = 0;
     sub_5730(a1);
     *(_DWORD *)(a1 + 172) = v5;
-    return sub_629C(a1);
+    return stop_backend(a1);
   }
   return result;
 }
@@ -2806,7 +2750,7 @@ int __fastcall sub_5730(int a1)
   if ( *(_BYTE *)(a1 + 289) )
   {
     v57 = v4 & 0xC;
-    sub_62E0(a1);
+    set_hifi_gain(a1);
     set_hifi_volume(a1);
   }
   else
@@ -2817,11 +2761,11 @@ int __fastcall sub_5730(int a1)
   }
   if ( (v4 & 2) == 0 && *(_BYTE *)(a1 + 260) )
   {
-    sub_6164(a1);
+    stop_amplifier(a1);
     *(_BYTE *)(a1 + 260) = 0;
   }
   if ( output_device_id == 8 && input_source_id == 11 )
-    sub_629C(a1);
+    stop_backend(a1);
   if ( input_source_id == 11 && (output_device_id == 8 || *(_BYTE *)(a1 + 289)) )
     goto LABEL_68;
   v9 = *(_QWORD *)(a1 + 252);
@@ -3207,7 +3151,7 @@ LABEL_139:
 // 116DC: using guessed type int dword_116DC;
 
 //----- (0000605C) --------------------------------------------------------
-void __fastcall sub_605C(int a1)
+void __fastcall do_in_standby(int a1)
 {
   int v2; // r5
   int v3; // r6
@@ -3277,7 +3221,7 @@ void __fastcall sub_605C(int a1)
 // 32A8: using guessed type int release_resampler(void);
 
 //----- (00006164) --------------------------------------------------------
-int __fastcall sub_6164(int a1)
+int __fastcall stop_amplifier(int a1)
 {
   int result; // r0
 
@@ -3370,7 +3314,7 @@ void __fastcall do_out_standby(int a1)
 // 32A8: using guessed type int release_resampler(void);
 
 //----- (0000629C) --------------------------------------------------------
-int __fastcall sub_629C(int a1)
+int __fastcall stop_backend(int a1)
 {
   int result; // r0
 
@@ -3393,7 +3337,7 @@ int __fastcall sub_629C(int a1)
 // 30B0: using guessed type int pcm_close(void);
 
 //----- (000062E0) --------------------------------------------------------
-int __fastcall sub_62E0(int a1)
+int __fastcall set_hifi_gain(int a1)
 {
   int v2; // r0
   int v3; // r6
@@ -3626,14 +3570,14 @@ int __fastcall in_standby(int a1)
 {
   pthread_mutex_lock((pthread_mutex_t *)(*(_DWORD *)(a1 + 172) + 164));
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 116));
-  sub_605C(a1);
+  do_in_standby(a1);
   pthread_mutex_unlock((pthread_mutex_t *)(a1 + 116));
   pthread_mutex_unlock((pthread_mutex_t *)(*(_DWORD *)(a1 + 172) + 164));
   return 0;
 }
 
 //----- (000066B0) --------------------------------------------------------
-int __fastcall sub_66B0(int a1, int a2)
+int __fastcall audio_test(int a1, int a2)
 {
   int str; // r6
   _BOOL4 is_headphone_on; // r5
@@ -3740,7 +3684,7 @@ LABEL_21:
         NxpTfa98xx_PowerOff(v26);
         sub_6CBC((_DWORD *)a1);
         v5 = 0;
-        sub_6D54(*(_DWORD *)(a1 + 192), (const char **)&default_settings, 0);
+        set_route_by_array(*(_DWORD *)(a1 + 192), (const char **)&default_settings, 0);
         dword_116CC = 1;
         SetAudioLoopback(0, 0);
         pthread_mutex_unlock((pthread_mutex_t *)(a1 + 164));
@@ -3776,7 +3720,7 @@ LABEL_21:
 LABEL_22:
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 164));
   sub_6CBC((_DWORD *)a1);
-  sub_6D54(*(_DWORD *)(a1 + 192), (const char **)&default_settings, 0);
+  set_route_by_array(*(_DWORD *)(a1 + 192), (const char **)&default_settings, 0);
   dword_116CC = 1;
   if ( v8 == 1 )
   {
@@ -3871,7 +3815,7 @@ LABEL_49:
   }
   else
   {
-    v22 = sub_6D54(*(_DWORD *)(a1 + 192), v10, 1);
+    v22 = set_route_by_array(*(_DWORD *)(a1 + 192), v10, 1);
     if ( v9 == 1 )
     {
       if ( NxpTfa98xx_PowerOn(0, "bluetooth_nrec=%d", 0) )
@@ -3960,7 +3904,7 @@ int __fastcall sub_6CBC(_DWORD *a1)
 // 31DC: using guessed type int pcm_stop(void);
 
 //----- (00006D54) --------------------------------------------------------
-int __fastcall sub_6D54(int result, const char **a2, int a3)
+int __fastcall set_route_by_array(int result, const char **a2, int a3)
 {
   int v5; // r9
   int v6; // r5
@@ -4311,7 +4255,7 @@ LABEL_58:
   if ( v7 == 1 )
   {
     pthread_mutex_lock((pthread_mutex_t *)(v4 + 116));
-    sub_605C(v4);
+    do_in_standby(v4);
     pthread_mutex_unlock((pthread_mutex_t *)(v4 + 116));
   }
   pthread_mutex_unlock((pthread_mutex_t *)(v3 + 164));
