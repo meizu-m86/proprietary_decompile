@@ -198,7 +198,7 @@ unsigned int __fastcall out_write(int a1, int a2, unsigned int a3);
 int out_get_render_position();
 int out_get_next_write_timestamp();
 int __fastcall out_get_presentation_position(int a1, _QWORD *a2, int a3);
-unsigned int __fastcall sub_7D2C(int a1);
+unsigned int __fastcall get_output_buffer_size(int a1);
 int __fastcall in_get_sample_rate(int a1);
 int in_set_sample_rate();
 int in_get_buffer_size(); // weak
@@ -922,13 +922,10 @@ int __fastcall get_output_device_id(int a1, unsigned int a2)
   v2 = a2;
   if ( !a2 )
     return 8;
-  v4 = ((a2 - ((a2 >> 1) & 0x55555555)) & 0x33333333) + (((a2 - ((a2 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-  if ( (16843009 * ((v4 + (v4 >> 4)) & 0xF0F0F0F)) >> 24 != 2 )
+  if ( popcount(a2)  != 2 )
   {
 LABEL_12:
-    v8 = ((v2 - (((unsigned int)v2 >> 1) & 0x55555555)) & 0x33333333)
-       + (((v2 - (((unsigned int)v2 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-    if ( (16843009 * ((v8 + (v8 >> 4)) & 0xF0F0F0F)) >> 24 == 1 )
+    if ( popcount(a2)  == 1 )
     {
       if ( v2 <= 15 )
       {
@@ -1447,23 +1444,6 @@ LABEL_45:
 // 116CC: using guessed type int dword_116CC;
 // 116D0: using guessed type int dword_116D0;
 // 3B7C: using guessed type char var_74[2];
-
-//----- (00004088) --------------------------------------------------------
-bool is_headphone_on()
-{
-  FILE *v0; // r4
-  char nptr; // [sp+Bh] [bp-Dh] BYREF
-
-  v0 = fopen("/sys/class/switch/h2w/state", "r");
-  nptr = 0;
-  if ( v0 )
-  {
-    _fread_chk(&nptr, 1, 1, v0, 1);
-    fclose(v0);
-  }
-  return atoi(&nptr) != 0;
-}
-// 30C8: using guessed type int __fastcall _fread_chk(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD);
 
 //----- (000040F8) --------------------------------------------------------
 int __fastcall amplifier_calibrate(int *a1)
@@ -2197,9 +2177,7 @@ int __fastcall adev_get_input_buffer_size(int a1, int *a2)
 
   v2 = *a2;
   v3 = a2[2];
-  v4 = a2[1] - (((unsigned int)a2[1] >> 1) & 0x55555555);
-  v5 = ((16843009
-       * (((v4 & 0x33333333) + ((v4 >> 2) & 0x33333333) + (((v4 & 0x33333333) + ((v4 >> 2) & 0x33333333)) >> 4)) & 0xF0F0F0F)) >> 24)
+  v5 = popcount(a2[1]) 
      * (((int)off_11038 * v2 / (unsigned int)off_11034 + 15) & 0xFFFFFFF0);
   switch ( v3 )
   {
@@ -2316,7 +2294,7 @@ int adev_open_output_stream(struct audio_hw_device *dev,
   v9[51] = a1;
   v9[46] = 48000;
   v9[47] = 1;
-  v19 = sub_7D2C((int)v9);
+  v19 = get_output_buffer_size((int)v9);
   v10[48] = v19;
   v20 = ((int (__fastcall *)(_DWORD *))v10[4])(v10);
   v21 = (v20 & 0xFF000000) == 218103808;
@@ -2361,8 +2339,7 @@ LABEL_12:
       }
       v24 = v23 & 0x3FFFF;
     }
-    v25 = ((v24 - ((v24 >> 1) & 0x55555555)) & 0x33333333) + (((v24 - ((v24 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-    v26 = (16843009 * ((v25 + (v25 >> 4)) & 0xF0F0F0F)) >> 24;
+    v26 = popcount(v24) ;
 LABEL_22:
     v8 = v26 * v22;
   }
@@ -4199,7 +4176,7 @@ LABEL_58:
           *(_DWORD *)(a1 + 184),
           v24);
         *(_DWORD *)(a1 + 184) = v24;
-        *(_DWORD *)(a1 + 192) = sub_7D2C(a1);
+        *(_DWORD *)(a1 + 192) = get_output_buffer_size(a1);
         v25 = v4;
         if ( v4 )
           v25 = 1;
@@ -4223,7 +4200,7 @@ LABEL_58:
       if ( *(_DWORD *)(a1 + 188) != v26 )
       {
         *(_DWORD *)(a1 + 188) = v26;
-        *(_DWORD *)(a1 + 192) = sub_7D2C(a1);
+        *(_DWORD *)(a1 + 192) = get_output_buffer_size(a1);
         v27 = v4;
         if ( v4 )
           v27 = 1;
@@ -4521,8 +4498,7 @@ LABEL_8:
     }
     v11 = v10 & 0x3FFFF;
   }
-  v12 = ((v11 - ((v11 >> 1) & 0x55555555)) & 0x33333333) + (((v11 - ((v11 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-  v13 = (16843009 * ((v12 + (v12 >> 4)) & 0xF0F0F0F)) >> 24;
+  v13 = popcount(v11) ;
 LABEL_18:
   v9 = v13 * v8;
 LABEL_19:
@@ -4686,8 +4662,7 @@ LABEL_55:
       }
       v39 = v38 & 0x3FFFF;
     }
-    v40 = ((v39 - ((v39 >> 1) & 0x55555555)) & 0x33333333) + (((v39 - ((v39 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-    v41 = (16843009 * ((v40 + (v40 >> 4)) & 0xF0F0F0F)) >> 24;
+    v41 = popcount(v39) ;
 LABEL_66:
     v36 = v41 * v35;
     a2 = v34;
@@ -5075,9 +5050,7 @@ LABEL_148:
       }
       v101 = v100 & 0x3FFFF;
     }
-    v102 = ((v101 - ((v101 >> 1) & 0x55555555)) & 0x33333333)
-         + (((v101 - ((v101 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-    v103 = (16843009 * ((v102 + (v102 >> 4)) & 0xF0F0F0F)) >> 24;
+    v103 = popcount(v101) ;
 LABEL_158:
     v99 = v103 * v98;
     goto LABEL_159;
@@ -5149,7 +5122,7 @@ LABEL_9:
 // 3380: using guessed type int __fastcall pcm_get_htimestamp(_DWORD, _DWORD, _DWORD);
 
 //----- (00007D2C) --------------------------------------------------------
-unsigned int __fastcall sub_7D2C(int a1)
+unsigned int __fastcall get_output_buffer_size(int a1)
 {
   int v1; // r1
   __int16 *v2; // r0
@@ -5478,8 +5451,7 @@ LABEL_8:
     }
     v12 = v11 & 0xFFFC;
   }
-  v13 = ((v12 - ((v12 >> 1) & 0x55555555)) & 0x33333333) + (((v12 - ((v12 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-  v14 = (16843009 * ((v13 + (v13 >> 4)) & 0xF0F0F0F)) >> 24;
+  v14 = popcount(v12) ;
 LABEL_18:
   v10 = v14 * v9;
 LABEL_19:
@@ -5612,8 +5584,7 @@ LABEL_49:
     }
     v32 = v31 & 0xFFFC;
   }
-  v33 = ((v32 - ((v32 >> 1) & 0x55555555)) & 0x33333333) + (((v32 - ((v32 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-  v34 = (16843009 * ((v33 + (v33 >> 4)) & 0xF0F0F0F)) >> 24;
+  v34 = popcount(v32) ;
 LABEL_59:
   v29 = v34 * v28;
 LABEL_60:
@@ -5800,8 +5771,7 @@ LABEL_138:
       }
       v72 = v71 & 0xFFFC;
     }
-    v73 = ((v72 - ((v72 >> 1) & 0x55555555)) & 0x33333333) + (((v72 - ((v72 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-    v74 = (16843009 * ((v73 + (v73 >> 4)) & 0xF0F0F0F)) >> 24;
+    v74 = popcount(v72) ;
 LABEL_148:
     v64 = v74 * v62;
     goto LABEL_149;
@@ -6044,8 +6014,7 @@ LABEL_183:
     {
       v89 = v88 & 0x3FFFFFFF;
 LABEL_191:
-      v90 = ((v89 - ((v89 >> 1) & 0x55555555)) & 0x33333333) + (((v89 - ((v89 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-      v91 = (16843009 * ((v90 + (v90 >> 4)) & 0xF0F0F0F)) >> 24;
+      v91 = popcount(v89) ;
     }
     else
     {
