@@ -4336,6 +4336,8 @@ int out_set_volume()
 
 //----- (00007344) --------------------------------------------------------
 unsigned int __fastcall out_write(int a1, int a2, unsigned int a3)
+static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
+                         size_t bytes)
 {
   int v3; // r9
   int v5; // r11
@@ -4450,9 +4452,9 @@ unsigned int __fastcall out_write(int a1, int a2, unsigned int a3)
   int v116; // [sp+58h] [bp-30h]
   int v117; // [sp+5Ch] [bp-2Ch]
 
-  v3 = a1;
-  v5 = *(_DWORD *)(a1 + 204);
-  v6 = (*(int (__fastcall **)(int))(a1 + 16))(a1);
+  v3 = a1; //struct stream_out
+  v5 = *(_DWORD *)(a1 + 204); //struct audio_device *
+  v6 = out_get_format(a1);
   v7 = (v6 & 0xFF000000) == 218103808;
   if ( (v6 & 0xFF000000) != 218103808 )
     v7 = (v6 & 0xFF000000) == 0;
