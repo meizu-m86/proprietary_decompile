@@ -27,6 +27,9 @@ sub_427C   set_hifi_volume
 sub_41B0   adev_set_headset_volume
 sub_52F4   adev_open_input_stream
 sub_7F90   in_read
+sub_8BD4   get_next_buffer
+sub_8A58   pcm_read_thread
+sub_7DF4   in_set_parameters
 
 
 ```
