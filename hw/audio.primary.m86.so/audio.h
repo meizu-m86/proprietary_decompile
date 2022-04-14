@@ -1293,6 +1293,10 @@ struct stream_out {
     void *v_212; // *out + 53 // out + 212
 };
 
+// size : 0x4E264 -> 1161144
+struct CVQStream {
+    void * a;
+}
 /**
  ** Structure for Audio Input Stream
  ** Implement audio_stream_in structure
@@ -1300,27 +1304,12 @@ struct stream_out {
 // size : 0xB0 -> 176
 struct stream_in {
     struct audio_stream_in stream;
+
+    struct CVQStream * cvqStream;// *in + 17  //  in + 68
+
     pthread_mutex_t lock;// *in + 29  //  in + 116
 
-    /* These variables are needed to save Android Request becuase pcm_config
-         and audio_config are different */
-    audio_io_handle_t handle;
-    audio_devices_t devices;
-    audio_source_t source;
-    audio_input_flags_t flags;
-    unsigned int sample_rate;
-    audio_channel_mask_t channel_mask;
-    audio_format_t format;
-
-    audio_usage_id_t ausage;
-    stream_state_type_t sstate;
-    bool mixer_path_setup;
-
-    /* PCM specific */
-    struct pcm *pcminfo;
-    struct pcm_config pcmconfig;
-
-    unsigned long err_count;
+    struct pcm *pcm; // *in + 30  //  in + 120
     
     bool b_124; // *in + 31 // in + 124
     bool b_125;             // in + 125
