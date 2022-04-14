@@ -25,7 +25,7 @@ void sub_2F34();
 // char *strerror(int errnum);
 // int _android_log_print(_DWORD, _DWORD, const char *, ...); weak
 // int __fastcall mixer_open(_DWORD); weak
-// int __fastcall mixer_get_ctl_by_name(_DWORD); weak
+// int __fastcall mixer_get_ctl_by_name(_DWORD, _DWORD); weak
 // int __fastcall mixer_close(_DWORD); weak
 // int usleep(__useconds_t useconds);
 // int pthread_mutex_lock(pthread_mutex_t *mutex);
@@ -63,7 +63,7 @@ int __fastcall j_wav_player_start(const char *, int, int);
 // int strcmp(const char *s1, const char *s2);
 // void *calloc(size_t nmemb, size_t size);
 // int Open(void); weak
-int __fastcall j_thread_refresh_audio_route(pthread_mutex_t *a1);
+int __fastcall j_thread_refresh_audio_route(int a1);
 // int NxpTfa98xx_Stop(void); weak
 // int __fastcall pcm_stop(_DWORD); weak
 // int __fastcall SetAudioClock(_DWORD); weak
@@ -74,10 +74,10 @@ int __fastcall j_thread_refresh_audio_route(pthread_mutex_t *a1);
 // char *strdup(const char *s);
 // float NxpTfa98xx_GetSpeakerImpedance(void); weak
 // int _sprintf_chk(_DWORD, _DWORD, _DWORD, const char *, ...); weak
-int __fastcall j_cvq_init(int);
+int __fastcall j_cvq_init(int a1);
 // int __fastcall SetAudioVolume(_DWORD); weak
-int __fastcall j_get_output_device_id(int a1, unsigned int a2);
-int __fastcall j_get_input_source_id(int a1, int a2);
+int __fastcall j_get_output_device_id(int, unsigned int);
+int __fastcall j_get_input_source_id(int, int);
 // void __fastcall _aeabi_memclr8(void *, size_t); idb
 // int __fastcall NxpTfa98xx_SetMute(_DWORD); weak
 // int NxpTfa98xx_PowerOn(_DWORD, const char *, ...); weak
@@ -138,48 +138,48 @@ int __fastcall sub_3598(int a1, int a2, int a3);
 int __fastcall pcm_data_dump(const char *a1, int a2, int a3, int a4);
 int __fastcall get_output_device_id(int a1, unsigned int a2);
 int __fastcall get_input_source_id(int a1, int a2);
-int __fastcall thread_refresh_audio_route(pthread_mutex_t *a1);
+int __fastcall thread_refresh_audio_route(audio_device *a1);
 int __fastcall test_set_hifi_gain(int result);
 int __fastcall wav_player_stop(int result);
 int __fastcall wav_player_start(const char *a1, int a2, int a3);
 bool is_headphone_on();
 int __fastcall amplifier_calibrate(int *a1);
 int thread_test_hifi(); // weak
-int __fastcall adev_set_headset_volume(int a1, float a2);
-unsigned int __fastcall sub_427C(int a1);
-int __fastcall set_headphone_volume(audio_device *a1);
-unsigned int __fastcall sub_4364(int a1, int a2, int a3);
+int __fastcall adev_set_headset_volume(audio_device *a1, float a2);
+int __fastcall set_hifi_volume(audio_device *a1);
+unsigned int __fastcall sub_42F0(int a1);
+unsigned int __fastcall set_mixer_value_by_name(int a1, int a2, int a3);
 int *__fastcall sub_4394(int a1);
 int __fastcall sub_43AC(int a1, int a2, unsigned int a3, const char *a4, const char *a5);
 int __fastcall adev_open(struct hw_module_t *a1, char *s1, audio_device **a3);
-int __fastcall sub_46E0(audio_device *a1);
-int sub_470A(); // weak
+int __fastcall adev_close(audio_device *a1);
+int adev_init_check(); // weak
 int __fastcall adev_set_voice_volume(audio_device *a1, float a2);
-int sub_4824(); // weak
+int adev_set_master_volume(); // weak
 int __fastcall adev_set_mode(audio_device *a1, int a2);
-int __fastcall sub_4B34(audio_device *a1, char a2);
-int __fastcall sub_4B3C(audio_device *a1, _BYTE *a2);
-int __fastcall sub_4B48(audio_device *a1, const char *a2);
-char *__fastcall sub_4E6C(audio_device *a1, const char *a2);
-int __fastcall sub_4FD0(int a1, int *a2);
-int __fastcall adev_open_output_stream(audio_device *a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6);
-int __fastcall sub_52B8(audio_device *a1, stream_out *a2);
-int __fastcall sub_52F4(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5);
-void __fastcall sub_5520(int a1, stream_in *a2);
-int sub_55A0(); // weak
-int __fastcall sub_55A4(int a1, int a2, int a3);
-int __fastcall set_voice_volume(audio_device *a1);
-int __fastcall sub_569C(int a1);
-int __fastcall sub_5730(audio_device *a1);
-void __fastcall sub_605C(int a1);
-int __fastcall sub_6164(int a1);
-int __fastcall sub_61B8(stream_out *a1);
-int __fastcall sub_629C(int a1);
-int __fastcall sub_62E0(audio_device *a1);
+int __fastcall adev_set_mic_mute(audio_device *a1, char a2);
+int __fastcall adev_get_mic_mute(audio_device *a1, _BYTE *a2);
+int __fastcall adev_set_parameters(audio_device *a1, const char *a2);
+char *__fastcall adev_get_parameters(audio_device *a1, const char *a2);
+unsigned int __fastcall adev_get_input_buffer_size(audio_device *a1, int *a2);
+int __fastcall adev_open_output_stream(struct audio_device *a1, int a2, int a3, int a4, int *a5, stream_out **a6);
+int __fastcall adev_close_output_stream(audio_device *a1, int a2);
+int __fastcall adev_open_input_stream(struct audio_device *a1, int a2, audio_devices_t a3, struct audio_config **a4, stream_in **a5);
+int __fastcall adev_close_input_stream(int a1, stream_in *a2);
+int adev_dump(); // weak
+int __fastcall adev_dumb2(audio_device *a1, int a2, int a3);
+int __fastcall sub_55E8(int a1);
+struct pcm *__fastcall sub_569C(int a1);
+int __fastcall sub_5730(int a1);
+int __fastcall do_in_standby(stream_in *a1);
+struct pcm *__fastcall stop_amplifier(audio_device *a1);
+int __fastcall do_out_standby(stream_out *a1);
+struct pcm *__fastcall stop_backend(audio_device *a1);
+int __fastcall set_hifi_gain(audio_device *a1);
 int __fastcall sub_6644(stream_out *a1);
 int __fastcall sub_6676(stream_in *a1);
-int __fastcall sub_66B0(audio_device *a1, int a2);
-struct pcm *__fastcall sub_6CBC(audio_device *a1);
+int __fastcall audio_test(audio_device *a1, int a2);
+int __fastcall sub_6CBC(_DWORD *a1);
 int __fastcall sub_6D54(int result, const char **a2, int a3);
 int __fastcall sub_6E08(int a1);
 int __fastcall sub_6E0E(int a1, int a2);
@@ -194,27 +194,27 @@ int sub_7320(); // weak
 int sub_7324(); // weak
 unsigned int __fastcall sub_7328(_DWORD *a1);
 int sub_733E(); // weak
-unsigned int __fastcall sub_7344(stream_out *a1, int a2, unsigned int a3);
+unsigned int __fastcall out_write(stream_out *a1, int a2, unsigned int a3);
 int sub_7C90(); // weak
 int sub_7C96(); // weak
 int __fastcall sub_7C9C(int a1, _QWORD *a2, int a3);
-unsigned int __fastcall sub_7D2C(stream_out *a1);
+unsigned int __fastcall get_output_buffer_size(stream_out *a1);
 int __fastcall sub_7DAC(int a1);
-int sub_7DB2();
-int sub_7DB8(); // weak
-int sub_7DE0();
-int sub_7DE4();
-int sub_7DE8();
-int sub_7DEE();
-int __fastcall sub_7DF4(int a1, int a2);
-int sub_7F78(); // weak
-int sub_7F84();
-int sub_7F88();
-int sub_7F8C();
-unsigned int __fastcall sub_7F90(int a1, char *a2, unsigned int a3);
-int sub_8A54();
-int __fastcall sub_8A58(int a1);
-int __fastcall sub_8BD4(_DWORD *a1, _DWORD *a2);
+int sub_7DB2(); // weak
+unsigned int __fastcall sub_7DB8(int a1);
+int sub_7DE0(); // weak
+int sub_7DE4(); // weak
+int sub_7DE8(); // weak
+int sub_7DEE(); // weak
+int __fastcall in_set_parameters(stream_in *a1, int a2);
+char *sub_7F78();
+int sub_7F84(); // weak
+int sub_7F88(); // weak
+int sub_7F8C(); // weak
+size_t __fastcall in_read(stream_in *a1, char *a2, size_t a3);
+int sub_8A54(); // weak
+int __fastcall pcm_read_thread(stream_in *a1);
+int __fastcall get_next_buffer(int a1, _DWORD *a2);
 int __fastcall sub_8C90(int result, int a2);
 int __fastcall audio_route_update_mixer(int a1);
 unsigned int __fastcall audio_route_reset(int a1);
@@ -306,8 +306,9 @@ _DWORD *__fastcall sub_B650(int *a1);
 
 int dword_0 = 1179403647; // weak
 char byte_4 = '\x01'; // weak
+char byte_6 = '\x01'; // weak
 char byte_7 = '\0'; // weak
-char byte_9[7] = { '\0', '\0', '\0', '\0', '\0', '\0', '\0' }; // weak
+__int16 word_10 = 3; // weak
 Elf32_Sym stru_400 = { 960u, 0u, 0u, 18u, 0u, 0u }; // weak
 Elf32_Sym stru_800 = { 3057u, 0u, 0u, 18u, 0u, 0u }; // weak
 _UNKNOWN loc_3E7E; // weak
@@ -832,10 +833,11 @@ int __fastcall j_wav_player_start(const char *a1, int a2, int a3)
 
 //----- (000031C4) --------------------------------------------------------
 // attributes: thunk
-int __fastcall j_thread_refresh_audio_route(pthread_mutex_t *a1)
+int __fastcall j_thread_refresh_audio_route(int a1)
 {
   return thread_refresh_audio_route(a1);
 }
+// 3908: using guessed type int __fastcall thread_refresh_audio_route(_DWORD);
 
 //----- (00003248) --------------------------------------------------------
 // attributes: thunk
@@ -1160,7 +1162,7 @@ int __fastcall get_input_source_id(int a1, int a2)
 // 11034: using guessed type void *off_11034;
 
 //----- (00003908) --------------------------------------------------------
-int __fastcall thread_refresh_audio_route(pthread_mutex_t *a1)
+int __fastcall thread_refresh_audio_route(audio_device *a1)
 {
   int v2; // r5
   int v3; // r0
@@ -1168,7 +1170,7 @@ int __fastcall thread_refresh_audio_route(pthread_mutex_t *a1)
   int ctl_by_name; // r7
   const char *v6; // r2
   int v7; // r0
-  _DWORD *v8; // r0
+  struct audio_route *v8; // r0
   int v9; // r0
   int v10; // r6
   int v11; // r0
@@ -1188,7 +1190,7 @@ int __fastcall thread_refresh_audio_route(pthread_mutex_t *a1)
       v6 = "%s(): Unable to open mixer";
       goto LABEL_7;
     }
-    ctl_by_name = mixer_get_ctl_by_name(v3);
+    ctl_by_name = mixer_get_ctl_by_name(v3, "Internal Route");
     mixer_close(v4);
     if ( ctl_by_name )
       break;
@@ -1201,14 +1203,14 @@ LABEL_7:
       goto LABEL_24;
     }
   }
-  pthread_mutex_lock(a1 + 41);
-  j_audio_route_free((_DWORD *)a1[47].__private[0]);
-  v8 = j_audio_route_init(0, "/system/etc/mixer_paths.xml");
-  a1[47].__private[0] = (int32_t)v8;
+  pthread_mutex_lock(&a1->lock);
+  j_audio_route_free(a1->audio_route);
+  v8 = (struct audio_route *)j_audio_route_init(0, "/system/etc/mixer_paths.xml");
+  a1->audio_route = v8;
   if ( !v8 )
     _android_log_print(6, "audio_hw_primary", "%s(): failed to open audio route", "thread_refresh_audio_route");
-  pthread_mutex_unlock(a1 + 41);
-  pthread_mutex_lock(a1 + 41);
+  pthread_mutex_unlock(&a1->lock);
+  pthread_mutex_lock(&a1->lock);
   v9 = pcm_open(0, 2, 0, &pcm_config_amplifier);
   v10 = v9;
   if ( v9 && !pcm_is_ready(v9) )
@@ -1231,10 +1233,10 @@ LABEL_7:
     else
     {
       pcm_prepare(v12);
-      j_audio_route_reset(a1[47].__private[0]);
-      j_audio_route_apply_path(a1[47].__private[0], "speaker");
-      j_audio_route_update_mixer(a1[47].__private[0]);
-      pthread_mutex_unlock(a1 + 41);
+      j_audio_route_reset(a1->audio_route);
+      j_audio_route_apply_path((int)a1->audio_route, "speaker");
+      j_audio_route_update_mixer(a1->audio_route);
+      pthread_mutex_unlock(&a1->lock);
       usleep(0x3E8u);
       started = NxpTfa98xx_StartUp(off_110D4);
       if ( started )
@@ -1244,7 +1246,7 @@ LABEL_7:
     pcm_close(v12);
   }
   pcm_close(v10);
-  pthread_mutex_unlock(a1 + 41);
+  pthread_mutex_unlock(&a1->lock);
   if ( started )
     _android_log_print(
       6,
@@ -1261,11 +1263,15 @@ LABEL_24:
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 2FF0: using guessed type int __fastcall mixer_open(_DWORD);
-// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD);
+// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD, _DWORD);
 // 3008: using guessed type int __fastcall mixer_close(_DWORD);
+// 302C: using guessed type int __fastcall j_audio_route_free(_DWORD);
+// 3038: using guessed type int __fastcall j_audio_route_init(_DWORD, _DWORD);
 // 3050: using guessed type int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD);
 // 305C: using guessed type int __fastcall pcm_is_ready(_DWORD);
 // 3068: using guessed type int __fastcall pcm_prepare(_DWORD);
+// 3074: using guessed type int __fastcall j_audio_route_reset(_DWORD);
+// 308C: using guessed type int __fastcall j_audio_route_update_mixer(_DWORD);
 // 3098: using guessed type int __fastcall NxpTfa98xx_StartUp(_DWORD);
 // 30A4: using guessed type int __fastcall pcm_get_error(_DWORD);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
@@ -1306,41 +1312,42 @@ int __fastcall wav_player_start(const char *a1, int a2, int a3)
   int v19; // r10
   int v20; // r11
   int v21; // r5
-  int v22; // r6
-  int v23; // r5
+  int v22; // r0
+  int v23; // r6
+  int v24; // r5
   int buffer_size; // r0
-  signed int v25; // r9
-  char *v26; // r11
-  int v27; // r7
-  int v28; // r11
-  char *v29; // r9
-  int v30; // r10
-  _BYTE *v31; // r3
-  char *v32; // r1
-  int v33; // r2
-  int v34; // r6
-  unsigned int v35; // r6
-  int v36; // r2
+  signed int v26; // r9
+  char *v27; // r11
+  int v28; // r7
+  int v29; // r11
+  char *v30; // r9
+  int v31; // r10
+  _BYTE *v32; // r3
+  char *v33; // r1
+  int v34; // r2
+  int v35; // r6
+  unsigned int v36; // r6
+  int v37; // r2
   int error; // [sp+0h] [bp-90h]
-  unsigned int v38; // [sp+Ch] [bp-84h]
-  _BYTE *v39; // [sp+Ch] [bp-84h]
-  unsigned int v40; // [sp+10h] [bp-80h]
+  unsigned int v39; // [sp+Ch] [bp-84h]
+  _BYTE *v40; // [sp+Ch] [bp-84h]
+  unsigned int v41; // [sp+10h] [bp-80h]
   unsigned int size; // [sp+14h] [bp-7Ch]
   int sizea; // [sp+14h] [bp-7Ch]
   int ptra; // [sp+18h] [bp-78h]
   char *ptr; // [sp+18h] [bp-78h]
-  char v45[2]; // [sp+1Ch] [bp-74h] BYREF
-  unsigned __int16 v46; // [sp+1Eh] [bp-72h]
-  unsigned int v47; // [sp+20h] [bp-70h]
-  unsigned __int16 v48; // [sp+2Ah] [bp-66h]
-  int v49; // [sp+2Ch] [bp-64h] BYREF
+  char v46[2]; // [sp+1Ch] [bp-74h] BYREF
+  unsigned __int16 v47; // [sp+1Eh] [bp-72h]
+  unsigned int v48; // [sp+20h] [bp-70h]
+  unsigned __int16 v49; // [sp+2Ah] [bp-66h]
+  int v50; // [sp+2Ch] [bp-64h] BYREF
   int off; // [sp+30h] [bp-60h]
-  int v51[3]; // [sp+34h] [bp-5Ch] BYREF
-  _DWORD v52[4]; // [sp+40h] [bp-50h] BYREF
-  int v53; // [sp+50h] [bp-40h]
-  int v54; // [sp+54h] [bp-3Ch]
-  int v55; // [sp+58h] [bp-38h]
-  int v56; // [sp+5Ch] [bp-34h]
+  int v52[3]; // [sp+34h] [bp-5Ch] BYREF
+  _DWORD v53[4]; // [sp+40h] [bp-50h] BYREF
+  int v54; // [sp+50h] [bp-40h]
+  int v55; // [sp+54h] [bp-3Ch]
+  int v56; // [sp+58h] [bp-38h]
+  int v57; // [sp+5Ch] [bp-34h]
 
   dword_116CC = 0;
   _android_log_print(3, "audio_hw_primary", "%s(): ...", "wav_player_start");
@@ -1352,8 +1359,8 @@ int __fastcall wav_player_start(const char *a1, int a2, int a3)
     _android_log_print(6, "audio_hw_primary", "Unable to open file '%s' [%s]", a1, v10);
     return 1;
   }
-  _fread_chk(v51, 12, 1, v6, 12);
-  if ( v51[0] != 1179011410 || v51[2] != 1163280727 )
+  _fread_chk(v52, 12, 1, v6, 12);
+  if ( v52[0] != 1179011410 || v52[2] != 1163280727 )
   {
     _android_log_print(6, "audio_hw_primary", "Error: '%s' is not a riff/wave file", a1);
     fclose(v6);
@@ -1361,10 +1368,10 @@ int __fastcall wav_player_start(const char *a1, int a2, int a3)
   }
   while ( 1 )
   {
-    _fread_chk(&v49, 8, 1, v6, 8);
-    if ( v49 != 544501094 )
+    _fread_chk(&v50, 8, 1, v6, 8);
+    if ( v50 != 544501094 )
       break;
-    _fread_chk(v45, 16, 1, v6, 16);
+    _fread_chk(v46, 16, 1, v6, 16);
     if ( (unsigned int)off >= 0x11 )
     {
       v7 = off - 16;
@@ -1372,41 +1379,41 @@ LABEL_5:
       fseek(v6, v7, 1);
     }
   }
-  if ( v49 != 1635017060 )
+  if ( v50 != 1635017060 )
   {
     v7 = off;
     goto LABEL_5;
   }
-  v11 = v46;
-  v12 = v48;
-  size = v47;
-  v52[0] = v46;
-  v52[1] = v47;
-  v52[2] = 1024;
-  v52[3] = 4;
-  if ( v48 == 16 )
+  v11 = v47;
+  v12 = v49;
+  size = v48;
+  v53[0] = v47;
+  v53[1] = v48;
+  v53[2] = 1024;
+  v53[3] = 4;
+  if ( v49 == 16 )
   {
     v13 = a3;
-    v53 = 0;
+    v54 = 0;
   }
   else
   {
     v13 = a3;
-    if ( v48 == 24 )
+    if ( v49 == 24 )
     {
       v14 = 3;
 LABEL_19:
-      v53 = v14;
+      v54 = v14;
     }
-    else if ( v48 == 32 )
+    else if ( v49 == 32 )
     {
       v14 = 1;
       goto LABEL_19;
     }
   }
-  v54 = 0;
   v55 = 0;
   v56 = 0;
+  v57 = 0;
   v15 = pcm_params_get(a2, v13, 0);
   v16 = v15;
   if ( !v15 )
@@ -1415,9 +1422,9 @@ LABEL_19:
     goto LABEL_45;
   }
   ptra = sub_43AC(v15, 6, size, "Sample rate", "Hz");
-  v38 = v11;
+  v39 = v11;
   v17 = sub_43AC(v16, 5, v11, "Sample", " channels");
-  v40 = v12;
+  v41 = v12;
   v18 = sub_43AC(v16, 3, v12, "Bitrate", " bits");
   v19 = sub_43AC(v16, 8, 0x400u, "Period size", "Hz");
   v20 = sub_43AC(v16, 10, 4u, "Period count", "Hz");
@@ -1425,92 +1432,93 @@ LABEL_19:
   if ( (ptra & v17 & v18 & v19 & v20) == 0 )
     goto LABEL_45;
   v21 = 0;
-  dword_116D0 = pcm_open(a2, v13, 0, v52);
-  if ( !dword_116D0 )
+  v22 = pcm_open(a2, v13, 0, v53);
+  dword_116D0 = v22;
+  if ( !v22 )
   {
 LABEL_40:
     error = pcm_get_error(v21);
     _android_log_print(6, "audio_hw_primary", "Unable to open PCM device %u (%s)", v13, error);
     goto LABEL_45;
   }
-  if ( !pcm_is_ready() )
+  if ( !pcm_is_ready(v22) )
   {
     v21 = dword_116D0;
     goto LABEL_40;
   }
-  v22 = mixer_open(1);
-  if ( v22 )
+  v23 = mixer_open(1);
+  if ( v23 )
   {
     _android_log_print(3, "audio_hw_primary", "%s(): set hifi gain: %d, %d", "play_sample", dword_116C8, 12);
-    sub_4364(v22, (int)"Gain selection", dword_116C8);
-    sub_4364(v22, (int)"Master Playback Volume", 12);
-    sub_4364(v22, (int)"Filter Shape", 1);
-    sub_4364(v22, (int)"bypass IIR", 1);
-    sub_4364(v22, (int)"THD Compensation", 1);
-    sub_4364(v22, (int)"2nd Harmonic Compensation", 0);
-    sub_4364(v22, (int)"3nd Harmonic Compensation", 254);
-    mixer_close(v22);
+    set_mixer_value_by_name(v23, (int)"Gain selection", dword_116C8);
+    set_mixer_value_by_name(v23, (int)"Master Playback Volume", 12);
+    set_mixer_value_by_name(v23, (int)"Filter Shape", 1);
+    set_mixer_value_by_name(v23, (int)"bypass IIR", 1);
+    set_mixer_value_by_name(v23, (int)"THD Compensation", 1);
+    set_mixer_value_by_name(v23, (int)"2nd Harmonic Compensation", 0);
+    set_mixer_value_by_name(v23, (int)"3nd Harmonic Compensation", 254);
+    mixer_close(v23);
   }
-  v23 = dword_116D0;
+  v24 = dword_116D0;
   buffer_size = pcm_get_buffer_size(dword_116D0);
-  v25 = pcm_frames_to_bytes(v23, buffer_size);
-  v26 = (char *)malloc(v25);
-  ptr = v26;
-  if ( v26 )
+  v26 = pcm_frames_to_bytes(v24, buffer_size);
+  v27 = (char *)malloc(v26);
+  ptr = v27;
+  if ( v27 )
   {
-    _android_log_print(3, "audio_hw_primary", "Playing sample: %u ch, %u hz, %u bit\n", v38, size, v40);
+    _android_log_print(3, "audio_hw_primary", "Playing sample: %u ch, %u hz, %u bit\n", v39, size, v41);
     signal(2, (__sighandler_t)sub_4394);
-    v27 = v25 / 4;
-    sizea = 3 * (v25 / 4);
-    v39 = v26 + 1;
+    v28 = v26 / 4;
+    sizea = 3 * (v26 / 4);
+    v40 = v27 + 1;
     do
     {
-      if ( v40 == 24 )
+      if ( v41 == 24 )
       {
-        v28 = v25;
-        v29 = (char *)malloc(sizea);
-        v30 = _fread_chk(v29, 1, sizea, v6, -1);
-        if ( v28 >= 4 )
+        v29 = v26;
+        v30 = (char *)malloc(sizea);
+        v31 = _fread_chk(v30, 1, sizea, v6, -1);
+        if ( v29 >= 4 )
         {
-          v31 = v39;
-          v32 = v29 + 2;
-          v33 = 0;
+          v32 = v40;
+          v33 = v30 + 2;
+          v34 = 0;
           do
           {
-            *(v31 - 1) = *(v32 - 2);
-            v34 = 3 * v33++;
-            *v31 = v29[v34 + 1];
-            v35 = *v32;
-            v32 += 3;
-            v31[1] = v35;
-            v31[2] = v35 >> 7;
-            v31 += 4;
+            *(v32 - 1) = *(v33 - 2);
+            v35 = 3 * v34++;
+            *v32 = v30[v35 + 1];
+            v36 = *v33;
+            v33 += 3;
+            v32[1] = v36;
+            v32[2] = v36 >> 7;
+            v32 += 4;
           }
-          while ( v33 < v27 );
+          while ( v34 < v28 );
         }
-        free(v29);
-        v25 = v28;
-        v26 = ptr;
-        v36 = 4 * (v30 / 3);
+        free(v30);
+        v26 = v29;
+        v27 = ptr;
+        v37 = 4 * (v31 / 3);
       }
       else
       {
-        v36 = _fread_chk(v26, 1, v25, v6, -1);
+        v37 = _fread_chk(v27, 1, v26, v6, -1);
       }
-      if ( v36 < 1 )
+      if ( v37 < 1 )
         break;
-      if ( pcm_write(dword_116D0, v26, v36) )
+      if ( pcm_write(dword_116D0, v27, v37) )
       {
         _android_log_print(6, "audio_hw_primary", "Error playing sample");
         break;
       }
     }
     while ( !dword_116CC );
-    free(v26);
+    free(v27);
   }
   else
   {
-    _android_log_print(6, "audio_hw_primary", "Unable to allocate %d bytes", v25);
+    _android_log_print(6, "audio_hw_primary", "Unable to allocate %d bytes", v26);
   }
   pcm_close(dword_116D0);
   dword_116D0 = 0;
@@ -1523,7 +1531,7 @@ LABEL_45:
 // 2FF0: using guessed type int __fastcall mixer_open(_DWORD);
 // 3008: using guessed type int __fastcall mixer_close(_DWORD);
 // 3050: using guessed type int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD);
-// 305C: using guessed type int pcm_is_ready(void);
+// 305C: using guessed type int __fastcall pcm_is_ready(_DWORD);
 // 30A4: using guessed type int __fastcall pcm_get_error(_DWORD);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
 // 30C8: using guessed type int __fastcall _fread_chk(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD);
@@ -1593,10 +1601,10 @@ int thread_test_hifi()
 // 4198: using guessed type int thread_test_hifi();
 
 //----- (000041B0) --------------------------------------------------------
-int __fastcall adev_set_headset_volume(int a1, float a2)
+int __fastcall adev_set_headset_volume(audio_device *a1, float a2)
 {
   int result; // r0
-  int v4; // r2
+  audio_mode_t amode; // r2
   bool v5; // zf
   int v6; // r4
   float *i; // r7
@@ -1604,10 +1612,10 @@ int __fastcall adev_set_headset_volume(int a1, float a2)
   char v9[9]; // [sp+1Fh] [bp-29h] BYREF
 
   result = -22;
-  v4 = *(_DWORD *)(a1 + 168);
-  v5 = v4 == 2;
-  if ( v4 != 2 )
-    v5 = (*(_DWORD *)(a1 + 172) & 0xC) == 0;
+  amode = a1->amode;
+  v5 = amode == AUDIO_MODE_IN_CALL;
+  if ( amode != AUDIO_MODE_IN_CALL )
+    v5 = (a1->out_device & 0xC) == 0;
   if ( !v5 )
   {
     v6 = 0;
@@ -1620,38 +1628,39 @@ int __fastcall adev_set_headset_volume(int a1, float a2)
       if ( ++v6 >= 61 )
         return 0;
     }
-    *(_DWORD *)(a1 + 272) = v6;
-    if ( *(_BYTE *)(a1 + 289) )
-      sub_427C(a1);
+    a1->headset_volume = v6;
+    if ( a1->b_289 )
+      set_hifi_volume(a1);
     else
-      set_headphone_volume((audio_device *)a1);
+      sub_42F0(a1);
     return 0;
   }
   return result;
 }
 // 3158: using guessed type int _snprintf_chk(_DWORD, _DWORD, _DWORD, _DWORD, const char *, ...);
+// 42F0: using guessed type int __fastcall sub_42F0(_DWORD);
 
 //----- (0000427C) --------------------------------------------------------
-unsigned int __fastcall sub_427C(int a1)
+int __fastcall set_hifi_volume(audio_device *a1)
 {
   int v2; // r5
-  int v3; // r0
+  int headset_volume; // r0
 
-  if ( *(_DWORD *)(a1 + 292) == 3 )
+  if ( a1->hifi_gain_state == 3 )
   {
     v2 = 0;
   }
   else
   {
-    v3 = *(_DWORD *)(a1 + 272);
-    if ( v3 == 60 )
+    headset_volume = a1->headset_volume;
+    if ( headset_volume == 60 )
     {
       v2 = 255;
     }
     else
     {
-      v2 = *(_DWORD *)(a1 + 300) + 2 * v3;
-      if ( *(_BYTE *)(a1 + 290) )
+      v2 = a1->hifi_volume + 2 * headset_volume;
+      if ( a1->b_290 )
       {
         if ( v2 < 24 )
           v2 -= v2 / 2;
@@ -1661,49 +1670,49 @@ unsigned int __fastcall sub_427C(int a1)
     }
   }
   _android_log_print(2, "audio_hw_primary", "%s(): volume=%d", "set_hifi_volume", v2);
-  return sub_4364(*(_DWORD *)(a1 + 196), (int)"Master Playback Volume", v2);
-}
-// 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
-
-//----- (000042F0) --------------------------------------------------------
-int __fastcall set_headphone_volume(audio_device *a1)
-{
-  int result; // r0
-  audio_mode_t amode; // r0
-  int v4; // r5
-  bool v5; // zf
-
-  result = LOBYTE(a1->out_device);
-  if ( (result & 0xC) != 0 )
-  {
-    amode = a1->amode;
-    v4 = 128;
-    v5 = amode == AUDIO_MODE_RINGTONE;
-    if ( amode != AUDIO_MODE_RINGTONE )
-      v5 = amode == AUDIO_MODE_IN_COMMUNICATION;
-    if ( !v5 )
-    {
-      if ( amode == AUDIO_MODE_IN_CALL )
-        v4 = 128 - 4 * a1->headphone_volume;
-      else
-        v4 = 128 - 2 * a1->headset_volume;
-    }
-    _android_log_print(2, "audio_hw_primary", "%s(): headphone volume=%d", "set_headphone_volume", v4);
-    return sub_4364(a1->mixer, "HPOUT Digital Volume", v4);
-  }
-  return result;
+  return set_mixer_value_by_name(a1->hifi_mixer, "Master Playback Volume", v2);
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 4364: using guessed type int __fastcall sub_4364(_DWORD, _DWORD, _DWORD);
 
+//----- (000042F0) --------------------------------------------------------
+unsigned int __fastcall sub_42F0(int a1)
+{
+  unsigned int result; // r0
+  int v3; // r0
+  int v4; // r5
+  bool v5; // zf
+
+  result = *(unsigned __int8 *)(a1 + 172);
+  if ( (result & 0xC) != 0 )
+  {
+    v3 = *(_DWORD *)(a1 + 168);
+    v4 = 128;
+    v5 = v3 == 1;
+    if ( v3 != 1 )
+      v5 = v3 == 3;
+    if ( !v5 )
+    {
+      if ( v3 == 2 )
+        v4 = 128 - 4 * *(_DWORD *)(a1 + 276);
+      else
+        v4 = 128 - 2 * *(_DWORD *)(a1 + 272);
+    }
+    _android_log_print(2, "audio_hw_primary", "%s(): headphone volume=%d", "set_headphone_volume", v4);
+    return set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Volume", v4);
+  }
+  return result;
+}
+// 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
+
 //----- (00004364) --------------------------------------------------------
-unsigned int __fastcall sub_4364(int a1, int a2, int a3)
+unsigned int __fastcall set_mixer_value_by_name(int a1, int a2, int a3)
 {
   unsigned int result; // r0
   unsigned int v5; // r5
   unsigned int i; // r6
 
-  result = mixer_get_ctl_by_name();
+  result = mixer_get_ctl_by_name(a1, a2);
   v5 = result;
   if ( result )
   {
@@ -1719,7 +1728,7 @@ unsigned int __fastcall sub_4364(int a1, int a2, int a3)
   }
   return result;
 }
-// 2FFC: using guessed type int mixer_get_ctl_by_name(void);
+// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD, _DWORD);
 // 3170: using guessed type int __fastcall mixer_ctl_get_num_values(_DWORD);
 // 317C: using guessed type int __fastcall mixer_ctl_set_value(_DWORD, _DWORD, _DWORD);
 
@@ -1769,9 +1778,9 @@ int __fastcall sub_43AC(int a1, int a2, unsigned int a3, const char *a4, const c
 int __fastcall adev_open(struct hw_module_t *a1, char *s1, audio_device **a3)
 {
   audio_device *v6; // r4
-  int v7; // r0
-  int v8; // r0
-  int v9; // r0
+  struct audio_route *v7; // r0
+  struct mixer *v8; // r0
+  struct mixer *v9; // r0
   _BOOL4 v10; // r0
   char s1a[128]; // [sp+8h] [bp-118h] BYREF
   char v12[128]; // [sp+88h] [bp-98h] BYREF
@@ -1784,25 +1793,25 @@ int __fastcall adev_open(struct hw_module_t *a1, char *s1, audio_device **a3)
   v6->hw_device.common.tag = 1213678676;
   v6->hw_device.common.version = 512;
   v6->hw_device.common.module = a1;
-  v6->hw_device.common.close = (int (__fastcall *)(struct hw_device_t *))sub_46E0;
-  v6->hw_device.init_check = (int (__fastcall *)(const struct audio_hw_device *))sub_470A;
+  v6->hw_device.common.close = (int (__fastcall *)(struct hw_device_t *))adev_close;
+  v6->hw_device.init_check = (int (__fastcall *)(const struct audio_hw_device *))adev_init_check;
   v6->hw_device.set_voice_volume = (int (__fastcall *)(struct audio_hw_device *, float))adev_set_voice_volume;
-  v6->hw_device.set_master_volume = (int (__fastcall *)(struct audio_hw_device *, float))sub_4824;
+  v6->hw_device.set_master_volume = (int (__fastcall *)(struct audio_hw_device *, float))adev_set_master_volume;
   v6->hw_device.set_mode = (int (__fastcall *)(struct audio_hw_device *, audio_mode_t))adev_set_mode;
-  v6->hw_device.set_mic_mute = (int (__fastcall *)(struct audio_hw_device *, bool))sub_4B34;
-  v6->hw_device.get_mic_mute = (int (__fastcall *)(const struct audio_hw_device *, bool *))sub_4B3C;
-  v6->hw_device.set_parameters = (int (__fastcall *)(struct audio_hw_device *, const char *))sub_4B48;
-  v6->hw_device.get_parameters = (char *(__fastcall *)(const struct audio_hw_device *, const char *))sub_4E6C;
-  v6->hw_device.get_input_buffer_size = (size_t (__fastcall *)(const struct audio_hw_device *, const struct audio_config *))sub_4FD0;
+  v6->hw_device.set_mic_mute = (int (__fastcall *)(struct audio_hw_device *, bool))adev_set_mic_mute;
+  v6->hw_device.get_mic_mute = (int (__fastcall *)(const struct audio_hw_device *, bool *))adev_get_mic_mute;
+  v6->hw_device.set_parameters = (int (__fastcall *)(struct audio_hw_device *, const char *))adev_set_parameters;
+  v6->hw_device.get_parameters = (char *(__fastcall *)(const struct audio_hw_device *, const char *))adev_get_parameters;
+  v6->hw_device.get_input_buffer_size = (size_t (__fastcall *)(const struct audio_hw_device *, const struct audio_config *))adev_get_input_buffer_size;
   v6->hw_device.open_output_stream = (int (__fastcall *)(struct audio_hw_device *, audio_io_handle_t, audio_devices_t, audio_output_flags_t, struct audio_config *, struct audio_stream_out **, const char *))adev_open_output_stream;
-  v6->hw_device.close_output_stream = (void (__fastcall *)(struct audio_hw_device *, struct audio_stream_out *))sub_52B8;
-  v6->hw_device.open_input_stream = (int (__fastcall *)(struct audio_hw_device *, audio_io_handle_t, audio_devices_t, struct audio_config *, struct audio_stream_in **, audio_input_flags_t, const char *, audio_source_t))sub_52F4;
-  v6->hw_device.close_input_stream = (void (__fastcall *)(struct audio_hw_device *, struct audio_stream_in *))sub_5520;
-  v6->hw_device.dump = (int (__fastcall *)(const struct audio_hw_device *, int))sub_55A0;
+  v6->hw_device.close_output_stream = (void (__fastcall *)(struct audio_hw_device *, struct audio_stream_out *))adev_close_output_stream;
+  v6->hw_device.open_input_stream = (int (__fastcall *)(struct audio_hw_device *, audio_io_handle_t, audio_devices_t, struct audio_config *, struct audio_stream_in **, audio_input_flags_t, const char *, audio_source_t))adev_open_input_stream;
+  v6->hw_device.close_input_stream = (void (__fastcall *)(struct audio_hw_device *, struct audio_stream_in *))adev_close_input_stream;
+  v6->hw_device.dump = (int (__fastcall *)(const struct audio_hw_device *, int))adev_dump;
   v6->hw_device.set_headphone_volume = (int (__fastcall *)(struct audio_hw_device *, float))adev_set_headset_volume;
-  v6->hw_device.dumb2 = (int *)sub_55A4;
-  v7 = j_audio_route_init(0, "/system/etc/mixer_paths.xml");
-  v6->audio_route = (struct audio_route *)v7;
+  v6->hw_device.dumb2 = (int *)adev_dumb2;
+  v7 = (struct audio_route *)j_audio_route_init(0, "/system/etc/mixer_paths.xml");
+  v6->audio_route = v7;
   if ( !v7 )
   {
     _android_log_print(6, "audio_hw_primary", "%s(): failed to open audio route, abort...", "adev_open");
@@ -1810,8 +1819,8 @@ LABEL_15:
     free(v6);
     return -12;
   }
-  v8 = mixer_open(0);
-  v6->mixer = (struct mixer *)v8;
+  v8 = (struct mixer *)mixer_open(0);
+  v6->mixer = v8;
   if ( !v8 )
   {
     _android_log_print(6, "audio_hw_primary", "%s(): failed to open mixer, abort...", "adev_open");
@@ -1819,8 +1828,8 @@ LABEL_14:
     j_audio_route_free(v6->audio_route);
     goto LABEL_15;
   }
-  v9 = mixer_open(1);
-  v6->hifi_mixer = (struct mixer *)v9;
+  v9 = (struct mixer *)mixer_open(1);
+  v6->hifi_mixer = v9;
   if ( !v9 )
   {
     _android_log_print(6, "audio_hw_primary", "%s(): failed to open HiFi mixer, abort...", "adev_open");
@@ -1845,7 +1854,7 @@ LABEL_14:
   v6->v_71 = &byte_7;
   *a3 = v6;
   Open();
-  j_thread_refresh_audio_route(v6);
+  j_thread_refresh_audio_route((int)v6);
   property_get("ro.product.locale.region", v12, "0");
   property_get("ro.product.locale.language", s1a, "0");
   _android_log_print(3, "audio_hw_primary", "%s:region=%s,language=%s", "adev_open", v12, s1a);
@@ -1854,6 +1863,7 @@ LABEL_14:
   _android_log_print(3, "audio_hw_primary", "%s:is_oversea=%d", "adev_open", v10);
   return 0;
 }
+// 7: using guessed type char byte_7;
 // 2F6C: using guessed type int __fastcall property_get(_DWORD, _DWORD, _DWORD);
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 2FF0: using guessed type int __fastcall mixer_open(_DWORD);
@@ -1861,7 +1871,6 @@ LABEL_14:
 // 302C: using guessed type int __fastcall j_audio_route_free(_DWORD);
 // 3038: using guessed type int __fastcall j_audio_route_init(_DWORD, _DWORD);
 // 31B8: using guessed type int Open(void);
-// 31C4: using guessed type int __fastcall j_thread_refresh_audio_route(_DWORD);
 // 41B0: using guessed type int adev_set_headset_volume();
 // 46E0: using guessed type int sub_46E0();
 // 470A: using guessed type int sub_470A();
@@ -1873,15 +1882,13 @@ LABEL_14:
 // 4B48: using guessed type int sub_4B48();
 // 4E6C: using guessed type int sub_4E6C();
 // 4FD0: using guessed type int sub_4FD0();
-// 5068: using guessed type int sub_5068(int, int, int, int, int, int);
 // 52B8: using guessed type int sub_52B8();
-// 52F4: using guessed type int sub_52F4(int, int, int, int, int);
 // 5520: using guessed type int sub_5520();
 // 55A0: using guessed type int sub_55A0();
 // 55A4: using guessed type int sub_55A4();
 
 //----- (000046E0) --------------------------------------------------------
-int __fastcall sub_46E0(audio_device *a1)
+int __fastcall adev_close(audio_device *a1)
 {
   NxpTfa98xx_Stop();
   mixer_close(a1->hifi_mixer);
@@ -1895,11 +1902,11 @@ int __fastcall sub_46E0(audio_device *a1)
 // 31D0: using guessed type int NxpTfa98xx_Stop(void);
 
 //----- (0000470A) --------------------------------------------------------
-int sub_470A()
+int adev_init_check()
 {
   return 0;
 }
-// 470A: using guessed type int sub_470A();
+// 470A: using guessed type int adev_init_check();
 
 //----- (00004710) --------------------------------------------------------
 int __fastcall adev_set_voice_volume(audio_device *a1, float a2)
@@ -1936,7 +1943,7 @@ int __fastcall adev_set_voice_volume(audio_device *a1, float a2)
   }
   while ( v4 != 15 );
   if ( a1->amode == AUDIO_MODE_IN_CALL )
-    set_voice_volume(a1);
+    sub_55E8(a1);
   pthread_mutex_unlock(mutex);
   return 0;
 }
@@ -1945,11 +1952,11 @@ int __fastcall adev_set_voice_volume(audio_device *a1, float a2)
 // 55E8: using guessed type int __fastcall sub_55E8(_DWORD);
 
 //----- (00004824) --------------------------------------------------------
-int sub_4824()
+int adev_set_master_volume()
 {
   return -38;
 }
-// 4824: using guessed type int sub_4824();
+// 4824: using guessed type int adev_set_master_volume();
 
 //----- (0000482C) --------------------------------------------------------
 int __fastcall adev_set_mode(audio_device *a1, int a2)
@@ -2041,7 +2048,7 @@ int __fastcall adev_set_mode(audio_device *a1, int a2)
       a1->pcm_voice_out = v9;
       if ( v9 )
       {
-        is_ready = pcm_is_ready();
+        is_ready = pcm_is_ready(v9);
         pcm_voice_out = a1->pcm_voice_out;
         if ( !is_ready )
         {
@@ -2062,7 +2069,7 @@ LABEL_28:
     pcm_voice_in = 0;
     v12 = (struct pcm *)pcm_open(0, 3, 0x10000000, &pcm_config_voice_call);
     a1->pcm_voice_in = v12;
-    if ( !v12 || (v13 = pcm_is_ready(), pcm_voice_in = a1->pcm_voice_in, v13) )
+    if ( !v12 || (v13 = pcm_is_ready(v12), pcm_voice_in = a1->pcm_voice_in, v13) )
     {
       pcm_prepare(pcm_voice_in);
       goto LABEL_28;
@@ -2110,7 +2117,7 @@ LABEL_37:
 // 7: using guessed type char byte_7;
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 3050: using guessed type int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD);
-// 305C: using guessed type int pcm_is_ready(void);
+// 305C: using guessed type int __fastcall pcm_is_ready(_DWORD);
 // 3068: using guessed type int __fastcall pcm_prepare(_DWORD);
 // 30A4: using guessed type int __fastcall pcm_get_error(_DWORD);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
@@ -2121,21 +2128,21 @@ LABEL_37:
 // 5730: using guessed type int __fastcall sub_5730(_DWORD);
 
 //----- (00004B34) --------------------------------------------------------
-int __fastcall sub_4B34(audio_device *a1, char a2)
+int __fastcall adev_set_mic_mute(audio_device *a1, char a2)
 {
   a1->mic_mute_state = a2;
   return 0;
 }
 
 //----- (00004B3C) --------------------------------------------------------
-int __fastcall sub_4B3C(audio_device *a1, _BYTE *a2)
+int __fastcall adev_get_mic_mute(audio_device *a1, _BYTE *a2)
 {
   *a2 = a1->mic_mute_state;
   return 0;
 }
 
 //----- (00004B48) --------------------------------------------------------
-int __fastcall sub_4B48(audio_device *a1, const char *a2)
+int __fastcall adev_set_parameters(audio_device *a1, const char *a2)
 {
   int str; // r4
   int v5; // r6
@@ -2167,8 +2174,8 @@ int __fastcall sub_4B48(audio_device *a1, const char *a2)
       a1->hifi_gain_state = v5;
       if ( a1->b_289 )
       {
-        sub_62E0(a1);
-        sub_427C(a1);
+        set_hifi_gain(a1);
+        set_hifi_volume(a1);
       }
     }
   }
@@ -2180,7 +2187,7 @@ int __fastcall sub_4B48(audio_device *a1, const char *a2)
       _android_log_print(3, "audio_hw_primary", "%s(): dirac state (%d >> %d)", "adev_set_parameters", a1->b_290, v6);
       a1->b_290 = v6;
       if ( v6 )
-        sub_427C(a1);
+        set_hifi_volume(a1);
     }
   }
   v7 = *(_QWORD *)&a1->v_63;
@@ -2243,7 +2250,7 @@ int __fastcall sub_4B48(audio_device *a1, const char *a2)
   }
   else
   {
-    v10 = sub_66B0(a1, a2);
+    v10 = audio_test(a1, (int)a2);
     str_parms_destroy(str);
   }
   return v10;
@@ -2252,15 +2259,12 @@ int __fastcall sub_4B48(audio_device *a1, const char *a2)
 // 31F4: using guessed type int __fastcall str_parms_create_str(_DWORD);
 // 3200: using guessed type int __fastcall str_parms_get_str(_DWORD, _DWORD, _DWORD, _DWORD);
 // 320C: using guessed type int __fastcall str_parms_destroy(_DWORD);
-// 427C: using guessed type int __fastcall sub_427C(_DWORD);
 // 5730: using guessed type int __fastcall sub_5730(_DWORD);
-// 62E0: using guessed type int __fastcall sub_62E0(_DWORD);
 // 6644: using guessed type int __fastcall sub_6644(_DWORD);
 // 6676: using guessed type int __fastcall sub_6676(_DWORD);
-// 66B0: using guessed type int __fastcall sub_66B0(_DWORD, _DWORD);
 
 //----- (00004E6C) --------------------------------------------------------
-char *__fastcall sub_4E6C(audio_device *a1, const char *a2)
+char *__fastcall adev_get_parameters(audio_device *a1, const char *a2)
 {
   int str; // r5
   int v5; // r4
@@ -2278,7 +2282,7 @@ char *__fastcall sub_4E6C(audio_device *a1, const char *a2)
     str_parms_destroy(str);
     if ( v7 >= 0 && !strcmp((const char *)s1, "pa_calibration") )
     {
-      if ( sub_66B0(a1, "factory_test=pa_calibration") )
+      if ( audio_test(a1, (int)"factory_test=pa_calibration") )
         SpeakerImpedance = 0.0;
       else
         SpeakerImpedance = NxpTfa98xx_GetSpeakerImpedance();
@@ -2287,7 +2291,7 @@ char *__fastcall sub_4E6C(audio_device *a1, const char *a2)
       v9 = str_parms_create_str(s1);
       v6 = (const char *)str_parms_to_str();
       str_parms_destroy(v9);
-      sub_66B0(a1, "factory_test=off");
+      audio_test(a1, (int)"factory_test=off");
       _android_log_print(3, "audio_hw_primary", "%s(): %s", "adev_get_parameters", v6);
     }
     else
@@ -2311,10 +2315,9 @@ char *__fastcall sub_4E6C(audio_device *a1, const char *a2)
 // 3218: using guessed type int str_parms_to_str(void);
 // 3230: using guessed type float NxpTfa98xx_GetSpeakerImpedance(void);
 // 323C: using guessed type int _sprintf_chk(_DWORD, _DWORD, _DWORD, const char *, ...);
-// 66B0: using guessed type int __fastcall sub_66B0(_DWORD, _DWORD);
 
 //----- (00004FD0) --------------------------------------------------------
-int __fastcall sub_4FD0(int a1, int *a2)
+unsigned int __fastcall adev_get_input_buffer_size(audio_device *a1, int *a2)
 {
   int v2; // r0
   int v3; // r12
@@ -2357,7 +2360,7 @@ LABEL_4:
 // 11038: using guessed type Elf32_Sym *off_11038;
 
 //----- (00005068) --------------------------------------------------------
-int __fastcall adev_open_output_stream(audio_device *a1, int a2, int a3, int a4, _DWORD *a5, _DWORD *a6)
+int __fastcall adev_open_output_stream(struct audio_device *a1, int a2, int a3, int a4, int *a5, stream_out **a6)
 {
   int result; // r0
   unsigned int v8; // r10
@@ -2371,7 +2374,7 @@ int __fastcall adev_open_output_stream(audio_device *a1, int a2, int a3, int a4,
   void *v16; // r5
   void *v17; // r6
   void *v18; // r7
-  unsigned int v19; // r6
+  unsigned int output_buffer_size; // r6
   int v20; // r0
   bool v21; // zf
   int v22; // r7
@@ -2396,25 +2399,25 @@ int __fastcall adev_open_output_stream(audio_device *a1, int a2, int a3, int a4,
   if ( !v9 )
     return -12;
   v9->channel_mask = 3;
-  v9->v_172 = &dword_0 + 3;
+  v9->out_v_172 = &dword_0 + 3;
   v11 = off_1100C;
   v12 = off_11010;
   v13 = (void *)unk_11014;
   v14 = unk_11018;
-  v9->v_116 = (void *)pcm_config;
+  v9->out_v_116 = (void *)pcm_config;
   v9->sample_rate = (int)v11;
-  v9->v_124 = v12;
-  v9->v_128 = v13;
+  v9->out_v_124 = v12;
+  v9->out_v_128 = v13;
   v9->format = v14;
   v15 = (void *)unk_11020;
   v16 = (void *)unk_11024;
   v17 = (void *)unk_11028;
   v18 = (void *)unk_1102C;
-  v9->v_136 = (void *)unk_1101C;
-  v9->v_140 = v15;
-  v9->v_144 = v16;
-  v9->v_148 = v17;
-  v9->v_152 = v18;
+  v9->out_v_136 = (void *)unk_1101C;
+  v9->out_v_140 = v15;
+  v9->out_v_144 = v16;
+  v9->out_v_148 = v17;
+  v9->out_v_152 = v18;
   v9->stream.common.get_sample_rate = (uint32_t (__fastcall *)(const struct audio_stream *))sub_6E08;
   v9->stream.common.set_sample_rate = (int (__fastcall *)(struct audio_stream *, uint32_t))sub_6E0E;
   v9->stream.common.get_buffer_size = (size_t (__fastcall *)(const struct audio_stream *))sub_6E16;
@@ -2429,15 +2432,15 @@ int __fastcall adev_open_output_stream(audio_device *a1, int a2, int a3, int a4,
   v9->stream.common.remove_audio_effect = (int (__fastcall *)(const struct audio_stream *, effect_handle_t))sub_7324;
   v9->stream.get_latency = (uint32_t (__fastcall *)(const struct audio_stream_out *))sub_7328;
   v9->stream.set_volume = (int (__fastcall *)(struct audio_stream_out *, float, float))sub_733E;
-  v9->stream.write = (ssize_t (__fastcall *)(struct audio_stream_out *, const void *, size_t))sub_7344;
+  v9->stream.write = (ssize_t (__fastcall *)(struct audio_stream_out *, const void *, size_t))out_write;
   v9->stream.get_render_position = (int (__fastcall *)(const struct audio_stream_out *, uint32_t *))sub_7C90;
   v9->stream.get_next_write_timestamp = (int (__fastcall *)(const struct audio_stream_out *, int64_t *))sub_7C96;
   v9->stream.get_presentation_position = (int (__fastcall *)(const struct audio_stream_out *, uint64_t *, struct timespec *))sub_7C9C;
   v9->adev = a1;
   v9->in_sample_rate = 48000;
   v9->in_format = AUDIO_FORMAT_PCM_16_BIT;
-  v19 = sub_7D2C(v9);
-  v10->v_192 = (void *)v19;
+  output_buffer_size = get_output_buffer_size(v9);
+  v10->out_v_192 = (void *)output_buffer_size;
   v20 = v10->stream.common.get_format(&v10->stream.common);
   v21 = (v20 & 0xFF000000) == 218103808;
   if ( (v20 & 0xFF000000) != 218103808 )
@@ -2486,11 +2489,11 @@ LABEL_12:
 LABEL_22:
     v8 = v26 * v22;
   }
-  v10->v_124 = (void *)(v19 / v8);
+  v10->out_v_124 = (void *)(output_buffer_size / v8);
   a5[2] = v10->in_format;
   a5[1] = v10->channel_mask;
   *a5 = v10->in_sample_rate;
-  LOBYTE(v10->v_160) = 1;
+  LOBYTE(v10->out_v_160) = 1;
   pthread_mutex_lock(&a1->lock);
   if ( a1->stream_out )
   {
@@ -2510,8 +2513,9 @@ LABEL_22:
   }
   return result;
 }
+// 0: using guessed type int dword_0;
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
-// 6644: using guessed type int sub_6644();
+// 6644: using guessed type int __fastcall sub_6644(_DWORD);
 // 6E08: using guessed type int sub_6E08();
 // 6E0E: using guessed type int sub_6E0E();
 // 6E16: using guessed type int sub_6E16();
@@ -2525,20 +2529,18 @@ LABEL_22:
 // 7324: using guessed type int sub_7324();
 // 7328: using guessed type int sub_7328();
 // 733E: using guessed type int sub_733E();
-// 7344: using guessed type int sub_7344();
 // 7C90: using guessed type int sub_7C90();
 // 7C96: using guessed type int sub_7C96();
 // 7C9C: using guessed type int sub_7C9C();
-// 7D2C: using guessed type int __fastcall sub_7D2C(_DWORD);
 // 1100C: using guessed type void *off_1100C;
 // 11010: using guessed type void *off_11010;
 
 //----- (000052B8) --------------------------------------------------------
-int __fastcall sub_52B8(audio_device *a1, stream_out *a2)
+int __fastcall adev_close_output_stream(audio_device *a1, int a2)
 {
   sub_6644(a2);
   pthread_mutex_lock(&a1->lock);
-  if ( (stream_out *)a1->stream_out == a2 )
+  if ( a1->stream_out == (struct audio_stream_out **)a2 )
     a1->stream_out = 0;
   a1->output_stream_state = 0;
   pthread_mutex_unlock(&a1->lock);
@@ -2548,11 +2550,16 @@ int __fastcall sub_52B8(audio_device *a1, stream_out *a2)
 // B610: using guessed type int __fastcall j_free(_DWORD);
 
 //----- (000052F4) --------------------------------------------------------
-int __fastcall sub_52F4(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5)
+int __fastcall adev_open_input_stream(
+        struct audio_device *a1,
+        int a2,
+        audio_devices_t a3,
+        struct audio_config **a4,
+        stream_in **a5)
 {
-  _DWORD *v8; // r7
+  stream_in *v8; // r7
   int v9; // r0
-  void *v10; // r6
+  struct CVQStream *v10; // r6
   int v11; // r1
   Elf32_Sym *v12; // r0
   int result; // r0
@@ -2560,12 +2567,12 @@ int __fastcall sub_52F4(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5)
 
   _android_log_print(3, "audio_hw_primary", "%s():...", "adev_open_input_stream");
   *a5 = 0;
-  if ( a4[1] != 16 )
+  if ( a4[1] != (struct audio_config *)&word_10 )
   {
-    a4[1] = 16;
+    a4[1] = (struct audio_config *)&word_10;
     return -22;
   }
-  v8 = calloc(1u, 0xB0u);
+  v8 = (stream_in *)calloc(1u, 0xB0u);
   if ( v8 )
   {
     property_get("persist.sys.audience.ustrhal", v14, "0");
@@ -2579,47 +2586,47 @@ int __fastcall sub_52F4(int a1, int a2, int a3, _DWORD *a4, _DWORD *a5)
       goto LABEL_9;
     }
     _android_log_print(3, "audio_hw_primary", "audio audience cvq enabled");
-    v8[18] = 1;
-    v10 = malloc(0x4E264u);
+    v8->in_int_72 = 1;
+    v10 = (struct CVQStream *)malloc(0x4E264u);
     if ( v10 )
     {
       _android_log_print(3, "audio_hw_primary", "audio audience cvq enabled");
-      v8[17] = v10;
-      j_cvq_init((int)v10);
-      v8[24] = 160000;
-      v8[23] = malloc(0x27100u);
-      v8[25] = 0;
-      v8[26] = 0;
+      v8->cvqStream = v10;
+      j_cvq_init(v10);
+      v8->max_bytes = 160000;
+      v8->in_v_92 = malloc(0x27100u);
+      v8->read_offset = 0;
+      v8->write_offset = 0;
       v11 = 1;
-      v8[27] = 0;
-      v8[19] = 0;
-      v8[21] = 0;
-      v8[22] = 0;
+      v8->write_size = 0;
+      v8->in_int_76 = 0;
+      v8->in_int_84 = 0;
+      v8->in_int_88 = 0;
       v12 = &stru_800;
 LABEL_9:
       pcm_config_in = v11;
       off_11038 = v12;
-      *v8 = sub_7DAC;
-      v8[1] = sub_7DB2;
-      v8[2] = sub_7DB8;
-      v8[3] = sub_7DE0;
-      v8[4] = sub_7DE4;
-      v8[5] = sub_7DE8;
-      v8[6] = sub_6676;
-      v8[7] = sub_7DEE;
-      v8[10] = sub_7DF4;
-      v8[11] = sub_7F78;
-      v8[12] = sub_7F84;
-      v8[13] = sub_7F88;
-      v8[14] = sub_7F8C;
-      v8[15] = sub_7F90;
-      v8[16] = sub_8A54;
-      v8[43] = a1;
-      *((_BYTE *)v8 + 124) = 1;
-      v8[32] = *a4;
+      v8->stream.common.get_sample_rate = (uint32_t (__fastcall *)(const struct audio_stream *))sub_7DAC;
+      v8->stream.common.set_sample_rate = (int (__fastcall *)(struct audio_stream *, uint32_t))sub_7DB2;
+      v8->stream.common.get_buffer_size = (size_t (__fastcall *)(const struct audio_stream *))sub_7DB8;
+      v8->stream.common.get_channels = (audio_channel_mask_t (__fastcall *)(const struct audio_stream *))sub_7DE0;
+      v8->stream.common.get_format = (audio_format_t (__fastcall *)(const struct audio_stream *))sub_7DE4;
+      v8->stream.common.set_format = (int (__fastcall *)(struct audio_stream *, audio_format_t))sub_7DE8;
+      v8->stream.common.standby = (int (__fastcall *)(struct audio_stream *))sub_6676;
+      v8->stream.common.dump = (int (__fastcall *)(const struct audio_stream *, int))sub_7DEE;
+      v8->stream.common.set_parameters = (int (__fastcall *)(struct audio_stream *, const char *))in_set_parameters;
+      v8->stream.common.get_parameters = (char *(__fastcall *)(const struct audio_stream *, const char *))sub_7F78;
+      v8->stream.common.add_audio_effect = (int (__fastcall *)(const struct audio_stream *, effect_handle_t))sub_7F84;
+      v8->stream.common.remove_audio_effect = (int (__fastcall *)(const struct audio_stream *, effect_handle_t))sub_7F88;
+      v8->stream.set_gain = (int (__fastcall *)(struct audio_stream_in *, float))sub_7F8C;
+      v8->stream.read = (ssize_t (__fastcall *)(struct audio_stream_in *, void *, size_t))in_read;
+      v8->stream.get_input_frames_lost = (uint32_t (__fastcall *)(struct audio_stream_in *))sub_8A54;
+      v8->adev = a1;
+      v8->in_b_124 = 1;
+      v8->config = *a4;
       result = 0;
-      v8[39] = 0;
-      v8[40] = a3;
+      v8->in_v_156 = 0;
+      v8->devices = a3;
       *a5 = v8;
       return result;
     }
@@ -2629,20 +2636,31 @@ LABEL_9:
   }
   return -12;
 }
+// 10: using guessed type __int16 word_10;
 // 400: using guessed type Elf32_Sym stru_400;
 // 800: using guessed type Elf32_Sym stru_800;
 // 2F6C: using guessed type int __fastcall property_get(_DWORD, _DWORD, _DWORD);
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 30BC: using guessed type int __fastcall property_set(_DWORD, _DWORD);
+// 3248: using guessed type int __fastcall j_cvq_init(_DWORD);
+// 6676: using guessed type int __fastcall sub_6676(_DWORD);
+// 7DAC: using guessed type int sub_7DAC();
+// 7DB2: using guessed type int sub_7DB2();
 // 7DB8: using guessed type int sub_7DB8();
-// 7DF4: using guessed type int sub_7DF4();
+// 7DE0: using guessed type int sub_7DE0();
+// 7DE4: using guessed type int sub_7DE4();
+// 7DE8: using guessed type int sub_7DE8();
+// 7DEE: using guessed type int sub_7DEE();
 // 7F78: using guessed type int sub_7F78();
-// 7F90: using guessed type int sub_7F90();
+// 7F84: using guessed type int sub_7F84();
+// 7F88: using guessed type int sub_7F88();
+// 7F8C: using guessed type int sub_7F8C();
+// 8A54: using guessed type int sub_8A54();
 // 11030: using guessed type int pcm_config_in;
 // 11038: using guessed type Elf32_Sym *off_11038;
 
 //----- (00005520) --------------------------------------------------------
-void __fastcall sub_5520(int a1, stream_in *a2)
+int __fastcall adev_close_input_stream(int a1, stream_in *a2)
 {
   struct audio_device *adev; // r6
   struct audio_stream_out **stream_out; // r5
@@ -2650,88 +2668,92 @@ void __fastcall sub_5520(int a1, stream_in *a2)
   adev = a2->adev;
   stream_out = adev->stream_out;
   sub_6676(a2);
-  _android_log_print(2, "audio_hw_primary", "%s(): is_cvq=%d", "adev_close_input_stream", a2->lock.__private[0]);
+  _android_log_print(2, "audio_hw_primary", "%s(): is_cvq=%d", "adev_close_input_stream", a2->in_int_72);
   if ( stream_out
     && !adev->b_289
     && (stream_out[46] != off_11034 || stream_out[47] != (struct audio_stream_out *)((char *)&dword_0 + 1))
-    && (!adev->asr_ready || a2->lock.__private[0])
+    && (!adev->asr_ready || a2->in_int_72)
     && adev->amode != AUDIO_MODE_IN_CALL )
   {
-    sub_6644((stream_out *)stream_out);
+    sub_6644(stream_out);
   }
-  j_free(a2);
+  return j_free(a2);
 }
 // 0: using guessed type int dword_0;
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
+// 6644: using guessed type int __fastcall sub_6644(_DWORD);
+// 6676: using guessed type int __fastcall sub_6676(_DWORD);
+// B610: using guessed type int __fastcall j_free(_DWORD);
 // 11034: using guessed type void *off_11034;
 
 //----- (000055A0) --------------------------------------------------------
-int sub_55A0()
+int adev_dump()
 {
   return 0;
 }
-// 55A0: using guessed type int sub_55A0();
+// 55A0: using guessed type int adev_dump();
 
 //----- (000055A4) --------------------------------------------------------
-int __fastcall sub_55A4(int a1, int a2, int a3)
+int __fastcall adev_dumb2(audio_device *a1, int a2, int a3)
 {
   int v5; // r6
 
-  if ( (*(_BYTE *)(a1 + 172) & 2) == 0 )
+  if ( (a1->out_device & 2) == 0 )
   {
     v5 = a3 + 2;
-    sub_4364(*(_DWORD *)(a1 + 192), (int)off_10BDC[a2], a3 + 2);
-    sub_4364(*(_DWORD *)(a1 + 192), (int)off_10BF0[a2], v5);
+    set_mixer_value_by_name(a1->mixer, off_10BDC[a2], a3 + 2);
+    set_mixer_value_by_name(a1->mixer, off_10BF0[a2], v5);
   }
   return 0;
 }
+// 4364: using guessed type int __fastcall sub_4364(_DWORD, _DWORD, _DWORD);
 // 10BDC: using guessed type char *off_10BDC[10];
 // 10BF0: using guessed type char *off_10BF0[5];
 
 //----- (000055E8) --------------------------------------------------------
-int __fastcall set_voice_volume(audio_device *a1)
+int __fastcall sub_55E8(int a1)
 {
-  audio_devices_t out_device; // r0
-  void *v_71; // r5
+  int v2; // r0
+  int v3; // r5
   int result; // r0
   int v5; // r0
 
-  out_device = a1->out_device;
-  if ( (out_device & 0xC) != 0 )
+  v2 = *(_DWORD *)(a1 + 172);
+  if ( (v2 & 0xC) != 0 )
   {
-    set_headphone_volume(a1);
+    sub_42F0(a1);
 LABEL_3:
-    v_71 = byte_9 + 6;
+    v3 = 15;
     goto LABEL_8;
   }
-  if ( (out_device & 1) != 0 )
+  if ( (v2 & 1) != 0 )
   {
-    v_71 = a1->v_71;
+    v3 = *(_DWORD *)(a1 + 284);
   }
   else
   {
-    if ( (out_device & 0x70) != 0 )
+    if ( (v2 & 0x70) != 0 )
       goto LABEL_3;
-    v_71 = a1->v_70;
+    v3 = *(_DWORD *)(a1 + 280);
   }
 LABEL_8:
-  if ( a1->messagerecord_state )
+  if ( *(_BYTE *)(a1 + 312) )
   {
     _android_log_print(2, "audio_hw_primary", "%s(): auto answer, fixed modem volume at 0dB", "set_voice_volume");
-    v_71 = byte_9 + 6;
+    v3 = 15;
   }
   _android_log_print(
     3,
     "audio_hw_primary",
     "%s(): out_device=0x%02x, voice_volome_level=%d",
     "set_voice_volume",
-    a1->out_device,
-    v_71);
-  result = SetAudioVolume(v_71);
+    *(_DWORD *)(a1 + 172),
+    v3);
+  result = SetAudioVolume(v3);
   if ( result )
   {
     Open();
-    v5 = SetAudioVolume(v_71);
+    v5 = SetAudioVolume(v3);
     return _android_log_print(
              3,
              "audio_hw_primary",
@@ -2744,22 +2766,21 @@ LABEL_8:
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 31B8: using guessed type int Open(void);
 // 3254: using guessed type int __fastcall SetAudioVolume(_DWORD);
-// 42F0: using guessed type int __fastcall sub_42F0(_DWORD);
 
 //----- (0000569C) --------------------------------------------------------
-int __fastcall sub_569C(int a1)
+struct pcm *__fastcall sub_569C(int a1)
 {
-  pthread_mutex_t *v2; // r5
+  stream_in *v2; // r5
   int v3; // r5
-  int result; // r0
+  struct pcm *result; // r0
   int v5; // r5
 
-  v2 = *(pthread_mutex_t **)(a1 + 252);
+  v2 = *(stream_in **)(a1 + 252);
   if ( v2 )
   {
-    pthread_mutex_lock(v2 + 29);
-    sub_605C((int)v2);
-    pthread_mutex_unlock(v2 + 29);
+    pthread_mutex_lock(&v2->lock);
+    do_in_standby(v2);
+    pthread_mutex_unlock(&v2->lock);
   }
   v3 = *(_DWORD *)(a1 + 256);
   if ( v3 && !*(_BYTE *)(v3 + 160) )
@@ -2767,141 +2788,141 @@ int __fastcall sub_569C(int a1)
     pthread_mutex_lock((pthread_mutex_t *)(v3 + 100));
     if ( *(_BYTE *)(a1 + 260) && (*(_BYTE *)(a1 + 172) & 2) != 0 )
     {
-      sub_6164(a1);
+      stop_amplifier((audio_device *)a1);
       *(_BYTE *)(a1 + 260) = 0;
     }
-    sub_61B8((stream_out *)v3);
-    sub_629C(a1);
-    return j_pthread_mutex_unlock((pthread_mutex_t *)(v3 + 100));
+    do_out_standby((stream_out *)v3);
+    stop_backend((audio_device *)a1);
+    return (struct pcm *)j_pthread_mutex_unlock((pthread_mutex_t *)(v3 + 100));
   }
-  else if ( *(_DWORD *)(a1 + 228) || (result = *(_DWORD *)(a1 + 232)) != 0 )
+  else if ( *(_DWORD *)(a1 + 228) || (result = *(struct pcm **)(a1 + 232)) != 0 )
   {
     v5 = *(_DWORD *)(a1 + 172);
     *(_DWORD *)(a1 + 172) = 0;
-    sub_5730((audio_device *)a1);
+    sub_5730(a1);
     *(_DWORD *)(a1 + 172) = v5;
-    return sub_629C(a1);
+    return stop_backend((audio_device *)a1);
   }
   return result;
 }
 
 //----- (00005730) --------------------------------------------------------
-int __fastcall sub_5730(audio_device *a1)
+int __fastcall sub_5730(int a1)
 {
   int output_device_id; // r8
   int input_source_id; // r10
-  audio_devices_t out_device; // r5
+  int v4; // r5
   int v5; // r11
   int v6; // r0
   __int64 v7; // r0
   int v8; // r9
   __int64 v9; // kr00_8
-  audio_mode_t amode; // r2
+  int v10; // r2
   void *v11; // r7
   void **v12; // r1
   void **v13; // r1
   _DWORD *v14; // r0
   bool v15; // zf
-  struct pcm *pcm_be_out; // r0
-  struct pcm *pcm_be_in; // r0
-  struct pcm *v18; // r0
-  struct pcm *v19; // r0
+  int v16; // r0
+  int v17; // r0
+  int v18; // r0
+  int v19; // r0
   const char *error; // r0
   const char *v21; // r0
-  struct pcm *v22; // r0
-  struct pcm *v23; // r0
-  struct audio_stream_out **v24; // r12
-  unsigned __int32 v25; // r0
+  int v22; // r0
+  int v23; // r0
+  int v24; // r12
+  unsigned int v25; // r0
   bool v26; // zf
-  struct pcm *pcm_pa_out; // r7
-  struct pcm *v28; // r0
+  int v27; // r7
+  int v28; // r0
   int v29; // r0
-  struct pcm *pcm_pa_in; // r7
-  struct pcm *v31; // r0
+  int v30; // r7
+  int v31; // r0
   int is_ready; // r0
-  struct pcm *pcm_btsco_out; // r0
-  struct pcm *v34; // r7
-  struct pcm *v35; // r0
+  int v33; // r0
+  int v34; // r7
+  int v35; // r0
   int v36; // r0
-  struct pcm *pcm_btsco_in; // r7
-  struct pcm *v38; // r0
+  int v37; // r7
+  int v38; // r0
   int v39; // r0
-  struct pcm *v40; // r0
+  int v40; // r0
   const char *v41; // r0
   const char *v42; // r0
   char *v43; // r5
   char *v44; // r7
-  int asr_ready; // r0
-  audio_devices_t in_device; // r0
+  int v45; // r0
+  int v46; // r0
   int v47; // r1
   const char *v48; // r0
   const char *v49; // r3
-  audio_mode_t v50; // r5
+  int v50; // r5
   const char *v52; // r0
   const char *v53; // r0
-  struct pcm *v54; // r0
-  struct pcm *v55; // r0
-  struct audio_stream_out **stream_out; // [sp+10h] [bp-B0h]
+  int v54; // r0
+  int v55; // r0
+  int v56; // [sp+10h] [bp-B0h]
   int v57; // [sp+14h] [bp-ACh]
   char s1[128]; // [sp+18h] [bp-A8h] BYREF
   int v59; // [sp+98h] [bp-28h]
 
-  output_device_id = j_get_output_device_id(a1, a1->out_device);
-  input_source_id = j_get_input_source_id(a1, a1->v_50);
-  out_device = a1->out_device;
-  stream_out = a1->stream_out;
-  if ( (out_device & 0x70) != 0 )
+  output_device_id = j_get_output_device_id(a1, *(_DWORD *)(a1 + 172));
+  input_source_id = j_get_input_source_id(a1, *(_DWORD *)(a1 + 200));
+  v4 = *(_DWORD *)(a1 + 172);
+  v56 = *(_DWORD *)(a1 + 256);
+  if ( (v4 & 0x70) != 0 )
     v5 = 1;
   else
-    v5 = (unsigned __int8)(a1->in_device & 8) >> 3;
-  if ( a1->amode == AUDIO_MODE_IN_CALL )
+    v5 = (unsigned __int8)(*(_BYTE *)(a1 + 176) & 8) >> 3;
+  if ( *(_DWORD *)(a1 + 168) == 2 )
   {
     memset(s1, 0, sizeof(s1));
     if ( property_get("hw.messagerecord.state", s1, "0") <= -1 )
     {
       _android_log_print(6, "audio_hw_primary", "%s(): cann't get hw.messagerecord.state", "set_voice_autoanswer");
-      HIDWORD(v7) = a1->amode;
+      HIDWORD(v7) = *(_DWORD *)(a1 + 168);
     }
     else
     {
       v6 = strcmp(s1, "1");
-      a1->messagerecord_state = v6 == 0;
-      HIDWORD(v7) = a1->amode;
+      *(_BYTE *)(a1 + 312) = v6 == 0;
+      HIDWORD(v7) = *(_DWORD *)(a1 + 168);
       LODWORD(v7) = v6 != 0;
       if ( v7 == 0x200000000LL )
       {
-        j_audio_route_reset(a1->audio_route);
-        j_audio_route_apply_path((int)a1->audio_route, "voice-call-auto-answer-capture");
-        j_audio_route_update_mixer(a1->audio_route);
+        j_audio_route_reset(*(_DWORD *)(a1 + 188));
+        j_audio_route_apply_path(*(_DWORD *)(a1 + 188), "voice-call-auto-answer-capture");
+        j_audio_route_update_mixer(*(_DWORD *)(a1 + 188));
         return _stack_chk_guard - v59;
       }
     }
     if ( HIDWORD(v7) == 2 )
-      set_voice_volume(a1);
+      sub_55E8(a1);
   }
-  v8 = out_device & 2;
-  if ( a1->b_289 )
+  v8 = v4 & 2;
+  if ( *(_BYTE *)(a1 + 289) )
   {
-    v57 = out_device & 0xC;
-    sub_62E0(a1);
-    sub_427C(a1);
+    v57 = v4 & 0xC;
+    set_hifi_gain((audio_device *)a1);
+    set_hifi_volume((audio_device *)a1);
   }
   else
   {
-    v57 = out_device & 0xC;
-    if ( (out_device & 0xC) != 0 )
-      set_headphone_volume(a1);
+    v57 = v4 & 0xC;
+    if ( (v4 & 0xC) != 0 )
+      sub_42F0(a1);
   }
-  if ( (out_device & 2) == 0 && a1->tfa_power_state )
+  if ( (v4 & 2) == 0 && *(_BYTE *)(a1 + 260) )
   {
-    sub_6164(a1);
-    a1->tfa_power_state = 0;
+    stop_amplifier((audio_device *)a1);
+    *(_BYTE *)(a1 + 260) = 0;
   }
   if ( output_device_id == 8 && input_source_id == 11 )
-    sub_629C(a1);
-  if ( input_source_id == 11 && (output_device_id == 8 || a1->b_289) )
+    stop_backend((audio_device *)a1);
+  if ( input_source_id == 11 && (output_device_id == 8 || *(_BYTE *)(a1 + 289)) )
     goto LABEL_68;
-  v9 = *(_QWORD *)&a1->v_63;
+  v9 = *(_QWORD *)(a1 + 252);
   *(_DWORD *)s1 = pcm_config_backend;
   *(_DWORD *)&s1[4] = unk_11084;
   *(_DWORD *)&s1[8] = unk_11088;
@@ -2912,8 +2933,8 @@ int __fastcall sub_5730(audio_device *a1)
   *(_DWORD *)&s1[28] = unk_1109C;
   *(_DWORD *)&s1[32] = unk_110A0;
   *(_DWORD *)&s1[36] = unk_110A4;
-  amode = a1->amode;
-  if ( amode == AUDIO_MODE_IN_COMMUNICATION )
+  v10 = *(_DWORD *)(a1 + 168);
+  if ( v10 == 3 )
   {
     v12 = (void **)(HIDWORD(v9) + 120);
     if ( !HIDWORD(v9) )
@@ -2924,11 +2945,11 @@ LABEL_44:
     v15 = (_DWORD)v9 == 0;
     if ( !(_DWORD)v9 )
       v15 = HIDWORD(v9) == 0;
-    if ( v15 && !a1->pcm_voice_out )
+    if ( v15 && !*(_DWORD *)(a1 + 220) )
       goto LABEL_68;
     goto LABEL_49;
   }
-  if ( amode == AUDIO_MODE_IN_CALL )
+  if ( v10 == 2 )
   {
     v11 = (void *)dword_1105C;
     *(_DWORD *)&s1[4] = dword_1105C;
@@ -2952,22 +2973,22 @@ LABEL_44:
   else
     v11 = off_11034;
   *(_DWORD *)&s1[4] = v11;
-  if ( !a1->asr_ready )
+  if ( !*(_BYTE *)(a1 + 313) )
   {
-    if ( a1->tfa_power_state )
+    if ( *(_BYTE *)(a1 + 260) )
     {
       NxpTfa98xx_SetMute(2);
-      a1->mute_state = 1;
+      *(_BYTE *)(a1 + 261) = 1;
     }
-    sub_4364(a1->mixer, "HPOUT Digital Switch", 0);
-    sub_4364(a1->mixer, "EPOUT Digital Switch", 0);
-    sub_4364(a1->mixer, "AIF2TX1 Input 1", 0);
-    sub_4364(a1->mixer, "AIF2TX2 Input 1", 0);
-    a1->b_268 = 1;
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Switch", 0);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"EPOUT Digital Switch", 0);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX1 Input 1", 0);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX2 Input 1", 0);
+    *(_BYTE *)(a1 + 268) = 1;
   }
 LABEL_49:
-  if ( !a1->pcm_be_out
-    || !a1->pcm_be_in
+  if ( !*(_DWORD *)(a1 + 228)
+    || !*(_DWORD *)(a1 + 232)
     || byte_116D4 != 1
     || v11 != (void *)dword_116D8
     || *(_DWORD *)&s1[16] != dword_116DC )
@@ -2981,58 +3002,58 @@ LABEL_49:
       v11,
       *(_DWORD *)&s1[16],
       *(_DWORD *)s1);
-    pcm_be_out = a1->pcm_be_out;
-    if ( pcm_be_out )
+    v16 = *(_DWORD *)(a1 + 228);
+    if ( v16 )
     {
-      pcm_close(pcm_be_out);
-      a1->pcm_be_out = 0;
+      pcm_close(v16);
+      *(_DWORD *)(a1 + 228) = 0;
     }
-    pcm_be_in = a1->pcm_be_in;
-    if ( pcm_be_in )
+    v17 = *(_DWORD *)(a1 + 232);
+    if ( v17 )
     {
-      pcm_close(pcm_be_in);
-      a1->pcm_be_in = 0;
+      pcm_close(v17);
+      *(_DWORD *)(a1 + 232) = 0;
     }
-    v18 = (struct pcm *)pcm_open(0, 2, 0, s1);
-    a1->pcm_be_out = v18;
-    if ( v18 && !pcm_is_ready() )
+    v18 = pcm_open(0, 2, 0, s1);
+    *(_DWORD *)(a1 + 228) = v18;
+    if ( v18 && !pcm_is_ready(v18) )
     {
-      error = (const char *)pcm_get_error(a1->pcm_be_out);
+      error = (const char *)pcm_get_error(*(_DWORD *)(a1 + 228));
       _android_log_print(6, "audio_hw_primary", "%s(): pcm_open(BACKEND_OUT) failed: %s", "start_backend", error);
     }
     else
     {
-      v19 = (struct pcm *)pcm_open(0, 2, 0x10000000, s1);
-      a1->pcm_be_in = v19;
-      if ( !v19 || pcm_is_ready() )
+      v19 = pcm_open(0, 2, 0x10000000, s1);
+      *(_DWORD *)(a1 + 232) = v19;
+      if ( !v19 || pcm_is_ready(v19) )
       {
-        pcm_prepare(a1->pcm_be_out);
-        pcm_prepare(a1->pcm_be_in);
+        pcm_prepare(*(_DWORD *)(a1 + 228));
+        pcm_prepare(*(_DWORD *)(a1 + 232));
         byte_116D4 = 1;
         dword_116D8 = *(_DWORD *)&s1[4];
         dword_116DC = *(_DWORD *)&s1[16];
         goto LABEL_68;
       }
-      v21 = (const char *)pcm_get_error(a1->pcm_be_in);
+      v21 = (const char *)pcm_get_error(*(_DWORD *)(a1 + 232));
       _android_log_print(6, "audio_hw_primary", "%s(): pcm_open(BACKEND_IN) failed: %s", "start_backend", v21);
-      v22 = a1->pcm_be_in;
+      v22 = *(_DWORD *)(a1 + 232);
       if ( v22 )
       {
         pcm_close(v22);
-        a1->pcm_be_in = 0;
+        *(_DWORD *)(a1 + 232) = 0;
       }
     }
-    v23 = a1->pcm_be_out;
+    v23 = *(_DWORD *)(a1 + 228);
     if ( v23 )
     {
       pcm_close(v23);
-      a1->pcm_be_out = 0;
+      *(_DWORD *)(a1 + 228) = 0;
     }
   }
 LABEL_68:
-  if ( (out_device & 2) == 0 || a1->tfa_power_state )
+  if ( (v4 & 2) == 0 || *(_BYTE *)(a1 + 260) )
     goto LABEL_85;
-  v24 = a1->stream_out;
+  v24 = *(_DWORD *)(a1 + 256);
   *(_DWORD *)s1 = pcm_config_amplifier;
   *(_DWORD *)&s1[4] = off_110D4;
   *(_DWORD *)&s1[8] = off_110D8;
@@ -3043,13 +3064,13 @@ LABEL_68:
   *(_DWORD *)&s1[28] = unk_110EC;
   *(_DWORD *)&s1[32] = unk_110F0;
   *(_DWORD *)&s1[36] = unk_110F4;
-  v25 = a1->amode & 0xFFFFFFFE;
+  v25 = *(_DWORD *)(a1 + 168) & 0xFFFFFFFE;
   if ( v25 == 2 )
     goto LABEL_75;
   v26 = v24 == 0;
   if ( v24 )
   {
-    v25 = (unsigned __int32)v24[30];
+    v25 = *(_DWORD *)(v24 + 120);
     v26 = v25 == 0;
   }
   if ( !v26 )
@@ -3063,109 +3084,109 @@ LABEL_75:
     *(_DWORD *)&s1[4] = 44100;
   }
 LABEL_76:
-  if ( a1->pcm_pa_out )
+  if ( *(_DWORD *)(a1 + 244) )
   {
 LABEL_80:
-    if ( a1->pcm_pa_in )
+    if ( *(_DWORD *)(a1 + 248) )
     {
 LABEL_84:
-      a1->sample_rate = *(_DWORD *)&s1[4];
+      *(_DWORD *)(a1 + 264) = *(_DWORD *)&s1[4];
       goto LABEL_85;
     }
-    pcm_pa_in = 0;
-    v31 = (struct pcm *)pcm_open(0, 6, 0x10000000, s1);
-    a1->pcm_pa_in = v31;
-    if ( !v31 || (is_ready = pcm_is_ready(), pcm_pa_in = a1->pcm_pa_in, is_ready) )
+    v30 = 0;
+    v31 = pcm_open(0, 6, 0x10000000, s1);
+    *(_DWORD *)(a1 + 248) = v31;
+    if ( !v31 || (is_ready = pcm_is_ready(v31), v30 = *(_DWORD *)(a1 + 248), is_ready) )
     {
-      pcm_prepare(pcm_pa_in);
+      pcm_prepare(v30);
       goto LABEL_84;
     }
-    v53 = (const char *)pcm_get_error(a1->pcm_pa_in);
+    v53 = (const char *)pcm_get_error(*(_DWORD *)(a1 + 248));
     _android_log_print(6, "audio_hw_primary", "%s(): pcm_open(PA_IN) failed: %s", "pre_start_amplifier", v53);
-    v54 = a1->pcm_pa_in;
+    v54 = *(_DWORD *)(a1 + 248);
     if ( v54 )
     {
       pcm_close(v54);
-      a1->pcm_pa_in = 0;
+      *(_DWORD *)(a1 + 248) = 0;
     }
     goto LABEL_146;
   }
-  pcm_pa_out = 0;
-  v28 = (struct pcm *)pcm_open(0, 6, 0, s1);
-  a1->pcm_pa_out = v28;
-  if ( !v28 || (v29 = pcm_is_ready(), pcm_pa_out = a1->pcm_pa_out, v29) )
+  v27 = 0;
+  v28 = pcm_open(0, 6, 0, s1);
+  *(_DWORD *)(a1 + 244) = v28;
+  if ( !v28 || (v29 = pcm_is_ready(v28), v27 = *(_DWORD *)(a1 + 244), v29) )
   {
-    pcm_prepare(pcm_pa_out);
+    pcm_prepare(v27);
     goto LABEL_80;
   }
-  v52 = (const char *)pcm_get_error(a1->pcm_pa_out);
+  v52 = (const char *)pcm_get_error(*(_DWORD *)(a1 + 244));
   _android_log_print(6, "audio_hw_primary", "%s(): pcm_open(PA_OUT) failed: %s", "pre_start_amplifier", v52);
 LABEL_146:
-  v55 = a1->pcm_pa_out;
+  v55 = *(_DWORD *)(a1 + 244);
   if ( v55 )
   {
     pcm_close(v55);
-    a1->pcm_pa_out = 0;
+    *(_DWORD *)(a1 + 244) = 0;
   }
 LABEL_85:
-  pcm_btsco_out = a1->pcm_btsco_out;
+  v33 = *(_DWORD *)(a1 + 236);
   if ( v5 == 1 )
   {
-    if ( !pcm_btsco_out )
+    if ( !v33 )
     {
       _android_log_print(3, "audio_hw_primary", "%s():...", "start_bt_sco");
       v34 = 0;
-      v35 = (struct pcm *)pcm_open(0, 5, 0, &pcm_config_sco);
-      a1->pcm_btsco_out = v35;
+      v35 = pcm_open(0, 5, 0, &pcm_config_sco);
+      *(_DWORD *)(a1 + 236) = v35;
       if ( v35 )
       {
-        v36 = pcm_is_ready();
-        v34 = a1->pcm_btsco_out;
+        v36 = pcm_is_ready(v35);
+        v34 = *(_DWORD *)(a1 + 236);
         if ( !v36 )
         {
-          v41 = (const char *)pcm_get_error(a1->pcm_btsco_out);
+          v41 = (const char *)pcm_get_error(*(_DWORD *)(a1 + 236));
           _android_log_print(6, "audio_hw_primary", "%s(): pcm_open(SCO_OUT) failed: %s", "start_bt_sco", v41);
 LABEL_100:
-          pcm_close(a1->pcm_btsco_out);
-          a1->pcm_btsco_out = 0;
+          pcm_close(*(_DWORD *)(a1 + 236));
+          *(_DWORD *)(a1 + 236) = 0;
           goto LABEL_101;
         }
       }
       pcm_prepare(v34);
     }
-    if ( a1->pcm_btsco_in )
+    if ( *(_DWORD *)(a1 + 240) )
       goto LABEL_101;
-    pcm_btsco_in = 0;
-    v38 = (struct pcm *)pcm_open(0, 5, 0x10000000, &pcm_config_sco);
-    a1->pcm_btsco_in = v38;
-    if ( !v38 || (v39 = pcm_is_ready(), pcm_btsco_in = a1->pcm_btsco_in, v39) )
+    v37 = 0;
+    v38 = pcm_open(0, 5, 0x10000000, &pcm_config_sco);
+    *(_DWORD *)(a1 + 240) = v38;
+    if ( !v38 || (v39 = pcm_is_ready(v38), v37 = *(_DWORD *)(a1 + 240), v39) )
     {
-      pcm_prepare(pcm_btsco_in);
+      pcm_prepare(v37);
       goto LABEL_101;
     }
-    v42 = (const char *)pcm_get_error(a1->pcm_btsco_in);
+    v42 = (const char *)pcm_get_error(*(_DWORD *)(a1 + 240));
     _android_log_print(6, "audio_hw_primary", "%s(): pcm_open(SCO_IN) failed: %s", "start_bt_sco", v42);
-    pcm_close(a1->pcm_btsco_in);
-    a1->pcm_btsco_in = 0;
+    pcm_close(*(_DWORD *)(a1 + 240));
+    *(_DWORD *)(a1 + 240) = 0;
     goto LABEL_100;
   }
-  if ( pcm_btsco_out )
+  if ( v33 )
   {
     _android_log_print(3, "audio_hw_primary", "%s():...", "stop_bt_sco");
-    pcm_stop(a1->pcm_btsco_out);
-    pcm_close(a1->pcm_btsco_out);
-    a1->pcm_btsco_out = 0;
+    pcm_stop(*(_DWORD *)(a1 + 236));
+    pcm_close(*(_DWORD *)(a1 + 236));
+    *(_DWORD *)(a1 + 236) = 0;
   }
-  v40 = a1->pcm_btsco_in;
+  v40 = *(_DWORD *)(a1 + 240);
   if ( v40 )
   {
     pcm_stop(v40);
-    pcm_close(a1->pcm_btsco_in);
-    a1->pcm_btsco_in = 0;
+    pcm_close(*(_DWORD *)(a1 + 240));
+    *(_DWORD *)(a1 + 240) = 0;
   }
 LABEL_101:
-  j_audio_route_reset(a1->audio_route);
-  j_audio_route_apply_path((int)a1->audio_route, "dummy");
+  j_audio_route_reset(*(_DWORD *)(a1 + 188));
+  j_audio_route_apply_path(*(_DWORD *)(a1 + 188), "dummy");
   if ( input_source_id == 11 )
   {
     if ( output_device_id == 8 )
@@ -3175,27 +3196,27 @@ LABEL_101:
     }
     else
     {
-      if ( a1->amode == AUDIO_MODE_IN_CALL )
+      if ( *(_DWORD *)(a1 + 168) == 2 )
       {
-        asr_ready = 0;
+        v45 = 0;
       }
       else
       {
-        asr_ready = a1->asr_ready;
-        if ( a1->asr_ready )
-          asr_ready = 2;
+        v45 = *(unsigned __int8 *)(a1 + 313);
+        if ( *(_BYTE *)(a1 + 313) )
+          v45 = 2;
       }
       v43 = 0;
-      v44 = *(char **)(&off_10AC4[7 * asr_ready])[output_device_id];
+      v44 = *(char **)(&off_10AC4[7 * v45])[output_device_id];
     }
   }
   else if ( output_device_id == 8 )
   {
-    in_device = a1->in_device;
+    v46 = *(_DWORD *)(a1 + 176);
     v47 = 0;
-    if ( in_device == -2147483640 )
+    if ( v46 == -2147483640 )
       v47 = 3;
-    if ( in_device == -2147483632 )
+    if ( v46 == -2147483632 )
       v47 = 1;
     v44 = 0;
     v43 = (char *)*((_DWORD *)(&off_10AC4[7 * input_source_id])[v47] + 1);
@@ -3216,173 +3237,169 @@ LABEL_101:
     "audio_hw_primary",
     "%s(): devices %#x input src %d output route %s input route %s",
     "select_devices",
-    a1->out_device,
-    a1->v_50,
+    *(_DWORD *)(a1 + 172),
+    *(_DWORD *)(a1 + 200),
     v48,
     v49);
   if ( v44 )
-    j_audio_route_apply_path((int)a1->audio_route, v44);
+    j_audio_route_apply_path(*(_DWORD *)(a1 + 188), v44);
   if ( v43 )
-    j_audio_route_apply_path((int)a1->audio_route, v43);
+    j_audio_route_apply_path(*(_DWORD *)(a1 + 188), v43);
   _android_log_print(3, "audio_hw_primary", "%s(): route time measurement: start", "select_devices");
-  j_audio_route_update_mixer(a1->audio_route);
+  j_audio_route_update_mixer(*(_DWORD *)(a1 + 188));
   _android_log_print(3, "audio_hw_primary", "%s(): route time measurement: end", "select_devices");
-  if ( v57 && a1->amode == AUDIO_MODE_NORMAL && !a1->b_289 )
+  if ( v57 && !*(_DWORD *)(a1 + 168) && !*(_BYTE *)(a1 + 289) )
     usleep(0x4E20u);
   if ( !v8 )
   {
-    if ( !a1->tfa_power_state )
+    if ( !*(_BYTE *)(a1 + 260) )
       goto LABEL_139;
 LABEL_136:
-    if ( a1->mute_state && !a1->asr_ready )
+    if ( *(_BYTE *)(a1 + 261) && !*(_BYTE *)(a1 + 313) )
     {
       NxpTfa98xx_SetMute(0);
-      a1->mute_state = 0;
+      *(_BYTE *)(a1 + 261) = 0;
     }
     goto LABEL_139;
   }
-  if ( a1->tfa_power_state )
+  if ( *(_BYTE *)(a1 + 260) )
     goto LABEL_136;
-  v50 = a1->amode;
-  if ( stream_out || v50 == AUDIO_MODE_IN_CALL )
+  v50 = *(_DWORD *)(a1 + 168);
+  if ( v56 || v50 == 2 )
   {
     usleep(0x1388u);
-    if ( NxpTfa98xx_PowerOn(stream_out == 0 || v50 == AUDIO_MODE_IN_CALL, a1->sample_rate, 0) )
+    if ( NxpTfa98xx_PowerOn(v56 == 0 || v50 == 2, *(const char **)(a1 + 264), 0) )
       _android_log_print(6, "audio_hw_primary", "%s(): failed to power on tfa98xx", "start_amplifier");
-    a1->tfa_power_state = 1;
+    *(_BYTE *)(a1 + 260) = 1;
     goto LABEL_136;
   }
 LABEL_139:
-  if ( a1->b_268 )
+  if ( *(_BYTE *)(a1 + 268) )
   {
-    sub_4364(a1->mixer, "HPOUT Digital Switch", 1);
-    sub_4364(a1->mixer, "EPOUT Digital Switch", 1);
-    sub_4364(a1->mixer, "AIF2TX1 Input 1", 38);
-    sub_4364(a1->mixer, "AIF2TX2 Input 1", 39);
-    a1->b_268 = 0;
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"HPOUT Digital Switch", 1);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"EPOUT Digital Switch", 1);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX1 Input 1", 38);
+    set_mixer_value_by_name(*(_DWORD *)(a1 + 192), (int)"AIF2TX2 Input 1", 39);
+    *(_BYTE *)(a1 + 268) = 0;
   }
   return _stack_chk_guard - v59;
 }
 // 2F6C: using guessed type int __fastcall property_get(_DWORD, _DWORD, _DWORD);
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 3050: using guessed type int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD);
-// 305C: using guessed type int pcm_is_ready(void);
+// 305C: using guessed type int __fastcall pcm_is_ready(_DWORD);
 // 3068: using guessed type int __fastcall pcm_prepare(_DWORD);
-// 3074: using guessed type int __fastcall j_audio_route_reset(_DWORD);
-// 308C: using guessed type int __fastcall j_audio_route_update_mixer(_DWORD);
 // 30A4: using guessed type int __fastcall pcm_get_error(_DWORD);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
 // 31DC: using guessed type int __fastcall pcm_stop(_DWORD);
-// 3260: using guessed type int __fastcall j_get_output_device_id(_DWORD, _DWORD);
-// 326C: using guessed type int __fastcall j_get_input_source_id(_DWORD, _DWORD);
 // 3284: using guessed type int __fastcall NxpTfa98xx_SetMute(_DWORD);
-// 3290: using guessed type int __fastcall NxpTfa98xx_PowerOn(_DWORD, _DWORD, _DWORD);
-// 427C: using guessed type int __fastcall sub_427C(_DWORD);
-// 4364: using guessed type int __fastcall sub_4364(_DWORD, _DWORD, _DWORD);
-// 6164: using guessed type int __fastcall sub_6164(_DWORD);
-// 629C: using guessed type int __fastcall sub_629C(_DWORD);
-// 62E0: using guessed type int __fastcall sub_62E0(_DWORD);
+// 3290: using guessed type int NxpTfa98xx_PowerOn(_DWORD, const char *, ...);
 // 10AC4: using guessed type char *off_10AC4[80];
 // 1100C: using guessed type void *off_1100C;
 // 11034: using guessed type void *off_11034;
 // 1105C: using guessed type int dword_1105C;
 // 110D4: using guessed type void *off_110D4;
-// 110D8: using guessed type Elf32_Sym *off_110D8;
+// 110D8: using guessed type Elf32_Sym *;
 // 116D4: using guessed type char byte_116D4;
 // 116D8: using guessed type int dword_116D8;
 // 116DC: using guessed type int dword_116DC;
 
 //----- (0000605C) --------------------------------------------------------
-void __fastcall sub_605C(int a1)
+int __fastcall do_in_standby(stream_in *a1)
 {
-  int v2; // r5
-  int v3; // r6
-  int v4; // r1
-  int v5; // r0
-  int v6; // r1
-  int v7; // r0
+  struct CVQStream *cvqStream; // r5
+  struct audio_device *adev; // r6
+  int result; // r0
+  audio_mode_t amode; // r1
+  struct audio_device *v6; // r0
+  int v7; // r1
+  int in_int_72; // r0
 
-  v2 = *(_DWORD *)(a1 + 68);
-  v3 = *(_DWORD *)(a1 + 172);
+  cvqStream = a1->cvqStream;
+  adev = a1->adev;
   _android_log_print(3, "audio_hw_primary", "%s():...", "do_in_standby");
-  if ( !*(_BYTE *)(a1 + 124) )
+  result = a1->in_b_124;
+  if ( !a1->in_b_124 )
   {
-    v4 = *(_DWORD *)(v3 + 168);
-    if ( v4 == 2 )
+    amode = adev->amode;
+    if ( amode == AUDIO_MODE_IN_CALL )
     {
-      v5 = *(_DWORD *)(a1 + 172);
-      v6 = 4;
+      v6 = a1->adev;
+      v7 = 4;
     }
     else
     {
-      v5 = *(_DWORD *)(a1 + 172);
-      if ( v4 == 3 )
-        v6 = 7;
+      v6 = a1->adev;
+      if ( amode == AUDIO_MODE_IN_COMMUNICATION )
+        v7 = 7;
       else
-        v6 = 0;
+        v7 = 0;
     }
-    *(_DWORD *)(v5 + 200) = v6;
-    if ( (*(_DWORD *)(v3 + 168) & 0xFFFFFFFE) != 2 )
-      *(_DWORD *)(*(_DWORD *)(a1 + 172) + 176) = 0;
+    v6->v_50 = (void *)v7;
+    if ( (adev->amode & 0xFFFFFFFE) != 2 )
+      a1->adev->in_device = 0;
     _android_log_print(
       2,
       "audio_hw_primary",
       "%s(): asr_ready=%d, is_cvq=%d",
       "do_in_standby",
-      *(unsigned __int8 *)(v3 + 313),
-      *(_DWORD *)(a1 + 72));
-    v7 = *(_DWORD *)(a1 + 72);
-    if ( !v7 )
+      adev->asr_ready,
+      a1->in_int_72);
+    in_int_72 = a1->in_int_72;
+    if ( !in_int_72 )
     {
-      sub_5730(*(audio_device **)(a1 + 172));
-      v7 = *(_DWORD *)(a1 + 72);
+      sub_5730(a1->adev);
+      in_int_72 = a1->in_int_72;
     }
-    if ( v7 == 1 )
+    if ( in_int_72 == 1 )
     {
-      if ( !*(_DWORD *)(v2 + 320072) )
-        (*(void (__fastcall **)(int))(v2 + 320080))(v2);
-      *(_DWORD *)(a1 + 76) = 1;
-      pthread_join(*(_DWORD *)(a1 + 80), 0);
-      free(*(void **)(a1 + 68));
-      free(*(void **)(a1 + 92));
+      if ( !cvqStream[5334].cvq_v_320072 )
+        ((void (__fastcall *)(struct CVQStream *))cvqStream[5334].cvq_close)(cvqStream);
+      a1->in_int_76 = 1;
+      pthread_join((pthread_t)a1->pcm_read_thread, 0);
+      free(a1->cvqStream);
+      free(a1->in_v_92);
     }
-    pcm_close(*(_DWORD *)(a1 + 120));
-    *(_DWORD *)(a1 + 120) = 0;
-    *(_BYTE *)(a1 + 124) = 1;
-    *(_DWORD *)(v3 + 252) = 0;
-    if ( *(_DWORD *)(a1 + 132) )
+    pcm_close(a1->pcm);
+    a1->pcm = 0;
+    a1->in_b_124 = 1;
+    adev->v_63 = 0;
+    if ( a1->in_fun_132 )
     {
       release_resampler();
-      *(_DWORD *)(a1 + 132) = 0;
+      a1->in_fun_132 = 0;
     }
-    j_free(*(void **)(a1 + 144));
+    return j_free(a1->in_v_144);
   }
+  return result;
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
 // 32A8: using guessed type int release_resampler(void);
+// 5730: using guessed type int __fastcall sub_5730(_DWORD);
+// B610: using guessed type int __fastcall j_free(_DWORD);
 
 //----- (00006164) --------------------------------------------------------
-int __fastcall sub_6164(int a1)
+struct pcm *__fastcall stop_amplifier(audio_device *a1)
 {
-  int v2; // r0
-  int result; // r0
+  struct pcm *pcm_pa_out; // r0
+  struct pcm *result; // r0
 
   if ( NxpTfa98xx_PowerOff(a1) )
     _android_log_print(6, "audio_hw_primary", "%s(): failed to power off tfa98xx", "stop_amplifier");
   usleep(0x1388u);
-  v2 = *(_DWORD *)(a1 + 244);
-  if ( v2 )
+  pcm_pa_out = a1->pcm_pa_out;
+  if ( pcm_pa_out )
   {
-    pcm_close(v2);
-    *(_DWORD *)(a1 + 244) = 0;
+    pcm_close(pcm_pa_out);
+    a1->pcm_pa_out = 0;
   }
-  result = *(_DWORD *)(a1 + 248);
+  result = a1->pcm_pa_in;
   if ( result )
   {
     pcm_close(result);
     result = 0;
-    *(_DWORD *)(a1 + 248) = 0;
+    a1->pcm_pa_in = 0;
   }
   return result;
 }
@@ -3391,7 +3408,7 @@ int __fastcall sub_6164(int a1)
 // 32B4: using guessed type int __fastcall NxpTfa98xx_PowerOff(_DWORD);
 
 //----- (000061B8) --------------------------------------------------------
-int __fastcall sub_61B8(stream_out *a1)
+int __fastcall do_out_standby(stream_out *a1)
 {
   struct audio_device *adev; // r8
   int result; // r0
@@ -3400,12 +3417,11 @@ int __fastcall sub_61B8(stream_out *a1)
   struct audio_stream_out *v6; // r0
   struct pcm **p_pcm; // r6
   int i; // r5
-  struct pcm *v9; // r0
 
   adev = a1->adev;
   _android_log_print(3, "audio_hw_primary", "%s():...", "do_out_standby");
-  result = LOBYTE(a1->v_160);
-  if ( !LOBYTE(a1->v_160) )
+  result = LOBYTE(a1->out_v_160);
+  if ( !LOBYTE(a1->out_v_160) )
   {
     if ( adev->b_289 )
     {
@@ -3436,51 +3452,51 @@ int __fastcall sub_61B8(stream_out *a1)
     p_pcm = &a1->pcm;
     for ( i = 0; i != 3; ++i )
     {
-      v9 = p_pcm[i];
-      if ( v9 )
+      if ( p_pcm[i] )
       {
-        pcm_stop(v9);
+        pcm_stop();
         pcm_close(p_pcm[i]);
         p_pcm[i] = 0;
       }
     }
-    LOBYTE(a1->v_160) = 1;
+    LOBYTE(a1->out_v_160) = 1;
     adev->stream_out = 0;
     result = (int)a1->resampler;
     if ( result )
     {
       release_resampler();
       a1->resampler = 0;
-      return j_free(a1->v_200);
+      return j_free(a1->out_v_200);
     }
   }
   return result;
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
-// 31DC: using guessed type int __fastcall pcm_stop(_DWORD);
+// 31DC: using guessed type int pcm_stop(void);
 // 32A8: using guessed type int release_resampler(void);
+// 5730: using guessed type int __fastcall sub_5730(_DWORD);
 // B610: using guessed type int __fastcall j_free(_DWORD);
 
 //----- (0000629C) --------------------------------------------------------
-int __fastcall sub_629C(int a1)
+struct pcm *__fastcall stop_backend(audio_device *a1)
 {
-  int v2; // r0
-  int result; // r0
+  struct pcm *pcm_be_in; // r0
+  struct pcm *result; // r0
 
   _android_log_print(3, "audio_hw_primary", "%s():...", "stop_backend");
-  v2 = *(_DWORD *)(a1 + 232);
-  if ( v2 )
+  pcm_be_in = a1->pcm_be_in;
+  if ( pcm_be_in )
   {
-    pcm_close(v2);
-    *(_DWORD *)(a1 + 232) = 0;
+    pcm_close(pcm_be_in);
+    a1->pcm_be_in = 0;
   }
-  result = *(_DWORD *)(a1 + 228);
+  result = a1->pcm_be_out;
   if ( result )
   {
     pcm_close(result);
     result = 0;
-    *(_DWORD *)(a1 + 228) = 0;
+    a1->pcm_be_out = 0;
   }
   return result;
 }
@@ -3488,7 +3504,7 @@ int __fastcall sub_629C(int a1)
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
 
 //----- (000062E0) --------------------------------------------------------
-int __fastcall sub_62E0(audio_device *a1)
+int __fastcall set_hifi_gain(audio_device *a1)
 {
   int v2; // r0
   int v3; // r6
@@ -3681,15 +3697,15 @@ LABEL_46:
           v9);
         if ( v8 != a1->hifi_gain )
         {
-          sub_4364(a1->hifi_mixer, "Filter Shape", 0);
-          sub_4364(a1->hifi_mixer, "bypass IIR", 0);
-          sub_4364(a1->hifi_mixer, "IIR bandwidth", 0);
-          sub_4364(a1->hifi_mixer, "Gain selection", v8);
-          sub_4364(a1->hifi_mixer, "THD Compensation", 1);
-          sub_4364(a1->hifi_mixer, "2nd Harmonic Compensation", 0);
-          sub_4364(a1->hifi_mixer, "3nd Harmonic Compensation", 254);
-          sub_4364(a1->hifi_mixer, "custom FIR enable", 1);
-          sub_4364(a1->hifi_mixer, "stage2 filter type", 0);
+          set_mixer_value_by_name(a1->hifi_mixer, "Filter Shape", 0);
+          set_mixer_value_by_name(a1->hifi_mixer, "bypass IIR", 0);
+          set_mixer_value_by_name(a1->hifi_mixer, "IIR bandwidth", 0);
+          set_mixer_value_by_name(a1->hifi_mixer, "Gain selection", v8);
+          set_mixer_value_by_name(a1->hifi_mixer, "THD Compensation", 1);
+          set_mixer_value_by_name(a1->hifi_mixer, "2nd Harmonic Compensation", 0);
+          set_mixer_value_by_name(a1->hifi_mixer, "3nd Harmonic Compensation", 254);
+          set_mixer_value_by_name(a1->hifi_mixer, "custom FIR enable", 1);
+          set_mixer_value_by_name(a1->hifi_mixer, "stage2 filter type", 0);
           if ( a1->hifi_gain_state != 3 )
             a1->hifi_gain = v8;
         }
@@ -3711,27 +3727,25 @@ int __fastcall sub_6644(stream_out *a1)
 {
   pthread_mutex_lock(&a1->adev->lock);
   pthread_mutex_lock(&a1->lock);
-  sub_61B8(a1);
+  do_out_standby(a1);
   pthread_mutex_unlock(&a1->lock);
   pthread_mutex_unlock(&a1->adev->lock);
   return 0;
 }
-// 61B8: using guessed type int __fastcall sub_61B8(_DWORD);
 
 //----- (00006676) --------------------------------------------------------
 int __fastcall sub_6676(stream_in *a1)
 {
   pthread_mutex_lock(&a1->adev->lock);
-  pthread_mutex_lock((pthread_mutex_t *)&a1->pcminfo);
-  sub_605C(a1);
-  pthread_mutex_unlock((pthread_mutex_t *)&a1->pcminfo);
+  pthread_mutex_lock(&a1->lock);
+  do_in_standby(a1);
+  pthread_mutex_unlock(&a1->lock);
   pthread_mutex_unlock(&a1->adev->lock);
   return 0;
 }
-// 605C: using guessed type int __fastcall sub_605C(_DWORD);
 
 //----- (000066B0) --------------------------------------------------------
-int __fastcall sub_66B0(audio_device *a1, int a2)
+int __fastcall audio_test(audio_device *a1, int a2)
 {
   int str; // r6
   int is_headphone_on; // r5
@@ -3891,7 +3905,7 @@ LABEL_22:
   v28[1] = 0x200000800LL;
   v12 = (struct pcm *)pcm_open(0, 2, 0, v28);
   a1->pcm_be_out = v12;
-  if ( v12 && !pcm_is_ready() )
+  if ( v12 && !pcm_is_ready(v12) )
   {
     error = (const char *)pcm_get_error(a1->pcm_be_out);
     _android_log_print(6, "audio_hw_primary", "pcm_open(VOICE_BE_OUT) failed: %s", error);
@@ -3902,7 +3916,7 @@ LABEL_53:
   }
   v13 = (struct pcm *)pcm_open(0, 2, 0x10000000, v28);
   a1->pcm_be_in = v13;
-  if ( v13 && !pcm_is_ready() )
+  if ( v13 && !pcm_is_ready(v13) )
   {
     v19 = (const char *)pcm_get_error(a1->pcm_be_in);
     _android_log_print(6, "audio_hw_primary", "pcm_open(VOICE_BE_IN) failed: %s", v19);
@@ -3913,7 +3927,7 @@ LABEL_52:
   }
   v14 = (struct pcm *)pcm_open(0, 3, 0, v28);
   a1->pcm_voice_out = v14;
-  if ( v14 && !pcm_is_ready() )
+  if ( v14 && !pcm_is_ready(v14) )
   {
     v20 = (const char *)pcm_get_error(a1->pcm_voice_out);
     _android_log_print(6, "audio_hw_primary", "pcm_open(VOICE_OUT) failed: %s", v20);
@@ -3924,7 +3938,7 @@ LABEL_51:
   }
   v15 = (struct pcm *)pcm_open(0, 3, 0x10000000, v28);
   a1->pcm_voice_in = v15;
-  if ( v15 && !pcm_is_ready() )
+  if ( v15 && !pcm_is_ready(v15) )
   {
     v21 = (const char *)pcm_get_error(a1->pcm_voice_in);
     _android_log_print(6, "audio_hw_primary", "pcm_open(VOICE_IN) failed: %s", v21);
@@ -3935,7 +3949,7 @@ LABEL_50:
   }
   v16 = (struct pcm *)pcm_open(0, 6, 0, v28);
   a1->pcm_pa_out = v16;
-  if ( v16 && !pcm_is_ready() )
+  if ( v16 && !pcm_is_ready(v16) )
   {
     v23 = (const char *)pcm_get_error(a1->pcm_pa_out);
     _android_log_print(6, "audio_hw_primary", "pcm_open(PA_OUT) failed: %s", v23);
@@ -3946,7 +3960,7 @@ LABEL_49:
   }
   v17 = (struct pcm *)pcm_open(0, 6, 0x10000000, v28);
   a1->pcm_pa_in = v17;
-  if ( v17 && !pcm_is_ready() )
+  if ( v17 && !pcm_is_ready(v17) )
   {
     v24 = (const char *)pcm_get_error(a1->pcm_pa_in);
     _android_log_print(6, "audio_hw_primary", "pcm_open(PA_IN) failed: %s", v24);
@@ -3986,7 +4000,7 @@ LABEL_49:
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 3050: using guessed type int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD);
-// 305C: using guessed type int pcm_is_ready(void);
+// 305C: using guessed type int __fastcall pcm_is_ready(_DWORD);
 // 3068: using guessed type int __fastcall pcm_prepare(_DWORD);
 // 30A4: using guessed type int __fastcall pcm_get_error(_DWORD);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
@@ -4015,131 +4029,124 @@ LABEL_49:
 // 66B0: using guessed type _QWORD var_70[4];
 
 //----- (00006CBC) --------------------------------------------------------
-struct pcm *__fastcall sub_6CBC(audio_device *a1)
+int __fastcall sub_6CBC(_DWORD *a1)
 {
-  struct pcm *pcm_be_out; // r0
-  struct pcm *pcm_be_in; // r0
-  struct pcm *pcm_voice_out; // r0
-  struct pcm *pcm_voice_in; // r0
-  struct pcm *pcm_pa_out; // r0
-  struct pcm *result; // r0
+  int result; // r0
 
-  pcm_be_out = a1->pcm_be_out;
-  if ( pcm_be_out )
+  if ( a1[57] )
   {
-    pcm_stop(pcm_be_out);
-    pcm_close(a1->pcm_be_out);
-    a1->pcm_be_out = 0;
+    pcm_stop();
+    pcm_close(a1[57]);
+    a1[57] = 0;
   }
-  pcm_be_in = a1->pcm_be_in;
-  if ( pcm_be_in )
+  if ( a1[58] )
   {
-    pcm_stop(pcm_be_in);
-    pcm_close(a1->pcm_be_in);
-    a1->pcm_be_in = 0;
+    pcm_stop();
+    pcm_close(a1[58]);
+    a1[58] = 0;
   }
-  pcm_voice_out = a1->pcm_voice_out;
-  if ( pcm_voice_out )
+  if ( a1[55] )
   {
-    pcm_stop(pcm_voice_out);
-    pcm_close(a1->pcm_voice_out);
-    a1->pcm_voice_out = 0;
+    pcm_stop();
+    pcm_close(a1[55]);
+    a1[55] = 0;
   }
-  pcm_voice_in = a1->pcm_voice_in;
-  if ( pcm_voice_in )
+  if ( a1[56] )
   {
-    pcm_stop(pcm_voice_in);
-    pcm_close(a1->pcm_voice_in);
-    a1->pcm_voice_in = 0;
+    pcm_stop();
+    pcm_close(a1[56]);
+    a1[56] = 0;
   }
-  pcm_pa_out = a1->pcm_pa_out;
-  if ( pcm_pa_out )
+  if ( a1[61] )
   {
-    pcm_stop(pcm_pa_out);
-    pcm_close(a1->pcm_pa_out);
-    a1->pcm_pa_out = 0;
+    pcm_stop();
+    pcm_close(a1[61]);
+    a1[61] = 0;
   }
-  result = a1->pcm_pa_in;
+  result = a1[62];
   if ( result )
   {
-    pcm_stop(result);
-    pcm_close(a1->pcm_pa_in);
+    pcm_stop();
+    pcm_close(a1[62]);
     result = 0;
-    a1->pcm_pa_in = 0;
+    a1[62] = 0;
   }
   return result;
 }
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
-// 31DC: using guessed type int __fastcall pcm_stop(_DWORD);
+// 31DC: using guessed type int pcm_stop(void);
 
 //----- (00006D54) --------------------------------------------------------
 int __fastcall sub_6D54(int result, const char **a2, int a3)
 {
-  int v5; // r9
-  int v6; // r5
-  const char **v7; // r4
+  const char *v5; // r1
+  int v6; // r9
+  int v7; // r5
+  const char **v8; // r4
   int ctl_by_name; // r7
-  const char **v9; // r4
-  const char *v10; // r1
-  int *v11; // r4
-  unsigned int v12; // r6
-  int v13; // r2
-  int v14; // r0
-  unsigned int v15; // r1
+  const char **v10; // r4
+  const char *v11; // r1
+  int *v12; // r4
+  unsigned int v13; // r6
+  int v14; // r2
+  int v15; // r0
+  unsigned int v16; // r1
 
-  v5 = result;
-  if ( *a2 )
+  v5 = *a2;
+  v6 = result;
+  if ( v5 )
   {
-    v6 = 0;
-    v7 = a2;
+    v7 = 0;
+    v8 = a2;
     while ( 1 )
     {
-      ctl_by_name = mixer_get_ctl_by_name(v5);
+      ctl_by_name = mixer_get_ctl_by_name(v6, v5);
       if ( !ctl_by_name )
         break;
-      v9 = &a2[3 * v6];
-      v10 = v9[2];
-      if ( v10 )
+      v10 = &a2[3 * v7];
+      v11 = v10[2];
+      if ( v11 )
       {
         if ( !a3 )
-          v10 = "Off";
-        mixer_ctl_set_enum_by_string(ctl_by_name, v10);
+          v11 = "Off";
+        mixer_ctl_set_enum_by_string(ctl_by_name, v11);
       }
       else if ( mixer_ctl_get_num_values(ctl_by_name) )
       {
-        v11 = (int *)(v9 + 1);
-        v12 = 0;
+        v12 = (int *)(v10 + 1);
+        v13 = 0;
         do
         {
           if ( a3 )
           {
-            v13 = *v11;
-            v14 = ctl_by_name;
-            v15 = v12;
+            v14 = *v12;
+            v15 = ctl_by_name;
+            v16 = v13;
           }
           else
           {
-            v14 = ctl_by_name;
-            v15 = v12;
-            v13 = 0;
+            v15 = ctl_by_name;
+            v16 = v13;
+            v14 = 0;
           }
-          mixer_ctl_set_value(v14, v15, v13);
-          ++v12;
+          mixer_ctl_set_value(v15, v16, v14);
+          ++v13;
         }
-        while ( v12 < mixer_ctl_get_num_values(ctl_by_name) );
+        while ( v13 < mixer_ctl_get_num_values(ctl_by_name) );
       }
-      ++v6;
-      result = 3 * v6;
-      v7 = &a2[3 * v6];
-      if ( !*v7 )
+      ++v7;
+      result = 3 * v7;
+      v5 = a2[3 * v7];
+      v8 = &a2[3 * v7];
+      if ( !v5 )
         return result;
     }
-    return _android_log_print(6, "audio_hw_primary", "%s(): failed to set ctl: %s ", "set_route_by_array", *v7);
+    return _android_log_print(6, "audio_hw_primary", "%s(): failed to set ctl: %s ", "set_route_by_array", *v8);
   }
   return result;
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
-// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD);
+// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD, _DWORD);
 // 3170: using guessed type int __fastcall mixer_ctl_get_num_values(_DWORD);
 // 317C: using guessed type int __fastcall mixer_ctl_set_value(_DWORD, _DWORD, _DWORD);
 // 3320: using guessed type int __fastcall mixer_ctl_set_enum_by_string(_DWORD, _DWORD);
@@ -4193,7 +4200,7 @@ int sub_6E34()
 int __fastcall sub_6E38(int a1, int a2)
 {
   int v3; // r5
-  pthread_mutex_t *v4; // r10
+  stream_in *v4; // r10
   int str; // r4
   int v6; // r6
   int v7; // r8
@@ -4224,7 +4231,7 @@ int __fastcall sub_6E38(int a1, int a2)
   char nptr[32]; // [sp+10h] [bp-48h] BYREF
 
   v3 = *(_DWORD *)(a1 + 204);
-  v4 = *(pthread_mutex_t **)(v3 + 252);
+  v4 = *(stream_in **)(v3 + 252);
   str = str_parms_create_str(a2);
   pthread_mutex_lock((pthread_mutex_t *)(v3 + 164));
   pthread_mutex_lock((pthread_mutex_t *)(a1 + 100));
@@ -4265,7 +4272,7 @@ LABEL_10:
     if ( v8 != 8 )
       v13 = v8 == 4;
     if ( v13 && *(_DWORD *)(v3 + 256) && *(_BYTE *)(v3 + 289) )
-      sub_61B8((stream_out *)a1);
+      do_out_standby((stream_out *)a1);
     v14 = v6 == 8;
     if ( v6 != 8 )
       v14 = v6 == 4;
@@ -4312,7 +4319,7 @@ LABEL_10:
           v18 = *(_DWORD *)(v17 + 164);
       }
       *(_DWORD *)(v3 + 172) = v18 | v6;
-      sub_5730((audio_device *)v3);
+      sub_5730(v3);
       v9 = 1;
       v19 = v11;
       if ( *(_DWORD *)(a1 + 104) )
@@ -4349,7 +4356,7 @@ LABEL_10:
           v23 = *(_DWORD *)(v22 + 164);
       }
       *(_DWORD *)(v3 + 172) = v23 | v6;
-      sub_5730((audio_device *)v3);
+      sub_5730(v3);
     }
     *(_DWORD *)(v3 + 172) = v6;
     v7 = v11 != 0;
@@ -4370,7 +4377,7 @@ LABEL_58:
           *(_DWORD *)(a1 + 184),
           v24);
         *(_DWORD *)(a1 + 184) = v24;
-        *(_DWORD *)(a1 + 192) = sub_7D2C((stream_out *)a1);
+        *(_DWORD *)(a1 + 192) = get_output_buffer_size((stream_out *)a1);
         v25 = (char)v4;
         if ( v4 )
           v25 = 1;
@@ -4394,7 +4401,7 @@ LABEL_58:
       if ( *(_DWORD *)(a1 + 188) != v26 )
       {
         *(_DWORD *)(a1 + 188) = v26;
-        *(_DWORD *)(a1 + 192) = sub_7D2C((stream_out *)a1);
+        *(_DWORD *)(a1 + 192) = get_output_buffer_size((stream_out *)a1);
         v27 = (char)v4;
         if ( v4 )
           v27 = 1;
@@ -4421,13 +4428,13 @@ LABEL_58:
     *(_BYTE *)(v3 + 288) = v31;
   }
   if ( v9 == 1 )
-    sub_61B8((stream_out *)a1);
+    do_out_standby((stream_out *)a1);
   pthread_mutex_unlock((pthread_mutex_t *)(a1 + 100));
   if ( v7 == 1 )
   {
-    pthread_mutex_lock(v4 + 29);
-    sub_605C((int)v4);
-    pthread_mutex_unlock(v4 + 29);
+    pthread_mutex_lock(&v4->lock);
+    do_in_standby(v4);
+    pthread_mutex_unlock(&v4->lock);
   }
   pthread_mutex_unlock((pthread_mutex_t *)(v3 + 164));
   str_parms_destroy(str);
@@ -4532,7 +4539,7 @@ int sub_733E()
 // 733E: using guessed type int sub_733E();
 
 //----- (00007344) --------------------------------------------------------
-unsigned int __fastcall sub_7344(stream_out *a1, int a2, unsigned int a3)
+unsigned int __fastcall out_write(stream_out *a1, int a2, unsigned int a3)
 {
   stream_out *v3; // r9
   struct audio_device *adev; // r11
@@ -4561,7 +4568,7 @@ unsigned int __fastcall sub_7344(stream_out *a1, int a2, unsigned int a3)
   int v28; // r1
   int v29; // r7
   bool v30; // zf
-  unsigned int v_192; // r5
+  unsigned int out_v_192; // r5
   int v32; // r0
   bool v33; // zf
   int v34; // r6
@@ -4574,13 +4581,13 @@ unsigned int __fastcall sub_7344(stream_out *a1, int a2, unsigned int a3)
   unsigned int v41; // r0
   int v42; // r0
   int sample_rate; // r3
-  void *v_124; // r5
-  void *v_128; // r6
+  void *out_v_124; // r5
+  void *out_v_128; // r6
   audio_format_t format; // r7
-  void *v_140; // r3
-  void *v_144; // r5
-  int v_148; // r6
-  int v_152; // r7
+  void *out_v_140; // r3
+  void *out_v_144; // r5
+  int out_v_148; // r6
+  int out_v_152; // r7
   struct pcm *pcm; // r5
   int v52; // r0
   struct pcm **p_pcm; // r7
@@ -4605,45 +4612,47 @@ unsigned int __fastcall sub_7344(stream_out *a1, int a2, unsigned int a3)
   const char *error; // r0
   const char *v73; // r0
   const char *v74; // r0
-  audio_format_t v75; // r1
-  char v76; // r0
-  int v77; // r2
-  int v78; // r3
-  unsigned int v79; // r7
-  char v80; // r5
-  char v81; // r7
-  int v82; // r6
+  struct pcm *spdif_pcm; // r0
+  struct pcm *v76; // r0
+  audio_format_t v77; // r1
+  char v78; // r0
+  int v79; // r2
+  int v80; // r3
+  unsigned int v81; // r7
+  char v82; // r5
+  char v83; // r7
+  int v84; // r6
   struct resampler_itfe **resampler; // r0
-  unsigned int v84; // r0
-  stream_out *v85; // r7
-  int v86; // r9
-  struct pcm **v87; // r11
-  int v88; // r5
+  unsigned int v86; // r0
+  stream_out *v87; // r7
+  int v88; // r9
+  struct pcm **v89; // r11
+  int v90; // r5
   int i; // r8
-  struct pcm *v90; // r0
-  const char *v91; // r0
-  audio_format_t v92; // r2
-  int v93; // r1
-  int v94; // r0
-  bool v95; // zf
-  int v96; // r5
-  int v97; // r0
-  unsigned int v98; // r0
-  unsigned int v99; // r0
+  struct pcm *v92; // r0
+  const char *v93; // r0
+  audio_format_t v94; // r2
+  int v95; // r1
+  int v96; // r0
+  bool v97; // zf
+  int v98; // r5
+  int v99; // r0
   unsigned int v100; // r0
   unsigned int v101; // r0
-  unsigned int v103; // [sp+18h] [bp-70h]
-  void **p_v_116; // [sp+1Ch] [bp-6Ch]
-  struct audio_device *v105; // [sp+20h] [bp-68h]
+  unsigned int v102; // r0
+  unsigned int v103; // r0
+  unsigned int v105; // [sp+18h] [bp-70h]
+  void **p_out_v_116; // [sp+1Ch] [bp-6Ch]
+  struct audio_device *v107; // [sp+20h] [bp-68h]
   pthread_mutex_t *mutex; // [sp+28h] [bp-60h]
-  unsigned int v108; // [sp+30h] [bp-58h] BYREF
-  unsigned int v109; // [sp+34h] [bp-54h] BYREF
-  __int64 v110; // [sp+38h] [bp-50h] BYREF
-  unsigned __int64 v111; // [sp+40h] [bp-48h]
-  __int64 v112; // [sp+48h] [bp-40h]
-  unsigned __int64 v113; // [sp+50h] [bp-38h]
-  int v114; // [sp+58h] [bp-30h]
-  int v115; // [sp+5Ch] [bp-2Ch]
+  unsigned int v110; // [sp+30h] [bp-58h] BYREF
+  unsigned int v111; // [sp+34h] [bp-54h] BYREF
+  __int64 v112; // [sp+38h] [bp-50h] BYREF
+  unsigned __int64 v113; // [sp+40h] [bp-48h]
+  __int64 v114; // [sp+48h] [bp-40h]
+  unsigned __int64 v115; // [sp+50h] [bp-38h]
+  int v116; // [sp+58h] [bp-30h]
+  int v117; // [sp+5Ch] [bp-2Ch]
 
   v3 = a1;
   adev = a1->adev;
@@ -4699,23 +4708,23 @@ LABEL_18:
   v9 = v13 * v8;
 LABEL_19:
   p_lock = &adev->lock;
-  v109 = a3 / v9;
-  v108 = 4 * (int)off_11010 * unk_11014 / v9;
+  v111 = a3 / v9;
+  v110 = 4 * (int)off_11010 * unk_11014 / v9;
   pthread_mutex_lock(&adev->lock);
   mutex = &v3->lock;
   pthread_mutex_lock(&v3->lock);
-  if ( !LOBYTE(v3->v_160) )
+  if ( !LOBYTE(v3->out_v_160) )
     goto LABEL_102;
-  v103 = v9;
+  v105 = v9;
   v15 = v3->adev;
   v16 = 0;
   v_63 = v15->v_63;
-  v110 = 0LL;
-  v111 = 0LL;
   v112 = 0LL;
   v113 = 0LL;
-  v114 = 0;
-  v115 = 0;
+  v114 = 0LL;
+  v115 = 0LL;
+  v116 = 0;
+  v117 = 0;
   v15->stream_out = (struct audio_stream_out **)v3;
   _android_log_print(
     3,
@@ -4810,7 +4819,7 @@ LABEL_42:
       v3->format = AUDIO_FORMAT_DEFAULT;
     }
   }
-  v_192 = (unsigned int)v3->v_192;
+  out_v_192 = (unsigned int)v3->out_v_192;
   v32 = v3->stream.common.get_format(&v3->stream.common);
   v33 = (v32 & 0xFF000000) == 218103808;
   if ( (v32 & 0xFF000000) != 218103808 )
@@ -4841,7 +4850,7 @@ LABEL_55:
           v35 = 0;
         break;
     }
-    v105 = v15;
+    v107 = v15;
     v38 = v3->stream.common.get_channels(&v3->stream.common);
     if ( v38 >> 30 == 2 )
     {
@@ -4865,31 +4874,31 @@ LABEL_66:
     a2 = v34;
     goto LABEL_67;
   }
-  v105 = v15;
+  v107 = v15;
   v36 = 1;
   v37 = v29;
 LABEL_67:
-  v42 = v_192 / v36;
-  v3->v_124 = (void *)v42;
-  p_v_116 = &v3->v_116;
-  v3->v_136 = (void *)((int)v3->v_128 * v42);
+  v42 = out_v_192 / v36;
+  v3->out_v_124 = (void *)v42;
+  p_out_v_116 = &v3->out_v_116;
+  v3->out_v_136 = (void *)((int)v3->out_v_128 * v42);
   sample_rate = v3->sample_rate;
-  v_124 = v3->v_124;
-  v_128 = v3->v_128;
+  out_v_124 = v3->out_v_124;
+  out_v_128 = v3->out_v_128;
   format = v3->format;
-  LODWORD(v110) = v3->v_116;
-  HIDWORD(v110) = sample_rate;
-  v111 = __PAIR64__((unsigned int)v_128, (unsigned int)v_124);
-  LODWORD(v112) = format;
-  v_140 = v3->v_140;
-  v_144 = v3->v_144;
-  v_148 = (int)v3->v_148;
-  v_152 = (int)v3->v_152;
-  HIDWORD(v112) = v3->v_136;
-  v113 = __PAIR64__((unsigned int)v_144, (unsigned int)v_140);
-  v114 = v_148;
-  v115 = v_152;
-  LODWORD(v111) = 4096;
+  LODWORD(v112) = v3->out_v_116;
+  HIDWORD(v112) = sample_rate;
+  v113 = __PAIR64__((unsigned int)out_v_128, (unsigned int)out_v_124);
+  LODWORD(v114) = format;
+  out_v_140 = v3->out_v_140;
+  out_v_144 = v3->out_v_144;
+  out_v_148 = (int)v3->out_v_148;
+  out_v_152 = (int)v3->out_v_152;
+  HIDWORD(v114) = v3->out_v_136;
+  v115 = __PAIR64__((unsigned int)out_v_144, (unsigned int)out_v_140);
+  v116 = out_v_148;
+  v117 = out_v_152;
+  LODWORD(v113) = 4096;
   if ( v37 == 1 )
   {
     pcm = 0;
@@ -4903,12 +4912,12 @@ LABEL_67:
       v3->sample_rate,
       v3->format,
       4096);
-    v52 = pcm_open(0, v3->devices, 8, &v110);
+    v52 = pcm_open(0, v3->devices, 8, &v112);
     v3->pcm = (struct pcm *)v52;
     if ( v52 )
     {
       p_pcm = &v3->pcm;
-      is_ready = pcm_is_ready();
+      is_ready = pcm_is_ready(v52);
       pcm = v3->pcm;
       if ( !is_ready )
       {
@@ -4919,12 +4928,12 @@ LABEL_67:
           "%s(): pcm_open(PCM_CARD_PRIMARY) failed: %s",
           "start_output_stream",
           error);
-        v55 = v105;
+        v55 = v107;
         p_lock = &adev->lock;
 LABEL_97:
         if ( *p_pcm )
         {
-          pcm_close();
+          pcm_close(*p_pcm);
           *p_pcm = 0;
         }
         v55->stream_out = 0;
@@ -4936,46 +4945,46 @@ LABEL_97:
     pcm_prepare(pcm);
   }
   v7 = v16;
-  v55 = v105;
+  v55 = v107;
   p_lock = &adev->lock;
   if ( v7 )
   {
     v56 = v3->format;
     if ( v56 )
     {
-      v57 = v111;
+      v57 = v113;
     }
     else
     {
       v3->format = AUDIO_FORMAT_PCM_32_BIT;
-      v105->b_314 = 1;
+      v107->b_314 = 1;
       v58 = malloc(4 * (_DWORD)off_11010 * unk_11014);
-      v105->v_79 = v58;
+      v107->v_79 = v58;
       if ( !v58 )
       {
 LABEL_96:
-        free(v105->v_79);
+        free(v107->v_79);
         p_pcm = &v3->pcm;
         goto LABEL_97;
       }
       memset(v58, 0, 4 * (_DWORD)off_11010 * unk_11014);
       v59 = v3->sample_rate;
-      v60 = v3->v_124;
-      v61 = v3->v_128;
+      v60 = v3->out_v_124;
+      v61 = v3->out_v_128;
       v62 = v3->format;
-      LODWORD(v110) = *p_v_116;
-      HIDWORD(v110) = v59;
-      v111 = __PAIR64__((unsigned int)v61, (unsigned int)v60);
-      LODWORD(v112) = v62;
-      v63 = *(_QWORD *)&v3->v_140;
-      v64 = (int)v3->v_148;
-      v65 = (int)v3->v_152;
-      HIDWORD(v112) = v3->v_136;
-      v113 = v63;
-      v114 = v64;
-      v115 = v65;
+      LODWORD(v112) = *p_out_v_116;
+      HIDWORD(v112) = v59;
+      v113 = __PAIR64__((unsigned int)v61, (unsigned int)v60);
+      LODWORD(v114) = v62;
+      v63 = *(_QWORD *)&v3->out_v_140;
+      v64 = (int)v3->out_v_148;
+      v65 = (int)v3->out_v_152;
+      HIDWORD(v114) = v3->out_v_136;
+      v115 = v63;
+      v116 = v64;
+      v117 = v65;
       v57 = 4096;
-      LODWORD(v111) = 4096;
+      LODWORD(v113) = 4096;
       v56 = v3->format;
     }
     hifi_pcm = 0;
@@ -4989,11 +4998,11 @@ LABEL_96:
       v3->sample_rate,
       v56,
       v57);
-    v67 = pcm_open(1, 0, 8, &v110);
+    v67 = pcm_open(1, 0, 8, &v112);
     v3->hifi_pcm = (struct pcm *)v67;
     if ( v67 )
     {
-      v68 = pcm_is_ready();
+      v68 = pcm_is_ready(v67);
       hifi_pcm = v3->hifi_pcm;
       if ( !v68 )
       {
@@ -5005,18 +5014,19 @@ LABEL_96:
           "start_output_stream",
           v73);
 LABEL_94:
-        if ( v3->hifi_pcm )
+        v76 = v3->hifi_pcm;
+        if ( v76 )
         {
-          pcm_close();
+          pcm_close(v76);
           v3->hifi_pcm = 0;
         }
         goto LABEL_96;
       }
     }
     pcm_prepare(hifi_pcm);
-    v105->b_289 = 1;
+    v107->b_289 = 1;
   }
-  if ( (v105->out_device & 0x1000) != 0 )
+  if ( (v107->out_device & 0x1000) != 0 )
   {
     _android_log_print(
       2,
@@ -5026,11 +5036,11 @@ LABEL_94:
       2,
       v3->devices,
       v3->sample_rate);
-    v69 = pcm_open(2, v3->devices, 8, p_v_116);
+    v69 = pcm_open(2, v3->devices, 8, p_out_v_116);
     v3->spdif_pcm = (struct pcm *)v69;
     if ( v69 )
     {
-      if ( !pcm_is_ready() )
+      if ( !pcm_is_ready(v69) )
       {
         v74 = (const char *)pcm_get_error(v3->spdif_pcm);
         _android_log_print(
@@ -5040,18 +5050,19 @@ LABEL_94:
           "start_output_stream",
           v74);
 LABEL_92:
-        if ( v3->spdif_pcm )
+        spdif_pcm = v3->spdif_pcm;
+        if ( spdif_pcm )
         {
-          pcm_close();
+          pcm_close(spdif_pcm);
           v3->spdif_pcm = 0;
         }
         goto LABEL_94;
       }
     }
   }
-  if ( v105->amode == AUDIO_MODE_IN_CALL )
-    v105->v_50 = &byte_4;
-  sub_5730(v105);
+  if ( v107->amode == AUDIO_MODE_IN_CALL )
+    v107->v_50 = &byte_4;
+  sub_5730(v107);
   v70 = v3->sample_rate;
   if ( v70 != v3->in_sample_rate )
   {
@@ -5063,66 +5074,66 @@ LABEL_92:
       v3->in_sample_rate,
       v70);
     v71 = malloc(4 * (_DWORD)off_11010 * unk_11014);
-    v3->v_200 = v71;
+    v3->out_v_200 = v71;
     if ( !v71 )
       goto LABEL_92;
     memset(v71, 0, 4 * (_DWORD)off_11010 * unk_11014);
     if ( create_resampler(v3->in_sample_rate, v3->sample_rate, 2, 4, 0, &v3->resampler) )
     {
-      free(v3->v_200);
+      free(v3->out_v_200);
       goto LABEL_92;
     }
     (*(void (**)(void))v3->resampler)();
   }
-  v9 = v103;
-  LOBYTE(v3->v_160) = 0;
+  v9 = v105;
+  LOBYTE(v3->out_v_160) = 0;
 LABEL_102:
   pthread_mutex_unlock(p_lock);
   j_pcm_data_dump("/sdcard/Android/log/audio_dump/audio_hw_out1.pcm", a2, a3, "audio.hw.pcm.dump");
-  v75 = v3->in_format;
-  if ( v75 != AUDIO_FORMAT_PCM_16_BIT && v3->format == AUDIO_FORMAT_DEFAULT )
+  v77 = v3->in_format;
+  if ( v77 != AUDIO_FORMAT_PCM_16_BIT && v3->format == AUDIO_FORMAT_DEFAULT )
   {
-    v76 = 16;
-    if ( v75 == AUDIO_FORMAT_PCM_8_24_BIT )
-      v76 = 8;
+    v78 = 16;
+    if ( v77 == AUDIO_FORMAT_PCM_8_24_BIT )
+      v78 = 8;
     if ( a3 >> 2 )
     {
-      v77 = 0;
+      v79 = 0;
       do
       {
-        *(_WORD *)(a2 + 2 * v77) = *(int *)(a2 + 4 * v77) >> v76;
-        ++v77;
+        *(_WORD *)(a2 + 2 * v79) = *(int *)(a2 + 4 * v79) >> v78;
+        ++v79;
       }
-      while ( a3 >> 2 != v77 );
+      while ( a3 >> 2 != v79 );
     }
     v9 >>= 1;
-    v109 = (a3 >> 1) / v9;
-    v108 = 4 * unk_11014 * (int)off_11010 / v9;
+    v111 = (a3 >> 1) / v9;
+    v110 = 4 * unk_11014 * (int)off_11010 / v9;
   }
   if ( adev->b_314 && adev->b_289 )
   {
     if ( a3 >> 1 )
     {
-      v78 = 0;
+      v80 = 0;
       do
       {
-        v79 = 127 * *(__int16 *)(a2 + 2 * v78);
-        *((_BYTE *)adev->v_79 + 4 * v78 + 1) = v79 >> 7;
-        v80 = v79 >> 15;
-        v81 = 2 * v79;
-        *((_BYTE *)adev->v_79 + 4 * v78 + 2) = v80;
-        v82 = (int)adev->v_79 + 4 * v78;
-        if ( *(char *)(a2 + 2 * v78 + 1) <= -1 )
-          *(_BYTE *)(v82 + 3) = -1;
+        v81 = 127 * *(__int16 *)(a2 + 2 * v80);
+        *((_BYTE *)adev->v_79 + 4 * v80 + 1) = v81 >> 7;
+        v82 = v81 >> 15;
+        v83 = 2 * v81;
+        *((_BYTE *)adev->v_79 + 4 * v80 + 2) = v82;
+        v84 = (int)adev->v_79 + 4 * v80;
+        if ( *(char *)(a2 + 2 * v80 + 1) <= -1 )
+          *(_BYTE *)(v84 + 3) = -1;
         else
-          *(_BYTE *)(v82 + 3) = 0;
-        *((_BYTE *)adev->v_79 + 4 * v78++) = v81;
+          *(_BYTE *)(v84 + 3) = 0;
+        *((_BYTE *)adev->v_79 + 4 * v80++) = v83;
       }
-      while ( a3 >> 1 != v78 );
+      while ( a3 >> 1 != v80 );
     }
     v9 *= 2;
-    v109 = 2 * a3 / v9;
-    v108 = 4 * unk_11014 * (int)off_11010 / v9;
+    v111 = 2 * a3 / v9;
+    v110 = 4 * unk_11014 * (int)off_11010 / v9;
   }
   resampler = v3->resampler;
   if ( resampler )
@@ -5132,134 +5143,135 @@ LABEL_102:
     ((void (__fastcall *)(struct resampler_itfe **, int, unsigned int *, void *, unsigned int *))resampler[2])(
       resampler,
       a2,
-      &v109,
-      v3->v_200,
-      &v108);
-    a2 = (int)v3->v_200;
-    v84 = v108;
+      &v111,
+      v3->out_v_200,
+      &v110);
+    a2 = (int)v3->out_v_200;
+    v86 = v110;
   }
   else
   {
-    v84 = v109;
-    v108 = v109;
+    v86 = v111;
+    v110 = v111;
     if ( adev->b_314 && adev->b_289 )
       a2 = (int)adev->v_79;
   }
-  v85 = v3;
-  v86 = a2;
-  j_pcm_data_dump("/sdcard/Android/log/audio_dump/audio_hw_out2.pcm", a2, v84 * v9, "audio.hw.pcm.dump");
-  v87 = &v85->pcm;
-  v88 = 0;
+  v87 = v3;
+  v88 = a2;
+  j_pcm_data_dump("/sdcard/Android/log/audio_dump/audio_hw_out2.pcm", a2, v86 * v9, "audio.hw.pcm.dump");
+  v89 = &v87->pcm;
+  v90 = 0;
   for ( i = 0; i != 3; ++i )
   {
-    v90 = v87[i];
-    if ( v90 )
+    v92 = v89[i];
+    if ( v92 )
     {
-      v88 = pcm_write(v90, v86, v108 * v9);
-      if ( v88 )
+      v90 = pcm_write(v92, v88, v110 * v9);
+      if ( v90 )
       {
-        v91 = (const char *)pcm_get_error(v87[i]);
-        _android_log_print(6, "audio_hw_primary", "%s: ret=%d, card_device = %d, error=%s", "out_write", v88, i, v91);
+        v93 = (const char *)pcm_get_error(v89[i]);
+        _android_log_print(6, "audio_hw_primary", "%s: ret=%d, card_device = %d, error=%s", "out_write", v90, i, v93);
       }
       else
       {
-        v92 = v85->in_format;
-        switch ( v92 )
+        v94 = v87->in_format;
+        switch ( v94 )
         {
           case AUDIO_FORMAT_PCM_16_BIT:
             goto LABEL_134;
           case AUDIO_FORMAT_PCM_8_BIT:
-            v93 = 1;
+            v95 = 1;
             break;
           case AUDIO_FORMAT_PCM_32_BIT:
           case AUDIO_FORMAT_PCM_8_24_BIT:
           case AUDIO_FORMAT_PCM_FLOAT:
-            v93 = 4;
+            v95 = 4;
             break;
           case AUDIO_FORMAT_PCM_24_BIT_PACKED:
-            v93 = 3;
+            v95 = 3;
             break;
           default:
-            if ( v92 == AUDIO_FORMAT_IEC61937 )
+            if ( v94 == AUDIO_FORMAT_IEC61937 )
 LABEL_134:
-              v93 = 2;
+              v95 = 2;
             else
-              v93 = 0;
+              v95 = 0;
             break;
         }
-        v88 = 0;
-        *(_QWORD *)&v85->v_208 += a3 / ((int)v85->v_116 * v93);
+        v90 = 0;
+        *(_QWORD *)&v87->out_v_208 += a3 / ((int)v87->out_v_116 * v95);
       }
     }
   }
   pthread_mutex_unlock(mutex);
-  v3 = v85;
-  if ( v88 )
+  v3 = v87;
+  if ( v90 )
   {
 LABEL_141:
-    v94 = v3->stream.common.get_format(&v3->stream.common);
-    v95 = (v94 & 0xFF000000) == 218103808;
-    if ( (v94 & 0xFF000000) != 218103808 )
-      v95 = (v94 & 0xFF000000) == 0;
-    if ( !v95 )
+    v96 = v3->stream.common.get_format(&v3->stream.common);
+    v97 = (v96 & 0xFF000000) == 218103808;
+    if ( (v96 & 0xFF000000) != 218103808 )
+      v97 = (v96 & 0xFF000000) == 0;
+    if ( !v97 )
     {
-      v97 = 1;
+      v99 = 1;
 LABEL_159:
-      usleep(1000000 * a3 / (v3->in_sample_rate * v97));
+      usleep(1000000 * a3 / (v3->in_sample_rate * v99));
       return a3;
     }
-    switch ( v94 )
+    switch ( v96 )
     {
       case 1:
         goto LABEL_148;
       case 2:
-        v96 = 1;
+        v98 = 1;
         break;
       case 3:
       case 4:
       case 5:
-        v96 = 4;
+        v98 = 4;
         break;
       case 6:
-        v96 = 3;
+        v98 = 3;
         break;
       default:
-        if ( v94 == 218103808 )
+        if ( v96 == 218103808 )
 LABEL_148:
-          v96 = 2;
+          v98 = 2;
         else
-          v96 = 0;
+          v98 = 0;
         break;
     }
-    v98 = v3->stream.common.get_channels(&v3->stream.common);
-    if ( v98 >> 30 == 2 )
+    v100 = v3->stream.common.get_channels(&v3->stream.common);
+    if ( v100 >> 30 == 2 )
     {
-      v99 = v98 & 0x3FFFFFFF;
+      v101 = v100 & 0x3FFFFFFF;
     }
     else
     {
-      if ( v98 >> 30 )
+      if ( v100 >> 30 )
       {
-        v101 = 0;
+        v103 = 0;
         goto LABEL_158;
       }
-      v99 = v98 & 0x3FFFF;
+      v101 = v100 & 0x3FFFF;
     }
-    v100 = ((v99 - ((v99 >> 1) & 0x55555555)) & 0x33333333) + (((v99 - ((v99 >> 1) & 0x55555555)) >> 2) & 0x33333333);
-    v101 = (16843009 * ((v100 + (v100 >> 4)) & 0xF0F0F0F)) >> 24;
+    v102 = ((v101 - ((v101 >> 1) & 0x55555555)) & 0x33333333)
+         + (((v101 - ((v101 >> 1) & 0x55555555)) >> 2) & 0x33333333);
+    v103 = (16843009 * ((v102 + (v102 >> 4)) & 0xF0F0F0F)) >> 24;
 LABEL_158:
-    v97 = v101 * v96;
+    v99 = v103 * v98;
     goto LABEL_159;
   }
   return a3;
 }
-// 4: using guessed type char;
+// 4: using guessed type char byte_4;
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 3050: using guessed type int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD);
-// 305C: using guessed type int pcm_is_ready(void);
+// 305C: using guessed type int __fastcall pcm_is_ready(_DWORD);
 // 3068: using guessed type int __fastcall pcm_prepare(_DWORD);
 // 30A4: using guessed type int __fastcall pcm_get_error(_DWORD);
-// 30B0: using guessed type int pcm_close(void);
+// 30B0: using guessed type int __fastcall pcm_close(_DWORD);
 // 3134: using guessed type int __fastcall pcm_write(_DWORD, _DWORD, _DWORD);
 // 3368: using guessed type int __fastcall create_resampler(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD);
 // 3374: using guessed type int __fastcall j_pcm_data_dump(_DWORD, _DWORD, _DWORD, _DWORD);
@@ -5323,7 +5335,7 @@ LABEL_9:
 // 3380: using guessed type int __fastcall pcm_get_htimestamp(_DWORD, _DWORD, _DWORD);
 
 //----- (00007D2C) --------------------------------------------------------
-unsigned int __fastcall sub_7D2C(stream_out *a1)
+unsigned int __fastcall get_output_buffer_size(stream_out *a1)
 {
   int v1; // r1
   __int16 *in_sample_rate; // r0
@@ -5362,70 +5374,83 @@ int sub_7DB2()
 {
   return 0;
 }
+// 7DB2: using guessed type int sub_7DB2();
+
+//----- (00007DB8) --------------------------------------------------------
+unsigned int __fastcall sub_7DB8(int a1)
+{
+  return (2 * (*(_DWORD *)(a1 + 128) * (int)off_11038 / (unsigned int)off_11034) + 30) & 0xFFFFFFE0;
+}
+// 11034: using guessed type void *off_11034;
+// 11038: using guessed type Elf32_Sym *off_11038;
 
 //----- (00007DE0) --------------------------------------------------------
 int sub_7DE0()
 {
   return 16;
 }
+// 7DE0: using guessed type int sub_7DE0();
 
 //----- (00007DE4) --------------------------------------------------------
 int sub_7DE4()
 {
   return 1;
 }
+// 7DE4: using guessed type int sub_7DE4();
 
 //----- (00007DE8) --------------------------------------------------------
 int sub_7DE8()
 {
   return -38;
 }
+// 7DE8: using guessed type int sub_7DE8();
 
 //----- (00007DEE) --------------------------------------------------------
 int sub_7DEE()
 {
   return 0;
 }
+// 7DEE: using guessed type int sub_7DEE();
 
 //----- (00007DF4) --------------------------------------------------------
-int __fastcall sub_7DF4(int a1, int a2)
+int __fastcall in_set_parameters(stream_in *a1, int a2)
 {
-  int v3; // r11
+  audio_device *adev; // r11
   int str; // r10
-  int v5; // r7
+  void *v5; // r7
   _BOOL4 v6; // r5
   int v7; // r7
   int v8; // r4
-  int v9; // r1
-  int v10; // r0
-  int v11; // r0
-  int v12; // r4
+  int32_t v9; // r1
+  void *in_v_156; // r0
+  audio_devices_t devices; // r0
+  int32_t v12; // r4
   int v13; // r0
   char nptr[32]; // [sp+8h] [bp-48h] BYREF
 
-  v3 = *(_DWORD *)(a1 + 172);
+  adev = a1->adev;
   str = str_parms_create_str(a2);
-  pthread_mutex_lock((pthread_mutex_t *)(v3 + 164));
-  pthread_mutex_lock((pthread_mutex_t *)(a1 + 116));
+  pthread_mutex_lock(&adev->lock);
+  pthread_mutex_lock(&a1->lock);
   if ( str_parms_get_str(str, "input_source", nptr, 32) < 0 )
   {
     v6 = 0;
   }
   else
   {
-    v5 = atoi(nptr);
+    v5 = (void *)atoi(nptr);
     _android_log_print(
       3,
       "audio_hw_primary",
       "%s(): input_source change: (0x%x >> 0x%x)",
       "in_set_parameters",
-      *(_DWORD *)(a1 + 156),
+      a1->in_v_156,
       v5);
     v6 = 0;
-    if ( v5 && *(_DWORD *)(a1 + 156) != v5 )
+    if ( v5 && a1->in_v_156 != v5 )
     {
-      *(_DWORD *)(a1 + 156) = v5;
-      v6 = *(_BYTE *)(a1 + 124) == 0;
+      a1->in_v_156 = v5;
+      v6 = !a1->in_b_124;
     }
   }
   v7 = str_parms_get_str(str, "routing", nptr, 32);
@@ -5436,179 +5461,190 @@ int __fastcall sub_7DF4(int a1, int a2)
           "audio_hw_primary",
           "%s(): in_device change: (0x%x >> 0x%x)",
           "in_set_parameters",
-          *(_DWORD *)(v3 + 176),
+          adev->in_device,
           v8),
         !v8)
-    || *(_DWORD *)(a1 + 160) == v8 )
+    || a1->devices == v8 )
   {
     if ( v6 )
       goto LABEL_12;
   }
   else
   {
-    *(_DWORD *)(a1 + 160) = v8;
-    if ( !*(_BYTE *)(a1 + 124) )
+    a1->devices = v8;
+    if ( !a1->in_b_124 )
     {
 LABEL_12:
-      v9 = *(_DWORD *)(v3 + 168);
+      v9 = adev->amode;
       if ( v9 == 2 )
-        v10 = 4;
+        in_v_156 = &byte_4;
       else
-        v10 = *(_DWORD *)(a1 + 156);
-      *(_DWORD *)(v3 + 200) = v10;
-      v11 = *(_DWORD *)(a1 + 160);
-      *(_DWORD *)(v3 + 176) = v11;
-      v12 = *(_DWORD *)(v3 + 172);
+        in_v_156 = a1->in_v_156;
+      adev->v_50 = in_v_156;
+      devices = a1->devices;
+      adev->in_device = devices;
+      v12 = adev->out_device;
       if ( v9 )
         goto LABEL_23;
-      switch ( v11 )
+      switch ( devices )
       {
-        case -2147483644:
+        case 0x80000004:
           v13 = 2;
           break;
-        case -2147483640:
+        case 0x80000008:
           v13 = 32;
           break;
-        case -2147483632:
+        case 0x80000010:
           v13 = 4;
           break;
         default:
 LABEL_23:
-          sub_5730((audio_device *)v3);
-          *(_DWORD *)(v3 + 172) = v12;
+          sub_5730(adev);
+          adev->out_device = v12;
           goto LABEL_24;
       }
-      *(_DWORD *)(v3 + 172) = v13;
+      adev->out_device = v13;
       goto LABEL_23;
     }
   }
 LABEL_24:
-  pthread_mutex_unlock((pthread_mutex_t *)(a1 + 116));
-  pthread_mutex_unlock((pthread_mutex_t *)(v3 + 164));
+  pthread_mutex_unlock(&a1->lock);
+  pthread_mutex_unlock(&adev->lock);
   str_parms_destroy(str);
   return v7;
 }
+// 4: using guessed type char byte_4;
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 31F4: using guessed type int __fastcall str_parms_create_str(_DWORD);
 // 3200: using guessed type int __fastcall str_parms_get_str(_DWORD, _DWORD, _DWORD, _DWORD);
 // 320C: using guessed type int __fastcall str_parms_destroy(_DWORD);
+// 5730: using guessed type int __fastcall sub_5730(_DWORD);
+
+//----- (00007F78) --------------------------------------------------------
+char *sub_7F78()
+{
+  return j_strdup((const char *)&unk_D192);
+}
 
 //----- (00007F84) --------------------------------------------------------
 int sub_7F84()
 {
   return 0;
 }
+// 7F84: using guessed type int sub_7F84();
 
 //----- (00007F88) --------------------------------------------------------
 int sub_7F88()
 {
   return 0;
 }
+// 7F88: using guessed type int sub_7F88();
 
 //----- (00007F8C) --------------------------------------------------------
 int sub_7F8C()
 {
   return 0;
 }
+// 7F8C: using guessed type int sub_7F8C();
 
 //----- (00007F90) --------------------------------------------------------
-unsigned int __fastcall sub_7F90(int a1, char *a2, unsigned int a3)
+size_t __fastcall in_read(stream_in *a1, char *a2, size_t a3)
 {
-  pthread_mutex_t *v6; // r7
-  int v7; // r0
+  struct audio_device *adev; // r7
+  audio_format_t v7; // r0
   bool v8; // zf
   int v9; // r4
   unsigned int v10; // r11
-  unsigned int v11; // r0
+  audio_channel_mask_t v11; // r0
   unsigned int v12; // r0
   unsigned int v13; // r0
   unsigned int v14; // r0
-  pthread_mutex_t *v15; // r9
-  int v16; // r6
-  int v17; // r10
-  int v18; // r4
+  pthread_mutex_t *p_lock; // r9
+  struct CVQStream *cvqStream; // r6
+  struct audio_device *v17; // r10
+  struct audio_stream_out **stream_out; // r4
   char *v19; // r0
   _DWORD *v20; // r1
   bool v21; // zf
-  int v22; // r0
+  struct pcm *v22; // r0
   int v23; // r4
   Elf32_Sym *v24; // r7
-  int v25; // r0
+  audio_format_t v25; // r0
   int v26; // r4
   bool v27; // zf
   int v28; // r7
   int v29; // r0
   const char *error; // r0
-  unsigned int v31; // r0
+  audio_channel_mask_t v31; // r0
   unsigned int v32; // r0
   unsigned int v33; // r0
   unsigned int v34; // r0
   void *v35; // r0
-  void *v36; // r0
+  struct audio_config *config; // r0
   pthread_mutex_t *v37; // r9
-  int v38; // r0
-  int v39; // r1
-  int *v40; // r4
-  int v41; // r7
+  audio_mode_t amode; // r0
+  char *in_v_156; // r1
+  _DWORD *p_out_device; // r4
+  audio_devices_t out_device; // r7
   unsigned int v42; // r0
-  int (__fastcall **v43)(int, void *, unsigned int); // r7
+  int (__fastcall **p_cvq_read)(_DWORD, _DWORD, _DWORD); // r7
   char *v44; // r4
-  int v45; // r0
-  int v46; // r1
-  unsigned int v47; // r1
+  int write_offset; // r0
+  int read_offset; // r1
+  unsigned int max_bytes; // r1
   int v48; // r2
-  int v49; // r0
-  int v50; // r11
+  struct pcm *pcm; // r0
+  int pcm_read_result; // r11
   char *v51; // r9
   int v52; // r0
-  unsigned int v53; // r4
+  size_t v53; // r4
   int v54; // r1
   size_t v55; // r7
-  size_t v56; // r3
-  unsigned int v57; // r1
+  int v56; // r3
+  size_t v57; // r1
   int v58; // r3
   unsigned int v59; // r9
-  int v60; // r0
+  audio_format_t v60; // r0
   bool v61; // zf
   int v62; // r4
   signed int v63; // r6
   int v64; // r9
-  signed int v65; // r3
+  int write_size; // r3
   __int64 v66; // kr00_8
   __int64 v67; // r0
   size_t v68; // r7
-  int v69; // r0
+  audio_devices_t devices; // r0
   int v70; // r0
-  unsigned int v71; // r0
+  audio_channel_mask_t v71; // r0
   unsigned int v72; // r0
   unsigned int v73; // r0
   unsigned int v74; // r0
-  unsigned int v75; // r7
+  size_t v75; // r7
   int i; // r4
-  int v77; // r0
+  int (__fastcall *in_fun_132)(); // r0
   int v78; // r6
-  unsigned int v79; // r1
-  unsigned int v80; // r0
+  char *in_v_168; // r1
+  unsigned int in_v_164; // r0
   unsigned int v81; // r1
-  unsigned int j; // r2
+  size_t j; // r2
   int v83; // r6
-  int v84; // r0
+  audio_format_t v84; // r0
   bool v85; // zf
   int v86; // r6
   int v87; // r0
-  unsigned int v88; // r0
+  audio_channel_mask_t v88; // r0
   unsigned int v89; // r0
   unsigned int v90; // r0
   unsigned int v91; // r0
-  pthread_mutex_t *v93; // [sp+14h] [bp-4Ch]
+  struct audio_device *v93; // [sp+14h] [bp-4Ch]
   char *v94; // [sp+28h] [bp-38h]
-  int (__fastcall **v95)(int, void *, unsigned int); // [sp+28h] [bp-38h]
+  int (__fastcall **v95)(_DWORD, _DWORD, _DWORD); // [sp+28h] [bp-38h]
   const void *v96; // [sp+2Ch] [bp-34h] BYREF
   int v97; // [sp+30h] [bp-30h]
   int v98; // [sp+34h] [bp-2Ch] BYREF
 
-  v6 = *(pthread_mutex_t **)(a1 + 172);
-  v7 = (*(int (__fastcall **)(int))(a1 + 16))(a1);
+  adev = a1->adev;
+  v7 = a1->stream.common.get_format((const struct audio_stream *)a1);
   v8 = (v7 & 0xFF000000) == 218103808;
   if ( (v7 & 0xFF000000) != 218103808 )
     v8 = (v7 & 0xFF000000) == 0;
@@ -5621,29 +5657,29 @@ unsigned int __fastcall sub_7F90(int a1, char *a2, unsigned int a3)
   v94 = a2;
   switch ( v7 )
   {
-    case 1:
+    case AUDIO_FORMAT_PCM_16_BIT:
       goto LABEL_8;
-    case 2:
+    case AUDIO_FORMAT_PCM_8_BIT:
       v9 = 1;
       break;
-    case 3:
-    case 4:
-    case 5:
+    case AUDIO_FORMAT_PCM_32_BIT:
+    case AUDIO_FORMAT_PCM_8_24_BIT:
+    case AUDIO_FORMAT_PCM_FLOAT:
       v9 = 4;
       break;
-    case 6:
+    case AUDIO_FORMAT_PCM_24_BIT_PACKED:
       v9 = 3;
       break;
     default:
       v94 = a2;
-      if ( v7 == 218103808 )
+      if ( v7 == AUDIO_FORMAT_IEC61937 )
 LABEL_8:
         v9 = 2;
       else
         v9 = 0;
       break;
   }
-  v11 = (*(int (__fastcall **)(int))(a1 + 12))(a1);
+  v11 = a1->stream.common.get_channels((const struct audio_stream *)a1);
   if ( v11 >> 30 == 2 )
   {
     v12 = v11 & 0x3FFFFFFF;
@@ -5662,39 +5698,39 @@ LABEL_8:
 LABEL_18:
   v10 = v14 * v9;
 LABEL_19:
-  v15 = v6 + 41;
-  v16 = *(_DWORD *)(a1 + 68);
-  v93 = v6;
-  pthread_mutex_lock(v6 + 41);
-  pthread_mutex_lock((pthread_mutex_t *)(a1 + 116));
-  if ( !*(_BYTE *)(a1 + 124) )
+  p_lock = &adev->lock;
+  cvqStream = a1->cvqStream;
+  v93 = adev;
+  pthread_mutex_lock(&adev->lock);
+  pthread_mutex_lock(&a1->lock);
+  if ( !a1->in_b_124 )
     goto LABEL_72;
-  v17 = *(_DWORD *)(a1 + 172);
-  v18 = *(_DWORD *)(v17 + 256);
+  v17 = a1->adev;
+  stream_out = v17->stream_out;
   _android_log_print(3, "audio_hw_primary", "%s():...", "start_input_stream");
-  *(_DWORD *)(v17 + 252) = a1;
-  if ( *(_DWORD *)(v17 + 168) == 2 )
+  v17->v_63 = a1;
+  if ( v17->amode == AUDIO_MODE_IN_CALL )
   {
     v19 = (char *)dword_1105C;
   }
-  else if ( *(_DWORD *)(a1 + 156) == 6 && *(_DWORD *)(a1 + 72) == 1 )
+  else if ( a1->in_v_156 == &byte_6 && a1->in_int_72 == 1 )
   {
     v19 = (_BYTE *)(&loc_3E7E + 2);
   }
   else
   {
-    if ( v18 )
+    if ( stream_out )
     {
-      v20 = (_DWORD *)(v18 + 104);
-      if ( *(_DWORD *)(v18 + 104) )
+      v20 = stream_out + 26;
+      if ( stream_out[26] )
       {
-        v19 = *(char **)(v18 + 120);
+        v19 = (char *)stream_out[30];
         v21 = v19 == "bluetooth_nrec=%d";
         if ( v19 != "bluetooth_nrec=%d" )
           v21 = v19 == (char *)&loc_AC44;
         if ( v21 )
         {
-          off_11034 = *(void **)(v18 + 120);
+          off_11034 = stream_out[30];
           goto LABEL_35;
         }
       }
@@ -5702,16 +5738,17 @@ LABEL_19:
     v19 = "%s(): voice_call_wb=%d, bluetooth_nrec=%d" + 24;
   }
   off_11034 = v19;
-  if ( !v18 )
+  if ( !stream_out )
     goto LABEL_39;
-  v20 = (_DWORD *)(v18 + 104);
+  v20 = stream_out + 26;
 LABEL_35:
-  if ( *v20 && (*(_DWORD *)(v18 + 132) != dword_11040 || *(char **)(v18 + 120) != v19) )
+  if ( *v20
+    && (stream_out[33] != (struct audio_stream_out *)dword_11040 || stream_out[30] != (struct audio_stream_out *)v19) )
   {
-    pthread_mutex_lock((pthread_mutex_t *)(v18 + 100));
+    pthread_mutex_lock((pthread_mutex_t *)stream_out + 25);
     _android_log_print(2, "audio_hw_primary", "%s(): sync with input stream, standby output", "start_input_stream");
-    sub_61B8((stream_out *)v18);
-    pthread_mutex_unlock((pthread_mutex_t *)(v18 + 100));
+    do_out_standby((stream_out *)stream_out);
+    pthread_mutex_unlock((pthread_mutex_t *)stream_out + 25);
     v19 = (char *)off_11034;
   }
 LABEL_39:
@@ -5725,11 +5762,11 @@ LABEL_39:
     v19,
     pcm_config_in,
     dword_11040);
-  v22 = pcm_open(0, 0, 0x10000000, &pcm_config_in);
-  *(_DWORD *)(a1 + 120) = v22;
+  v22 = (struct pcm *)pcm_open(0, 0, 0x10000000, &pcm_config_in);
+  a1->pcm = v22;
   if ( v22 && !pcm_is_ready(v22) )
   {
-    error = (const char *)pcm_get_error(*(_DWORD *)(a1 + 120));
+    error = (const char *)pcm_get_error(a1->pcm);
     _android_log_print(
       6,
       "audio_hw_primary",
@@ -5737,14 +5774,14 @@ LABEL_39:
       "start_input_stream",
       error);
 LABEL_64:
-    pcm_close(*(_DWORD *)(a1 + 120));
-    *(_DWORD *)(a1 + 120) = 0;
-    *(_DWORD *)(v17 + 252) = 0;
+    pcm_close(a1->pcm);
+    a1->pcm = 0;
+    v17->v_63 = 0;
     goto LABEL_65;
   }
   v23 = pcm_config_in;
   v24 = off_11038;
-  v25 = (*(int (__fastcall **)(int))(a1 + 16))(a1);
+  v25 = a1->stream.common.get_format((const struct audio_stream *)a1);
   v26 = v23 * (_DWORD)v24;
   v27 = (v25 & 0xFF000000) == 218103808;
   if ( (v25 & 0xFF000000) != 218103808 )
@@ -5756,28 +5793,28 @@ LABEL_64:
   }
   switch ( v25 )
   {
-    case 1:
+    case AUDIO_FORMAT_PCM_16_BIT:
       goto LABEL_49;
-    case 2:
+    case AUDIO_FORMAT_PCM_8_BIT:
       v28 = 1;
       break;
-    case 3:
-    case 4:
-    case 5:
+    case AUDIO_FORMAT_PCM_32_BIT:
+    case AUDIO_FORMAT_PCM_8_24_BIT:
+    case AUDIO_FORMAT_PCM_FLOAT:
       v28 = 4;
       break;
-    case 6:
+    case AUDIO_FORMAT_PCM_24_BIT_PACKED:
       v28 = 3;
       break;
     default:
-      if ( v25 == 218103808 )
+      if ( v25 == AUDIO_FORMAT_IEC61937 )
 LABEL_49:
         v28 = 2;
       else
         v28 = 0;
       break;
   }
-  v31 = (*(int (__fastcall **)(int))(a1 + 12))(a1);
+  v31 = a1->stream.common.get_channels((const struct audio_stream *)a1);
   if ( v31 >> 30 == 2 )
   {
     v32 = v31 & 0x3FFFFFFF;
@@ -5797,85 +5834,85 @@ LABEL_59:
   v29 = v34 * v28;
 LABEL_60:
   v35 = malloc(v26 * v29);
-  *(_DWORD *)(a1 + 144) = v35;
+  a1->in_v_144 = v35;
   if ( !v35 )
   {
 LABEL_65:
-    pthread_mutex_unlock(v15);
-    v37 = (pthread_mutex_t *)(a1 + 116);
+    pthread_mutex_unlock(p_lock);
+    v37 = &a1->lock;
     goto LABEL_176;
   }
-  v36 = *(void **)(a1 + 128);
-  if ( v36 != off_11034 )
+  config = a1->config;
+  if ( config != off_11034 )
   {
-    *(_DWORD *)(a1 + 136) = sub_8BD4;
-    *(_DWORD *)(a1 + 140) = sub_8C90;
+    a1->get_next_buffer = (int (__fastcall *)(struct stream_in *))get_next_buffer;
+    a1->in_fun_140 = sub_8C90;
     _android_log_print(
       3,
       "audio_hw_primary",
       "%s(): create_resampler: (%d >> %d)",
       "start_input_stream",
       off_11034,
-      v36);
-    if ( create_resampler(off_11034, *(_DWORD *)(a1 + 128), 1, 4, a1 + 136, a1 + 132) )
+      config);
+    if ( create_resampler(off_11034, a1->config, 1, 4, &a1->get_next_buffer, &a1->in_fun_132) )
     {
-      free(*(void **)(a1 + 144));
+      free(a1->in_v_144);
       goto LABEL_64;
     }
-    (**(void (***)(void))(a1 + 132))();
+    (*(void (**)(void))a1->in_fun_132)();
   }
-  *(_DWORD *)(a1 + 148) = 0;
-  v38 = *(_DWORD *)(v17 + 168);
-  if ( v38 == 2 )
+  a1->in_v_148 = 0;
+  amode = v17->amode;
+  if ( amode == AUDIO_MODE_IN_CALL )
   {
-    *(_DWORD *)(v17 + 200) = 4;
+    v17->v_50 = &byte_4;
   }
   else
   {
-    v39 = *(_DWORD *)(a1 + 156);
-    *(_DWORD *)(v17 + 200) = v39;
-    if ( !v38 )
+    in_v_156 = (char *)a1->in_v_156;
+    v17->v_50 = in_v_156;
+    if ( amode == AUDIO_MODE_NORMAL )
     {
-      if ( v39 == 4 )
-        *(_DWORD *)(v17 + 200) = 0;
-      v69 = *(_DWORD *)(a1 + 160);
-      *(_DWORD *)(v17 + 176) = v69;
-      v40 = (int *)(v17 + 172);
-      v41 = *(_DWORD *)(v17 + 172);
-      switch ( v69 )
+      if ( in_v_156 == &byte_4 )
+        v17->v_50 = 0;
+      devices = a1->devices;
+      v17->in_device = devices;
+      p_out_device = &v17->out_device;
+      out_device = v17->out_device;
+      switch ( devices )
       {
-        case -2147483644:
+        case 0x80000004:
           v70 = 2;
           break;
-        case -2147483640:
+        case 0x80000008:
           v70 = 32;
           break;
-        case -2147483632:
+        case 0x80000010:
           v70 = 4;
           break;
         default:
           goto LABEL_71;
       }
-      *v40 = v70;
+      *p_out_device = v70;
       goto LABEL_71;
     }
   }
-  *(_DWORD *)(v17 + 176) = *(_DWORD *)(a1 + 160);
-  v40 = (int *)(v17 + 172);
-  v41 = *(_DWORD *)(v17 + 172);
+  v17->in_device = a1->devices;
+  p_out_device = &v17->out_device;
+  out_device = v17->out_device;
 LABEL_71:
-  sub_5730((audio_device *)v17);
-  *v40 = v41;
-  v42 = 100 * *(_DWORD *)(a1 + 128) / 0x3E8u;
-  *(_DWORD *)(a1 + 168) = v42;
-  *(_WORD *)(a1 + 166) = 0xFFFF / v42;
-  *(_WORD *)(a1 + 164) = 0;
-  *(_BYTE *)(a1 + 124) = 0;
+  sub_5730(v17);
+  *p_out_device = out_device;
+  v42 = 100 * (int)a1->config / 0x3E8u;
+  a1->in_v_168 = (void *)v42;
+  HIWORD(a1->in_v_164) = 0xFFFF / v42;
+  LOWORD(a1->in_v_164) = 0;
+  a1->in_b_124 = 0;
 LABEL_72:
-  pthread_mutex_unlock(v15);
-  if ( !*(_DWORD *)(a1 + 72) )
+  pthread_mutex_unlock(p_lock);
+  if ( !a1->in_int_72 )
   {
-    v60 = (*(int (__fastcall **)(int))(a1 + 16))(a1);
+    v60 = a1->stream.common.get_format((const struct audio_stream *)a1);
     v61 = (v60 & 0xFF000000) == 218103808;
     if ( (v60 & 0xFF000000) != 218103808 )
       v61 = (v60 & 0xFF000000) == 0;
@@ -5887,85 +5924,88 @@ LABEL_149:
       for ( i = 0; (int)v75 > i; i += v98 )
       {
         v98 = v75 - i;
-        v77 = *(_DWORD *)(a1 + 132);
-        if ( v77 )
+        in_fun_132 = a1->in_fun_132;
+        if ( in_fun_132 )
         {
-          (*(void (__fastcall **)(int, char *, int *))(v77 + 4))(v77, &v94[i * v64], &v98);
+          (*((void (__fastcall **)(int (__fastcall *)(), char *, int *))in_fun_132 + 1))(
+            in_fun_132,
+            &v94[i * v64],
+            &v98);
         }
         else
         {
           v96 = 0;
           v97 = v75 - i;
-          sub_8BD4((_DWORD *)(a1 + 136), &v96);
+          get_next_buffer(&a1->get_next_buffer, &v96);
           v78 = v97;
           if ( v96 )
           {
             qmemcpy(&v94[i * v64], v96, v97 * v64);
             v98 = v78;
           }
-          *(_DWORD *)(a1 + 148) -= v78;
+          a1->in_v_148 = (char *)a1->in_v_148 - v78;
         }
-        v50 = *(_DWORD *)(a1 + 152);
-        if ( v50 )
+        pcm_read_result = a1->pcm_read_result;
+        if ( pcm_read_result )
           goto LABEL_160;
       }
-      v50 = i;
+      pcm_read_result = i;
 LABEL_160:
-      v79 = *(_DWORD *)(a1 + 168);
-      if ( v50 > 0 )
-        v50 = 0;
-      if ( v79 )
+      in_v_168 = (char *)a1->in_v_168;
+      if ( pcm_read_result > 0 )
+        pcm_read_result = 0;
+      if ( in_v_168 )
       {
-        v80 = *(_DWORD *)(a1 + 164);
-        if ( v79 <= v75 )
-          v75 = *(_DWORD *)(a1 + 168);
-        v37 = (pthread_mutex_t *)(a1 + 116);
+        in_v_164 = (unsigned int)a1->in_v_164;
+        if ( (unsigned int)in_v_168 <= v75 )
+          v75 = (size_t)a1->in_v_168;
+        v37 = &a1->lock;
         v44 = v94;
         if ( v75 )
         {
-          v81 = HIWORD(v80);
+          v81 = HIWORD(in_v_164);
           for ( j = 0; j < v75; ++j )
           {
-            v83 = (unsigned __int16)v80;
-            LOWORD(v80) = v81 + v80;
+            v83 = (unsigned __int16)in_v_164;
+            LOWORD(in_v_164) = v81 + in_v_164;
             *(_WORD *)&v94[2 * j] = (unsigned int)(v83 * *(__int16 *)&v94[2 * j]) >> 16;
           }
-          v79 = *(_DWORD *)(a1 + 168);
+          in_v_168 = (char *)a1->in_v_168;
         }
-        *(_WORD *)(a1 + 164) = v80;
-        *(_DWORD *)(a1 + 168) = v79 - v75;
+        LOWORD(a1->in_v_164) = in_v_164;
+        a1->in_v_168 = &in_v_168[-v75];
       }
       else
       {
-        v37 = (pthread_mutex_t *)(a1 + 116);
+        v37 = &a1->lock;
         v44 = v94;
       }
       goto LABEL_171;
     }
     switch ( v60 )
     {
-      case 1:
+      case AUDIO_FORMAT_PCM_16_BIT:
         goto LABEL_138;
-      case 2:
+      case AUDIO_FORMAT_PCM_8_BIT:
         v62 = 1;
         break;
-      case 3:
-      case 4:
-      case 5:
+      case AUDIO_FORMAT_PCM_32_BIT:
+      case AUDIO_FORMAT_PCM_8_24_BIT:
+      case AUDIO_FORMAT_PCM_FLOAT:
         v62 = 4;
         break;
-      case 6:
+      case AUDIO_FORMAT_PCM_24_BIT_PACKED:
         v62 = 3;
         break;
       default:
-        if ( v60 == 218103808 )
+        if ( v60 == AUDIO_FORMAT_IEC61937 )
 LABEL_138:
           v62 = 2;
         else
           v62 = 0;
         break;
     }
-    v71 = (*(int (__fastcall **)(int))(a1 + 12))(a1);
+    v71 = a1->stream.common.get_channels((const struct audio_stream *)a1);
     if ( v71 >> 30 == 2 )
     {
       v72 = v71 & 0x3FFFFFFF;
@@ -5985,128 +6025,128 @@ LABEL_148:
     v64 = v74 * v62;
     goto LABEL_149;
   }
-  v43 = (int (__fastcall **)(int, void *, unsigned int))(v16 + 320092);
+  p_cvq_read = (int (__fastcall **)(_DWORD, _DWORD, _DWORD))&cvqStream[5334].cvq_read;
   v44 = v94;
   while ( 1 )
   {
-    *(_DWORD *)(a1 + 88) = a3;
-    if ( !*(_DWORD *)(a1 + 84) )
+    a1->in_int_88 = a3;
+    if ( !a1->in_int_84 )
     {
       _android_log_print(4, "audio_hw_primary", "#### start pcm read thread ####");
-      if ( pthread_create((pthread_t *)(a1 + 80), 0, (void *(*)(void *))sub_8A58, (void *)a1) <= -1 )
+      if ( pthread_create((pthread_t *)&a1->pcm_read_thread, 0, (void *(*)(void *))pcm_read_thread, a1) <= -1 )
       {
         _android_log_print(6, "audio_hw_primary", "#### pcm_read_thread() thread creation failed ####");
       }
       else
       {
-        *(_DWORD *)(a1 + 76) = 0;
-        *(_DWORD *)(a1 + 84) = 1;
+        a1->in_int_76 = 0;
+        a1->in_int_84 = 1;
         _android_log_print(4, "audio_hw_primary", "#### Pcm read thread created successfully ####");
       }
     }
-    v45 = *(_DWORD *)(a1 + 104);
-    if ( v45 && (v46 = *(_DWORD *)(a1 + 100)) != 0 && v45 >= v46 && v45 - v46 <= a3 && *(_DWORD *)(v16 + 4) )
+    write_offset = a1->write_offset;
+    if ( write_offset
+      && (read_offset = a1->read_offset) != 0
+      && write_offset >= read_offset
+      && write_offset - read_offset <= a3
+      && cvqStream->cvq_v_4 )
     {
-      if ( !*(_DWORD *)(a1 + 76) )
+      if ( !a1->in_int_76 )
       {
-        *(_DWORD *)(a1 + 76) = 1;
-        pthread_join(*(_DWORD *)(a1 + 80), 0);
+        a1->in_int_76 = 1;
+        pthread_join((pthread_t)a1->pcm_read_thread, 0);
         _android_log_print(3, "audio_hw_primary", "#### Pcm read thread stopped successfully ####");
 LABEL_100:
-        if ( !*(_DWORD *)v16 )
+        if ( !cvqStream->L_0 )
         {
-          _android_log_print(
-            2,
-            "audio_hw_primary",
-            "#### before waiting for first read - %d ####",
-            *(_DWORD *)(a1 + 104));
+          _android_log_print(2, "audio_hw_primary", "#### before waiting for first read - %d ####", a1->write_offset);
           do
           {
             usleep(0x3E8u);
-            v58 = *(_DWORD *)(a1 + 104);
+            v58 = a1->write_offset;
           }
           while ( !v58 );
           _android_log_print(2, "audio_hw_primary", "#### after waiting for first read  - %d ####", v58);
-          (*(void (__fastcall **)(int))(v16 + 320076))(v16);
-          (*(void (__fastcall **)(int))(v16 + 320084))(v16);
-          *(_DWORD *)v16 = 1;
+          ((void (__fastcall *)(struct CVQStream *))cvqStream[5334].cvq_open)(cvqStream);
+          ((void (__fastcall *)(struct CVQStream *))cvqStream[5334].cvq_start)(cvqStream);
+          cvqStream->L_0 = (unsigned int *)(&dword_0 + 1);
         }
-        v50 = 0;
+        pcm_read_result = 0;
         goto LABEL_105;
       }
     }
-    else if ( !*(_DWORD *)(a1 + 76) )
+    else if ( !a1->in_int_76 )
     {
       goto LABEL_100;
     }
-    if ( v45 - *(_DWORD *)(a1 + 100) >= a3 )
+    if ( write_offset - a1->read_offset >= a3 )
       goto LABEL_100;
     _android_log_print(2, "audio_hw_primary", "before slim read");
-    v47 = *(_DWORD *)(a1 + 96);
-    if ( *(_DWORD *)(a1 + 108) + a3 >= v47 )
+    max_bytes = a1->max_bytes;
+    if ( a1->write_size + a3 >= max_bytes )
     {
       _android_log_print(2, "audio_hw_primary", "after slim read");
       goto LABEL_100;
     }
-    v48 = *(_DWORD *)(a1 + 104);
-    v49 = *(_DWORD *)(a1 + 120);
-    if ( v48 + a3 <= v47 )
+    v48 = a1->write_offset;
+    pcm = a1->pcm;
+    if ( v48 + a3 <= max_bytes )
     {
       v51 = v44;
-      v50 = pcm_read(v49, *(_DWORD *)(a1 + 92) + v48, a3);
+      pcm_read_result = pcm_read(pcm, (char *)a1->in_v_92 + v48, a3);
       v57 = 0;
-      if ( !v50 )
+      if ( !pcm_read_result )
         v57 = a3;
-      *(_DWORD *)(a1 + 104) += v57;
-      *(_DWORD *)(a1 + 108) += v57;
+      a1->write_offset += v57;
+      a1->write_size += v57;
     }
     else
     {
-      v95 = v43;
-      v50 = pcm_read(v49, v44, a3);
+      v95 = p_cvq_read;
+      pcm_read_result = pcm_read(pcm, v44, a3);
       _android_log_print(
         3,
         "audio_hw_primary",
         "before write overflow - (write offset, max bytes) = (%d, %d)",
-        *(_DWORD *)(a1 + 104),
-        *(_DWORD *)(a1 + 96));
+        a1->write_offset,
+        a1->max_bytes);
       v51 = v44;
-      v52 = *(_DWORD *)(a1 + 104);
+      v52 = a1->write_offset;
       v53 = 0;
-      v54 = *(_DWORD *)(a1 + 96);
-      if ( !v50 )
+      v54 = a1->max_bytes;
+      if ( !pcm_read_result )
         v53 = a3;
       v55 = v52 + v53 - v54;
       if ( v54 - v52 >= 1 )
-        qmemcpy((void *)(v52 + *(_DWORD *)(a1 + 92)), v51, v54 - v52);
-      *(_DWORD *)(a1 + 104) = 0;
-      qmemcpy(*(void **)(a1 + 92), &v51[v53 - v55], v55);
-      v56 = *(_DWORD *)(a1 + 104) + v55;
-      *(_DWORD *)(a1 + 104) = v56;
-      *(_DWORD *)(a1 + 108) += v53;
+        qmemcpy((char *)a1->in_v_92 + v52, v51, v54 - v52);
+      a1->write_offset = 0;
+      qmemcpy(a1->in_v_92, &v51[v53 - v55], v55);
+      v56 = a1->write_offset + v55;
+      a1->write_offset = v56;
+      a1->write_size += v53;
       _android_log_print(3, "audio_hw_primary", "after write overflow - (write offset, max bytes) = (%d, %d)", v56, v53);
-      v43 = v95;
+      p_cvq_read = v95;
     }
     _android_log_print(2, "audio_hw_primary", "after slim read");
     v44 = v51;
-    if ( !v50 )
+    if ( !pcm_read_result )
       goto LABEL_100;
 LABEL_105:
-    if ( *(_DWORD *)(v16 + 4) )
+    if ( cvqStream->cvq_v_4 )
     {
       v59 = 0;
       v63 = a3;
 LABEL_122:
-      v65 = *(_DWORD *)(a1 + 108);
-      if ( v65 >= v63 )
+      write_size = a1->write_size;
+      if ( write_size >= v63 )
       {
         _android_log_print(3, "audio_hw_primary", "hal read memcpy cvq %d", v63);
-        v66 = *(_QWORD *)(a1 + 96);
+        v66 = *(_QWORD *)&a1->max_bytes;
         if ( HIDWORD(v66) + v63 <= (int)v66 )
         {
-          qmemcpy(&v44[v59], (const void *)(*(_DWORD *)(a1 + 92) + HIDWORD(v66)), v63);
-          *(_DWORD *)(a1 + 100) += v63;
-          *(_DWORD *)(a1 + 108) -= v63;
+          qmemcpy(&v44[v59], (char *)a1->in_v_92 + HIDWORD(v66), v63);
+          a1->read_offset += v63;
+          a1->write_size -= v63;
         }
         else
         {
@@ -6116,27 +6156,22 @@ LABEL_122:
             "before read overflow - (read offset, max size) = (%d, %d)",
             HIDWORD(v66),
             (_DWORD)v66);
-          v67 = *(_QWORD *)(a1 + 96);
+          v67 = *(_QWORD *)&a1->max_bytes;
           v68 = HIDWORD(v67) + v63 - v67;
           if ( (int)v67 - HIDWORD(v67) >= 1 )
-            qmemcpy(&v44[v59], (const void *)(HIDWORD(v67) + *(_DWORD *)(a1 + 92)), v67 - HIDWORD(v67));
-          qmemcpy(&v44[v59 + v63 - v68], *(const void **)(a1 + 92), v68);
-          *(_DWORD *)(a1 + 100) = v68;
-          *(_DWORD *)(a1 + 108) -= v63;
+            qmemcpy(&v44[v59], (char *)a1->in_v_92 + HIDWORD(v67), v67 - HIDWORD(v67));
+          qmemcpy(&v44[v59 + v63 - v68], a1->in_v_92, v68);
+          a1->read_offset = v68;
+          a1->write_size -= v63;
           _android_log_print(
             3,
             "audio_hw_primary",
             "after read overflow - (read offset, max size) = (%d, %d)",
             v68,
-            *(_DWORD *)(a1 + 96));
+            a1->max_bytes);
         }
         _android_log_print(2, "audio_hw_primary", "hal read memcpy end cvq %d", v63);
-        _android_log_print(
-          2,
-          "audio_hw_primary",
-          "read/write offset - %d/%d ",
-          *(_DWORD *)(a1 + 100),
-          *(_DWORD *)(a1 + 104));
+        _android_log_print(2, "audio_hw_primary", "read/write offset - %d/%d ", a1->read_offset, a1->write_offset);
       }
       else
       {
@@ -6144,49 +6179,49 @@ LABEL_122:
           6,
           "audio_hw_primary",
           "#### Not enough data for reading in circular buffer (filled, req) = (%d, %d) ####",
-          v65,
+          write_size,
           v63);
       }
       goto LABEL_130;
     }
-    if ( *(_DWORD *)v16 != 1 )
+    if ( cvqStream->L_0 != (unsigned int *)((char *)&dword_0 + 1) )
       goto LABEL_130;
-    v59 = (*v43)(v16, v44, a3);
+    v59 = (*p_cvq_read)(cvqStream, v44, a3);
     if ( v59 )
       goto LABEL_110;
-    if ( *(_DWORD *)(v16 + 8) )
+    if ( cvqStream->read_on_thread )
       break;
     _android_log_print(3, "audio_hw_primary", "CVQ data not ready!");
     usleep(0x2710u);
   }
   v59 = 0;
 LABEL_110:
-  if ( v59 < a3 && *(_DWORD *)(v16 + 8) )
+  if ( v59 < a3 && cvqStream->read_on_thread )
   {
     _android_log_print(3, "audio_hw_primary", "end of uartstreaming");
-    *(_DWORD *)(v16 + 4) = 1;
-    (*(void (__fastcall **)(int))(v16 + 320080))(v16);
+    cvqStream->cvq_v_4 = &dword_0 + 1;
+    ((void (__fastcall *)(struct CVQStream *))cvqStream[5334].cvq_close)(cvqStream);
     a3 = v59;
-    v37 = (pthread_mutex_t *)(a1 + 116);
+    v37 = &a1->lock;
     goto LABEL_175;
   }
   _android_log_print(2, "audio_hw_primary", "hal read strm end cvq %d", v59);
-  if ( *(_DWORD *)(v16 + 4) )
+  if ( cvqStream->cvq_v_4 )
   {
     v63 = a3 - v59;
     goto LABEL_122;
   }
 LABEL_130:
-  v37 = (pthread_mutex_t *)(a1 + 116);
+  v37 = &a1->lock;
 LABEL_171:
-  if ( !v50 && LOBYTE(v93[45].__private[0]) )
+  if ( !pcm_read_result && v93->mic_mute_state )
     memset(v44, 0, a3);
-  j_pcm_data_dump("/sdcard/Android/log/audio_dump/audio_hw_in.pcm", (int)v44, a3, (int)"audio.hw.pcm.dump");
+  j_pcm_data_dump("/sdcard/Android/log/audio_dump/audio_hw_in.pcm", v44, a3, "audio.hw.pcm.dump");
 LABEL_175:
-  if ( v50 <= -1 )
+  if ( pcm_read_result <= -1 )
   {
 LABEL_176:
-    v84 = (*(int (__fastcall **)(int))(a1 + 16))(a1);
+    v84 = a1->stream.common.get_format((const struct audio_stream *)a1);
     v85 = (v84 & 0xFF000000) == 218103808;
     if ( (v84 & 0xFF000000) != 218103808 )
       v85 = (v84 & 0xFF000000) == 0;
@@ -6197,28 +6232,28 @@ LABEL_176:
     }
     switch ( v84 )
     {
-      case 1:
+      case AUDIO_FORMAT_PCM_16_BIT:
         goto LABEL_183;
-      case 2:
+      case AUDIO_FORMAT_PCM_8_BIT:
         v86 = 1;
         break;
-      case 3:
-      case 4:
-      case 5:
+      case AUDIO_FORMAT_PCM_32_BIT:
+      case AUDIO_FORMAT_PCM_8_24_BIT:
+      case AUDIO_FORMAT_PCM_FLOAT:
         v86 = 4;
         break;
-      case 6:
+      case AUDIO_FORMAT_PCM_24_BIT_PACKED:
         v86 = 3;
         break;
       default:
-        if ( v84 == 218103808 )
+        if ( v84 == AUDIO_FORMAT_IEC61937 )
 LABEL_183:
           v86 = 2;
         else
           v86 = 0;
         break;
     }
-    v88 = (*(int (__fastcall **)(int))(a1 + 12))(a1);
+    v88 = a1->stream.common.get_channels((const struct audio_stream *)a1);
     if ( v88 >> 30 == 2 )
     {
       v89 = v88 & 0x3FFFFFFF;
@@ -6237,18 +6272,26 @@ LABEL_191:
     }
     v87 = v91 * v86;
 LABEL_194:
-    usleep(1000000 * a3 / (*(_DWORD *)(a1 + 128) * v87));
+    usleep(1000000 * a3 / ((int)a1->config * v87));
   }
   pthread_mutex_unlock(v37);
   return a3;
 }
+// 0: using guessed type int dword_0;
+// 4: using guessed type char byte_4;
+// 6: using guessed type char byte_6;
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
 // 3050: using guessed type int __fastcall pcm_open(_DWORD, _DWORD, _DWORD, _DWORD);
 // 305C: using guessed type int __fastcall pcm_is_ready(_DWORD);
 // 30A4: using guessed type int __fastcall pcm_get_error(_DWORD);
 // 30B0: using guessed type int __fastcall pcm_close(_DWORD);
 // 3368: using guessed type int __fastcall create_resampler(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD);
+// 3374: using guessed type int __fastcall j_pcm_data_dump(_DWORD, _DWORD, _DWORD, _DWORD);
 // 338C: using guessed type int __fastcall pcm_read(_DWORD, _DWORD, _DWORD);
+// 5730: using guessed type int __fastcall sub_5730(_DWORD);
+// 8A58: using guessed type int sub_8A58();
+// 8BD4: using guessed type int __fastcall sub_8BD4(_DWORD, _DWORD);
+// 8C90: using guessed type int sub_8C90();
 // 11030: using guessed type int pcm_config_in;
 // 11034: using guessed type void *off_11034;
 // 11038: using guessed type Elf32_Sym *off_11038;
@@ -6260,72 +6303,68 @@ int sub_8A54()
 {
   return 0;
 }
+// 8A54: using guessed type int sub_8A54();
 
 //----- (00008A58) --------------------------------------------------------
-int __fastcall sub_8A58(int a1)
+int __fastcall pcm_read_thread(stream_in *a1)
 {
-  size_t v2; // r5
+  int in_int_88; // r5
   char *v3; // r10
   const char *v4; // r7
-  signed int v5; // r0
-  int v6; // r1
+  int max_bytes; // r0
+  int write_offset; // r1
   const char *v7; // r6
   int v8; // r7
   bool v9; // zf
   int v10; // r0
-  size_t v11; // r7
+  int v11; // r7
   int v12; // r1
   size_t v13; // r11
-  size_t v14; // r3
-  size_t v15; // r0
+  int v14; // r3
+  int v15; // r0
 
-  v2 = *(_DWORD *)(a1 + 88);
+  in_int_88 = a1->in_int_88;
   _android_log_print(3, "audio_hw_primary", "%s():...%d", "pcm_read_thread", 898);
   v3 = 0;
   v4 = "%s: before slim read";
   do
   {
     _android_log_print(2, "audio_hw_primary", v4, "pcm_read_thread");
-    v5 = *(_DWORD *)(a1 + 96);
-    if ( (int)(*(_DWORD *)(a1 + 108) + v2) < v5 )
+    max_bytes = a1->max_bytes;
+    if ( a1->write_size + in_int_88 < max_bytes )
     {
-      v6 = *(_DWORD *)(a1 + 104);
-      if ( (int)(v6 + v2) <= v5 )
+      write_offset = a1->write_offset;
+      if ( write_offset + in_int_88 <= max_bytes )
       {
-        v9 = pcm_read(*(_DWORD *)(a1 + 120), v6 + *(_DWORD *)(a1 + 92), v2) == 0;
+        v9 = pcm_read(a1->pcm, (char *)a1->in_v_92 + write_offset, in_int_88) == 0;
         v15 = 0;
         if ( v9 )
-          v15 = v2;
-        *(_DWORD *)(a1 + 104) += v15;
-        *(_DWORD *)(a1 + 108) += v15;
+          v15 = in_int_88;
+        a1->write_offset += v15;
+        a1->write_size += v15;
       }
       else
       {
         v7 = v4;
-        v3 = (char *)malloc(v2);
+        v3 = (char *)malloc(in_int_88);
         if ( !v3 )
           _android_log_print(6, "audio_hw_primary", "%s: malloc fail!!!", "pcm_read_thread");
-        v8 = pcm_read(*(_DWORD *)(a1 + 120), v3, v2);
-        _android_log_print(
-          3,
-          "audio_hw_primary",
-          "before write overflow %d, %d",
-          *(_DWORD *)(a1 + 104),
-          *(_DWORD *)(a1 + 96));
+        v8 = pcm_read(a1->pcm, v3, in_int_88);
+        _android_log_print(3, "audio_hw_primary", "before write overflow %d, %d", a1->write_offset, a1->max_bytes);
         v9 = v8 == 0;
-        v10 = *(_DWORD *)(a1 + 104);
+        v10 = a1->write_offset;
         v11 = 0;
-        v12 = *(_DWORD *)(a1 + 96);
+        v12 = a1->max_bytes;
         if ( v9 )
-          v11 = v2;
+          v11 = in_int_88;
         v13 = v10 + v11 - v12;
         if ( v12 - v10 >= 1 )
-          qmemcpy((void *)(v10 + *(_DWORD *)(a1 + 92)), v3, v12 - v10);
-        *(_DWORD *)(a1 + 104) = 0;
-        qmemcpy(*(void **)(a1 + 92), &v3[v11 - v13], v13);
-        v14 = *(_DWORD *)(a1 + 104) + v13;
-        *(_DWORD *)(a1 + 104) = v14;
-        *(_DWORD *)(a1 + 108) += v11;
+          qmemcpy((char *)a1->in_v_92 + v10, v3, v12 - v10);
+        a1->write_offset = 0;
+        qmemcpy(a1->in_v_92, &v3[v11 - v13], v13);
+        v14 = a1->write_offset + v13;
+        a1->write_offset = v14;
+        a1->write_size += v11;
         _android_log_print(3, "audio_hw_primary", "after write overflow %d : %d", v14, v11);
         v4 = v7;
       }
@@ -6333,7 +6372,7 @@ int __fastcall sub_8A58(int a1)
     _android_log_print(2, "audio_hw_primary", "%s: after slim read", "pcm_read_thread");
     usleep(0x2710u);
   }
-  while ( !*(_DWORD *)(a1 + 76) );
+  while ( !a1->in_int_76 );
   if ( v3 )
     free(v3);
   _android_log_print(4, "audio_hw_primary", "#### pcm read thread exit ####");
@@ -6343,7 +6382,7 @@ int __fastcall sub_8A58(int a1)
 // 338C: using guessed type int __fastcall pcm_read(_DWORD, _DWORD, _DWORD);
 
 //----- (00008BD4) --------------------------------------------------------
-int __fastcall sub_8BD4(_DWORD *a1, _DWORD *a2)
+int __fastcall get_next_buffer(int a1, _DWORD *a2)
 {
   int result; // r0
   int v5; // r6
@@ -6358,40 +6397,40 @@ int __fastcall sub_8BD4(_DWORD *a1, _DWORD *a2)
   result = -22;
   if ( a1 && a2 )
   {
-    v5 = *(a1 - 4);
+    v5 = *(_DWORD *)(a1 - 16);
     if ( !v5 )
     {
       *a2 = 0;
       a2[1] = 0;
       result = -19;
-      a1[4] = -19;
+      *(_DWORD *)(a1 + 16) = -19;
       return result;
     }
-    v6 = (Elf32_Sym *)a1[3];
+    v6 = *(Elf32_Sym **)(a1 + 12);
     if ( !v6 )
     {
-      v7 = a1[2];
-      v8 = pcm_frames_to_bytes(*(a1 - 4), off_11038);
+      v7 = *(_DWORD *)(a1 + 8);
+      v8 = pcm_frames_to_bytes(*(_DWORD *)(a1 - 16), off_11038);
       v9 = pcm_read(v5, v7, v8);
-      a1[4] = v9;
+      *(_DWORD *)(a1 + 16) = v9;
       if ( v9 )
       {
         _android_log_print(6, "audio_hw_primary", "get_next_buffer() pcm_read error %d", v9);
         *a2 = 0;
         a2[1] = 0;
-        return a1[4];
+        return *(_DWORD *)(a1 + 16);
       }
       v6 = off_11038;
       v10 = (unsigned int)off_11038 >= 2;
-      a1[3] = off_11038;
+      *(_DWORD *)(a1 + 12) = off_11038;
       if ( v10 )
       {
         v11 = 1;
         do
         {
-          *(_WORD *)(a1[2] + 2 * v11) = *(_WORD *)(a1[2] + 4 * v11);
+          *(_WORD *)(*(_DWORD *)(a1 + 8) + 2 * v11) = *(_WORD *)(*(_DWORD *)(a1 + 8) + 4 * v11);
           ++v11;
-          v6 = (Elf32_Sym *)a1[3];
+          v6 = *(Elf32_Sym **)(a1 + 12);
         }
         while ( v11 < (unsigned int)v6 );
       }
@@ -6400,8 +6439,8 @@ int __fastcall sub_8BD4(_DWORD *a1, _DWORD *a2)
     if ( v12 > v6 )
       v12 = v6;
     a2[1] = v12;
-    *a2 = a1[2] + 2 * ((_DWORD)off_11038 - a1[3]);
-    return a1[4];
+    *a2 = *(_DWORD *)(a1 + 8) + 2 * ((_DWORD)off_11038 - *(_DWORD *)(a1 + 12));
+    return *(_DWORD *)(a1 + 16);
   }
   return result;
 }
@@ -6942,7 +6981,7 @@ LABEL_82:
   }
   if ( !strcmp(s1, "ctl") )
   {
-    ctl_by_name = mixer_get_ctl_by_name(*(_DWORD *)v50);
+    ctl_by_name = mixer_get_ctl_by_name(*(_DWORD *)v50, v6);
     v10 = ctl_by_name;
     if ( ctl_by_name )
     {
@@ -7079,7 +7118,7 @@ LABEL_83:
   return result;
 }
 // 2FD8: using guessed type int _android_log_print(_DWORD, _DWORD, const char *, ...);
-// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD);
+// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD, _DWORD);
 // 3170: using guessed type int __fastcall mixer_ctl_get_num_values(_DWORD);
 // 33D4: using guessed type int __fastcall mixer_ctl_get_type(_DWORD);
 // 3440: using guessed type int __fastcall mixer_ctl_get_num_enums(_DWORD);
@@ -7173,7 +7212,7 @@ int __fastcall get_value(const char *a1, int a2)
     v4 = v3;
     if ( v3 )
     {
-      if ( mixer_get_ctl_by_name(v3) )
+      if ( mixer_get_ctl_by_name(v3, a1) )
         __debugbreak();
       printf("Invalid control name: %s\n", a1);
       mixer_close(v4);
@@ -7190,7 +7229,7 @@ int __fastcall get_value(const char *a1, int a2)
   return -1;
 }
 // 2FF0: using guessed type int __fastcall mixer_open(_DWORD);
-// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD);
+// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD, _DWORD);
 // 3008: using guessed type int __fastcall mixer_close(_DWORD);
 
 //----- (00009674) --------------------------------------------------------
@@ -7210,7 +7249,7 @@ int __fastcall set_value(const char *a1, const char *a2)
     v5 = v4;
     if ( v4 )
     {
-      ctl_by_name = mixer_get_ctl_by_name(v4);
+      ctl_by_name = mixer_get_ctl_by_name(v4, a1);
       v7 = ctl_by_name;
       if ( ctl_by_name )
       {
@@ -7260,7 +7299,7 @@ LABEL_17:
   return -1;
 }
 // 2FF0: using guessed type int __fastcall mixer_open(_DWORD);
-// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD);
+// 2FFC: using guessed type int __fastcall mixer_get_ctl_by_name(_DWORD, _DWORD);
 // 3008: using guessed type int __fastcall mixer_close(_DWORD);
 // 317C: using guessed type int __fastcall mixer_ctl_set_value(_DWORD, _DWORD, _DWORD);
 // 3320: using guessed type int __fastcall mixer_ctl_set_enum_by_string(_DWORD, _DWORD);
@@ -9436,5 +9475,5 @@ _DWORD *__fastcall sub_B650(int *a1)
   return sub_B5FC(a1);
 }
 
-// nfuncs=396 queued=185 decompiled=185 lumina nreq=0 worse=0 better=0
-// ALL OK, 185 function(s) have been successfully decompiled
+// nfuncs=396 queued=187 decompiled=187 lumina nreq=0 worse=0 better=0
+// ALL OK, 187 function(s) have been successfully decompiled
