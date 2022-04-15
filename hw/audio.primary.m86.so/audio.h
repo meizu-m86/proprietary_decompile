@@ -1286,7 +1286,7 @@ struct stream_out {
     audio_format_t in_format; // *out + 47 // out + 188
     void *out_v_192; // *out + 48 // out + 192
     struct resampler_itfe **resampler; // *out + 49 // out + 196
-    void *out_v_200; // *out + 50 // out + 200
+    void *out_resampler_pcm_out_buffer; // *out + 50 // out + 200
 
     struct audio_device *adev; // *out + 51 // out + 204
     void *out_v_208; // *out + 52 // out + 208
@@ -1409,7 +1409,7 @@ struct audio_device {
     struct pcm *pcm_pa_out;// * + 61 // adev + 244      // PA_OUT
     struct pcm *pcm_pa_in;// * + 62 // adev + 248     // PA_IN
 
-    void *v_63;      // * + 63 // adev + 252 
+    struct audio_stream_in **stream_in;      // * + 63 // adev + 252 
     struct audio_stream_out **stream_out;      // * + 64 // adev + 256 
 
     bool tfa_power_state; // adev + 260
@@ -1449,7 +1449,7 @@ struct audio_device {
     bool b_314; // adev + 314
     bool b_315; // adev + 315
     
-    void *v_79; // * + 79 // adev + 316
+    void *adev_pcm_out_buffer; // * + 79 // adev + 316
 };
 
 
