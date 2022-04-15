@@ -1274,7 +1274,12 @@ struct stream_out {
 
     void *out_v_152; // *out + 38 // out + 152
     audio_devices_t devices; // *out + 39 // out + 156
-    void *out_v_160; // *out + 40 // out + 160
+
+    bool *out_b_160; // *out + 40 // out + 160
+    bool *out_b_161;
+    bool *out_b_162;
+    bool *out_b_163;
+
     void *out_v_164; // *out + 41 // out + 164
 
     int channel_mask; // *out + 42 // out + 168
@@ -1325,7 +1330,7 @@ struct stream_in {
 
     struct CVQStream * cvqStream;// *in + 17  //  in + 68
     
-    int in_int_72;/// *in + 18  //  in + 72
+    int is_cvq;/// *in + 18  //  in + 72
     int in_int_76;/// *in + 19  //  in + 76
     pthread_t *pcm_read_thread;/// *in + 20  //  in + 80
     int in_int_84;/// *in + 21  //  in + 84
@@ -1430,7 +1435,7 @@ struct audio_device {
     void *v_71;      // * + 71 // adev + 284
 
     bool hifi_state; // * + 72 // adev + 288
-    bool b_289; //  adev + 289
+    bool hifi_pcm_opened; //  adev + 289
     bool b_290; // adev + 290
     bool b_291; // adev + 291
     
