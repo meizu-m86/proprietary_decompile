@@ -1260,19 +1260,8 @@ struct stream_out {
     struct pcm *pcm; // *out + 26 // out + 104
     struct pcm *hifi_pcm; // *out + 27 // out + 108
     struct pcm *spdif_pcm; // *out + 28 // out + 112
-    void *out_v_116; // *out + 29 // out + 116
+    struct pcm_config pcmconfig; // *out + 29 // out + 116  // size: 40
 
-    int sample_rate; // *out + 30 // out + 120
-    void *out_v_124; // *out + 31 // out + 124
-    void *out_v_128; // *out + 32 // out + 128
-    audio_format_t format; // *out + 33 // out + 132
-
-    void *out_v_136; // *out + 34 // out + 136
-    void *out_v_140; // *out + 35 // out + 140
-    void *out_v_144; // *out + 36 // out + 144
-    void *out_v_148; // *out + 37 // out + 148
-
-    void *out_v_152; // *out + 38 // out + 152
     audio_devices_t devices; // *out + 39 // out + 156
 
     bool *out_b_160; // *out + 40 // out + 160
@@ -1308,7 +1297,7 @@ struct CVQStream {
 
     void *cvq_v_320040;// + 320040
     FILE *uart_char_dev;// + 320056
-    
+
     void *cvq_v_320068;// + 320068
     void *cvq_v_320072;// + 320072
 
@@ -1318,7 +1307,7 @@ struct CVQStream {
     int (*readdirect)();// + 320088
     int (*cvq_read)();// + 320092
     int (*pcm_read_uart_char_dev)();// + 320096
-    
+
 };
 /**
  ** Structure for Audio Input Stream
@@ -1329,7 +1318,7 @@ struct stream_in {
     struct audio_stream_in stream;
 
     struct CVQStream * cvqStream;// *in + 17  //  in + 68
-    
+
     int is_cvq;/// *in + 18  //  in + 72
     int in_int_76;/// *in + 19  //  in + 76
     pthread_t *pcm_read_thread;/// *in + 20  //  in + 80
@@ -1343,29 +1332,29 @@ struct stream_in {
     int write_offset;/// *in + 26  //  in + 104
     int write_size;/// *in + 27  //  in + 108
     void *in_v_112;/// *in + 28  //  in + 112
-    
+
     pthread_mutex_t lock;// *in + 29  //  in + 116
 
     struct pcm *pcm; // *in + 30  //  in + 120
-    
+
     bool in_b_124; // *in + 31 // in + 124
     bool in_b_125;             // in + 125
     bool in_b_126;             // in + 126
     bool in_b_127;             // in + 127
-    
+
     struct audio_config *config; // *in + 32 // in + 128
 
     int (*in_fun_132)();/// *in + 33  //  in + 132
-    
+
     int (*get_next_buffer)(struct stream_in *stream_in);/// *in + 34  //  in + 136
     int (*in_fun_140)();/// *in + 35  //  in + 140
-    
+
     void *in_v_144;/// *in + 36  //  in + 144
 
     void *in_v_148;/// *in + 37  //  in + 148
     int pcm_read_result;/// *in + 38  //  in + 152
     void *in_v_156;/// *in + 39  //  in + 156
-    audio_devices_t devices;/// *in + 40  //  in + 160
+    audio_devices_t devices; // *in + 40 // in + 160
 
     void *in_v_164;/// *in + 41  //  in + 164
     void *in_v_168;/// *in + 42  //  in + 168
