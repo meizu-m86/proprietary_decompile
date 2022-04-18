@@ -112,6 +112,109 @@
 /**
  *  audio stream parameters
  */
+typedef enum {
+    AUDIO_FORMAT_INVALID             = 0xFFFFFFFFUL,
+    AUDIO_FORMAT_DEFAULT             = 0,
+    AUDIO_FORMAT_PCM                 = 0x00000000UL, /* DO NOT CHANGE */
+    AUDIO_FORMAT_MP3                 = 0x01000000UL,
+    AUDIO_FORMAT_AMR_NB              = 0x02000000UL,
+    AUDIO_FORMAT_AMR_WB              = 0x03000000UL,
+    AUDIO_FORMAT_AAC                 = 0x04000000UL,
+    AUDIO_FORMAT_HE_AAC_V1           = 0x05000000UL, /* Deprecated, Use AUDIO_FORMAT_AAC_HE_V1*/
+    AUDIO_FORMAT_HE_AAC_V2           = 0x06000000UL, /* Deprecated, Use AUDIO_FORMAT_AAC_HE_V2*/
+    AUDIO_FORMAT_VORBIS              = 0x07000000UL,
+    AUDIO_FORMAT_OPUS                = 0x08000000UL,
+    AUDIO_FORMAT_AC3                 = 0x09000000UL,
+    AUDIO_FORMAT_E_AC3               = 0x0A000000UL,
+    AUDIO_FORMAT_DTS                 = 0x0B000000UL,
+    AUDIO_FORMAT_DTS_HD              = 0x0C000000UL,
+    // IEC61937 is encoded audio wrapped in 16-bit PCM.
+    AUDIO_FORMAT_IEC61937            = 0x0D000000UL,
+    AUDIO_FORMAT_EVRC                = 0x10000000UL,
+    AUDIO_FORMAT_QCELP               = 0x11000000UL,
+    AUDIO_FORMAT_WMA                 = 0x12000000UL,
+    AUDIO_FORMAT_WMA_PRO             = 0x13000000UL,
+    AUDIO_FORMAT_AAC_ADIF            = 0x14000000UL,
+    AUDIO_FORMAT_EVRCB               = 0x15000000UL,
+    AUDIO_FORMAT_EVRCWB              = 0x16000000UL,
+    AUDIO_FORMAT_AMR_WB_PLUS         = 0x17000000UL,
+    AUDIO_FORMAT_MP2                 = 0x18000000UL,
+    AUDIO_FORMAT_EVRCNW              = 0x19000000UL,
+    AUDIO_FORMAT_PCM_OFFLOAD         = 0x1A000000UL,
+    AUDIO_FORMAT_FLAC                = 0x1B000000UL,
+    AUDIO_FORMAT_ALAC                = 0x1C000000UL,
+    AUDIO_FORMAT_APE                 = 0x1D000000UL,
+    AUDIO_FORMAT_AAC_ADTS            = 0x1E000000UL,
+    AUDIO_FORMAT_DSD                 = 0x1F000000UL,
+    AUDIO_FORMAT_SBC                 = 0x20000000UL,
+    AUDIO_FORMAT_APTX                = 0x21000000UL,
+    AUDIO_FORMAT_APTX_HD             = 0x22000000UL,
+
+    AUDIO_FORMAT_DOLBY_TRUEHD        = 0x0E000000UL,
+    AUDIO_FORMAT_MAIN_MASK           = 0xFF000000UL, /* Deprecated. Use audio_get_main_format() */
+    AUDIO_FORMAT_SUB_MASK            = 0x00FFFFFFUL,
+
+    /* Aliases */
+    /* note != AudioFormat.ENCODING_PCM_16BIT */
+    AUDIO_FORMAT_PCM_16_BIT          = (AUDIO_FORMAT_PCM |
+                                        AUDIO_FORMAT_PCM_SUB_16_BIT),
+    /* note != AudioFormat.ENCODING_PCM_8BIT */
+    AUDIO_FORMAT_PCM_8_BIT           = (AUDIO_FORMAT_PCM |
+                                        AUDIO_FORMAT_PCM_SUB_8_BIT),
+    AUDIO_FORMAT_PCM_32_BIT          = (AUDIO_FORMAT_PCM |
+                                        AUDIO_FORMAT_PCM_SUB_32_BIT),
+    AUDIO_FORMAT_PCM_8_24_BIT        = (AUDIO_FORMAT_PCM |
+                                        AUDIO_FORMAT_PCM_SUB_8_24_BIT),
+    AUDIO_FORMAT_PCM_FLOAT           = (AUDIO_FORMAT_PCM |
+                                        AUDIO_FORMAT_PCM_SUB_FLOAT),
+    AUDIO_FORMAT_PCM_24_BIT_PACKED   = (AUDIO_FORMAT_PCM |
+                                        AUDIO_FORMAT_PCM_SUB_24_BIT_PACKED),
+    AUDIO_FORMAT_AAC_MAIN            = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_MAIN),
+    AUDIO_FORMAT_AAC_LC              = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_LC),
+    AUDIO_FORMAT_AAC_SSR             = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_SSR),
+    AUDIO_FORMAT_AAC_LTP             = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_LTP),
+    AUDIO_FORMAT_AAC_HE_V1           = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_HE_V1),
+    AUDIO_FORMAT_AAC_SCALABLE        = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_SCALABLE),
+    AUDIO_FORMAT_AAC_ERLC            = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_ERLC),
+    AUDIO_FORMAT_AAC_LD              = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_LD),
+    AUDIO_FORMAT_AAC_HE_V2           = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_HE_V2),
+    AUDIO_FORMAT_AAC_ELD             = (AUDIO_FORMAT_AAC |
+                                        AUDIO_FORMAT_AAC_SUB_ELD),
+    AUDIO_FORMAT_AAC_ADTS_MAIN       = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_MAIN),
+    AUDIO_FORMAT_AAC_ADTS_LC         = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_LC),
+    AUDIO_FORMAT_AAC_ADTS_SSR        = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_SSR),
+    AUDIO_FORMAT_AAC_ADTS_LTP        = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_LTP),
+    AUDIO_FORMAT_AAC_ADTS_HE_V1      = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_HE_V1),
+    AUDIO_FORMAT_AAC_ADTS_SCALABLE   = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_SCALABLE),
+    AUDIO_FORMAT_AAC_ADTS_ERLC       = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_ERLC),
+    AUDIO_FORMAT_AAC_ADTS_LD         = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_LD),
+    AUDIO_FORMAT_AAC_ADTS_HE_V2      = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_HE_V2),
+    AUDIO_FORMAT_AAC_ADTS_ELD        = (AUDIO_FORMAT_AAC_ADTS |
+                                        AUDIO_FORMAT_AAC_SUB_ELD),
+    /*Offload PCM formats*/
+    AUDIO_FORMAT_PCM_16_BIT_OFFLOAD  = (AUDIO_FORMAT_PCM_OFFLOAD |
+                                        AUDIO_FORMAT_PCM_SUB_16_BIT),
+    AUDIO_FORMAT_PCM_24_BIT_OFFLOAD  = (AUDIO_FORMAT_PCM_OFFLOAD |
+                                        AUDIO_FORMAT_PCM_SUB_8_24_BIT),
+} audio_format_t;
 
 #define AUDIO_PARAMETER_STREAM_ROUTING "routing"             /* audio_devices_t */
 #define AUDIO_PARAMETER_STREAM_FORMAT "format"               /* audio_format_t */
@@ -949,6 +1052,81 @@ struct audio_module {
     struct hw_module_t common;
 };
 
+typedef uint32_t audio_channel_mask_t;
+typedef enum {
+    AUDIO_USAGE_UNKNOWN                            = 0,
+    AUDIO_USAGE_MEDIA                              = 1,
+    AUDIO_USAGE_VOICE_COMMUNICATION                = 2,
+    AUDIO_USAGE_VOICE_COMMUNICATION_SIGNALLING     = 3,
+    AUDIO_USAGE_ALARM                              = 4,
+    AUDIO_USAGE_NOTIFICATION                       = 5,
+    AUDIO_USAGE_NOTIFICATION_TELEPHONY_RINGTONE    = 6,
+    AUDIO_USAGE_NOTIFICATION_COMMUNICATION_REQUEST = 7,
+    AUDIO_USAGE_NOTIFICATION_COMMUNICATION_INSTANT = 8,
+    AUDIO_USAGE_NOTIFICATION_COMMUNICATION_DELAYED = 9,
+    AUDIO_USAGE_NOTIFICATION_EVENT                 = 10,
+    AUDIO_USAGE_ASSISTANCE_ACCESSIBILITY           = 11,
+    AUDIO_USAGE_ASSISTANCE_NAVIGATION_GUIDANCE     = 12,
+    AUDIO_USAGE_ASSISTANCE_SONIFICATION            = 13,
+    AUDIO_USAGE_GAME                               = 14,
+    AUDIO_USAGE_VIRTUAL_SOURCE                     = 15,
+
+    AUDIO_USAGE_CNT,
+    AUDIO_USAGE_MAX                                = AUDIO_USAGE_CNT - 1,
+} audio_usage_t;
+typedef enum {
+    /* These values must kept in sync with
+     * frameworks/base/media/java/android/media/AudioSystem.java
+     */
+    AUDIO_STREAM_DEFAULT          = -1,
+    AUDIO_STREAM_MIN              = 0,
+    AUDIO_STREAM_VOICE_CALL       = 0,
+    AUDIO_STREAM_SYSTEM           = 1,
+    AUDIO_STREAM_RING             = 2,
+    AUDIO_STREAM_MUSIC            = 3,
+    AUDIO_STREAM_ALARM            = 4,
+    AUDIO_STREAM_NOTIFICATION     = 5,
+    AUDIO_STREAM_BLUETOOTH_SCO    = 6,
+    AUDIO_STREAM_ENFORCED_AUDIBLE = 7, /* Sounds that cannot be muted by user
+                                        * and must be routed to speaker
+                                        */
+    AUDIO_STREAM_DTMF             = 8,
+    AUDIO_STREAM_TTS              = 9,  /* Transmitted Through Speaker.
+                                         * Plays over speaker only, silent on other devices.
+                                         */
+    AUDIO_STREAM_ACCESSIBILITY    = 10, /* For accessibility talk back prompts */
+    AUDIO_STREAM_REROUTING        = 11, /* For dynamic policy output mixes */
+    AUDIO_STREAM_PATCH            = 12, /* For internal audio flinger tracks. Fixed volume */
+    AUDIO_STREAM_PUBLIC_CNT       = AUDIO_STREAM_TTS + 1,
+    AUDIO_STREAM_FOR_POLICY_CNT   = AUDIO_STREAM_PATCH, /* number of streams considered by
+                                           audio policy for volume and routing */
+    AUDIO_STREAM_CNT              = AUDIO_STREAM_PATCH + 1,
+} audio_stream_type_t;
+typedef struct {
+    uint16_t version;                   // version of the info structure
+    uint16_t size;                      // total size of the structure including version and size
+    uint32_t sample_rate;               // sample rate in Hz
+    audio_channel_mask_t channel_mask;  // channel mask
+    audio_format_t format;              // audio format
+    audio_stream_type_t stream_type;    // stream type
+    uint32_t bit_rate;                  // bit rate in bits per second
+    int64_t duration_us;                // duration in microseconds, -1 if unknown
+    bool has_video;                     // true if stream is tied to a video stream
+    bool is_streaming;                  // true if streaming, false if local playback
+    uint32_t bit_width;
+    uint32_t offload_buffer_size;       // offload fragment size
+    audio_usage_t usage;
+} audio_offload_info_t;
+
+struct audio_config {
+    uint32_t sample_rate;
+    audio_channel_mask_t channel_mask;
+    audio_format_t  format;
+    audio_offload_info_t offload_info;
+    size_t frame_count;
+};
+typedef struct audio_config audio_config_t;
+
 struct audio_hw_device {
     /**
      * Common methods of the audio device.  This *must* be the first member of audio_hw_device
@@ -1278,7 +1456,7 @@ struct stream_out {
 
     int in_sample_rate; // *out + 46 // out + 184
     audio_format_t in_format; // *out + 47 // out + 188
-    void *out_v_192; // *out + 48 // out + 192
+    size_t output_buffer_size; // *out + 48 // out + 192
     struct resampler_itfe **resampler; // *out + 49 // out + 196
     void *out_resampler_pcm_out_buffer; // *out + 50 // out + 200
 
@@ -1411,7 +1589,7 @@ struct audio_device {
     bool b_262; // adev + 262
     bool b_263; // adev + 263
     
-    int sample_rate; // * + 66 //  adev + 264
+    uint32_t sample_rate; // * + 66 //  adev + 264
     
     bool b_268; // * + 67 // adev + 268
     bool output_stream_state; // adev + 269
@@ -1420,8 +1598,8 @@ struct audio_device {
 
     int headset_volume;      // * + 68 // adev + 272 
     int headphone_volume;    // * + 69 // adev + 276
-    void *v_70;      // * + 70 // adev + 280
-    void *v_71;      // * + 71 // adev + 284
+    int adv_int_70;      // * + 70 // adev + 280
+    int adv_int_71;      // * + 71 // adev + 284
 
     bool hifi_state; // * + 72 // adev + 288
     bool hifi_pcm_opened; //  adev + 289
