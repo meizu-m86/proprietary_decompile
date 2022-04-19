@@ -48,7 +48,40 @@ sub_55A0   adev_dump
 sub_55A4   adev_dumb2
 sub_4364   set_mixer_value_by_name
 
+sub_55E8   set_voice_volume
+sub_6644   out_standby
+sub_6676   in_standby
+sub_6D54   set_route_by_array
 
+sub_6E08   out_get_sample_rate
+sub_6E0E   out_set_sample_rate
+sub_6E16   out_get_buffer_size
+sub_6E22   out_get_channels
+sub_6E28   out_get_format
+sub_6E2E   out_set_format
+sub_6E34   out_dump
+sub_6E38   out_set_parameters
+sub_723C   out_get_parameters
+sub_7320   out_add_audio_effect
+sub_7324   out_remove_audio_effect
+sub_7328   out_get_latency
+sub_733E   out_set_volume
+sub_7C90   out_get_render_position
+sub_7C96   out_get_next_write_timestamp
+sub_7C9C   out_get_presentation_position
+
+sub_7DAC   in_get_sample_rate
+sub_7DB2   in_set_sample_rate
+sub_7DB8   in_get_buffer_size
+sub_7DE0   in_get_channels
+sub_7DE4   in_get_format
+sub_7DE8   in_set_format
+sub_7DEE   in_dump
+sub_7F78   in_get_parameters
+sub_7F84   in_add_audio_effect
+sub_7F88   in_remove_audio_effect
+sub_7F8C   in_set_gain
+sub_8A54   in_get_input_frames_lost
 
 
 
