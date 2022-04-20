@@ -10,6 +10,7 @@
       * int (*dumb3);
       * int (*set_headphone_volume)(struct audio_hw_device *dev, float volume);   
 
+### 00008C9E 以下是libaudioroute和libunwind的东西反编译直接忽略
 
 ### 反编译函数对照
 ```
